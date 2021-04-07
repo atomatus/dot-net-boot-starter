@@ -1,2 +1,2 @@
-# dot-net-boot-starter
+# dot-net-boot-starter ⊞📦
 .Net boot starter framework.
