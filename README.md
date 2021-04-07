@@ -1,4 +1,4 @@
 # .Net Boot Starter ⊞📦
 <p>
-.Net boot starter framework.
+.Net boot starter library.
 </p>
