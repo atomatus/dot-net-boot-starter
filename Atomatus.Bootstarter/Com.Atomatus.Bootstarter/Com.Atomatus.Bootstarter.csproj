@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Context/ContextBase.Configuration.cs">
+      <DependentUpon>Context/ContextBase.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="Model/ModelBase.Int.cs">
+      <DependentUpon>Model/ModelBase.cs</DependentUpon>
+    </None>
+    <None Include="Model/ModelBase.Long.cs">
+      <DependentUpon>Model/ModelBase.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Model/Auditable/AuditableModel.Int.cs">
+      <DependentUpon>Model/Auditable/AuditableModel.cs</DependentUpon>
+    </None>
+    <None Include="Model/Auditable/AuditableModel.Long.cs">
+      <DependentUpon>Model/Auditable/AuditableModel.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Services/IService.Crud.cs">
+      <DependentUpon>Services/IService.cs</DependentUpon>
+    </None>
+    <None Include="Services/IService.Crud.Async.cs">
+      <DependentUpon>Services/IService.cs</DependentUpon>
+    </None>
+    <None Include="Services/ServiceCrudAsync.cs">
+      <DependentUpon>Services/ServiceCrud.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.5" />
+  </ItemGroup>
+  
+</Project>
