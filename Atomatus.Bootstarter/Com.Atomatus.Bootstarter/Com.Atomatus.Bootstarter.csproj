@@ -9,7 +9,19 @@
       <DependentUpon>Context/ContextBase.cs</DependentUpon>
     </None>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <None Include="Context/Configuration/Connection/ContextConnection.Builder.cs">
+      <DependentUpon>Context/Configuration/Connection/ContextConnection.cs</DependentUpon>
+    </None>
+    <None Include="Context/Configuration/Connection/ContextConnection.Parameters.cs">
+      <DependentUpon>Context/Configuration/Connection/ContextConnection.cs</DependentUpon>
+    </None>
+    <None Include="Context/Configuration/Connection/ContextConnectionString.Extensions.cs">
+      <DependentUpon>Context/Configuration/Connection/ContextConnectionString.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
   <ItemGroup>
     <None Include="Model/ModelBase.Int.cs">
       <DependentUpon>Model/ModelBase.cs</DependentUpon>
@@ -43,6 +55,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
   
 </Project>
