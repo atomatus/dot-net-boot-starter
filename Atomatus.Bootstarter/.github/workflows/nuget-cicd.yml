@@ -1,0 +1,34 @@
+# This workflow execute a sequence of jobs to build, 
+# release and publish a packages to NuGet.
+
+name: 00 - Dot Net Deploy to NuGet
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+env:
+  PROJ_BS_PATH: 'Com.Atomatus.Bootstarter/Com.Atomatus.Bootstarter.csproj'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1.x'
+          
+      - name: 'Restore Project Bootstarter'
+        if: ${{ success() }}
+        run: dotnet restore ${{ env.PROJ_BS_PATH }}
+
+      - name: 'Build Project Bootstarter'
+        if: ${{ success() }}
+        run: dotnet build ${{ env.PROJ_BS_PATH }} --no-restore --configuration Release
+
