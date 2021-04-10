@@ -10,7 +10,7 @@ on:
     branches: [ master, main ]
 
 env:
-  PROJ_BS_PATH: 'Com.Atomatus.Bootstarter/Com.Atomatus.Bootstarter.csproj'
+  PROJ_BS_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Com.Atomatus.Bootstarter.csproj'
 
 jobs:
   deploy:
