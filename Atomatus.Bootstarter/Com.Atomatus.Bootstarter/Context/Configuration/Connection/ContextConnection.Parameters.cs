@@ -5,13 +5,6 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 {
     public abstract class ContextConnectionParameters : IDisposable
     {
-        protected internal enum DatabaseTypes
-        {
-            NotSet,
-            Postgres,
-            SqlServer
-        }
-
         protected string database;
         protected string host;
         protected int port;
@@ -23,10 +16,9 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
         protected int minPoolSize;
         protected int maxPoolSize;
         protected string applicationName;
-        protected DatabaseTypes databaseType;
 
-        internal protected IConfiguration configuration;
-        internal protected string connectionStringKey;
+        protected IConfiguration configuration;
+        protected string connectionStringKey;
 
         ~ContextConnectionParameters()
         {
@@ -43,18 +35,14 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
             this.timeout                = other.timeout;
             this.commandTimeout         = other.commandTimeout;
             this.idleLifetime           = other.idleLifetime;
-            this.applicationName        = other.applicationName;
-            this.databaseType           = other.databaseType;
+            this.minPoolSize            = other.minPoolSize;
+            this.maxPoolSize            = other.maxPoolSize;
+            this.applicationName        = other.applicationName;            
             this.configuration          = other.configuration;
             this.connectionStringKey    = other.connectionStringKey;
         }
 
         protected ContextConnectionParameters() { }
-
-        protected internal bool IsDatabaseType(DatabaseTypes type)
-        {
-            return databaseType == type;
-        }
 
         protected virtual void OnDispose() { }
 

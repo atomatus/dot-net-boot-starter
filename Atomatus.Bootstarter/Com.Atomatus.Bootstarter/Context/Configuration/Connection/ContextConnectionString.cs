@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 {
-    internal sealed class ContextConnectionString : ContextConnection
+    internal class ContextConnectionString : ContextConnection
     {
         private readonly string connectionString;
 
@@ -31,13 +32,18 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
             }
             else
             {
-                key = key.StartsWith("ConnectionStrings:") ? key : "ConnectionStrings:" + key;
+                key = key.Contains(':') ? key : "ConnectionStrings:" + key;
                 return configuration is null ? null : configuration[key] ??
                     throw new InvalidOperationException($"ConnectionString key ({connectionStringKey}) not found in appsettings.json!");
             }
         }
 
         protected override string GetConnectionString() => connectionString;
+
+        protected internal override DbContextOptionsBuilder Attach(DbContextOptionsBuilder options)
+        {
+            return options;
+        }
 
         internal bool IsValid() => !string.IsNullOrWhiteSpace(connectionString);
     }

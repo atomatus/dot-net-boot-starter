@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 {
@@ -17,14 +18,19 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
                 .Append("Initial Catalog=").AppendOrThrow(database, "Database name not set!").Append(";")
                 .AppendIf(HasUsername(), "User Id=", user, ';')
                 .AppendIf(HasPassword(), "Password=", password, ';')
-                .AppendIf(HasUsernameAndPassword() || !DotnetRunningInContainer, "Integrated Security=True;")
-                .AppendIf(HasUsernameAndPassword(), "Trusted_Connection=True;")
+                .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer, "Integrated Security=True;")
+                .AppendIf(HasNotUsernameAndPassword(), "Trusted_Connection=True;")
                 .Append("MultipleActiveResultSets=True;")
                 .Append("Connection Timeout=").AppendOrElse(timeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(";")
                 .AppendIf(HasIdleLifetime(), "Connection Lifetime=", idleLifetime, ';')                
                 .AppendIf(MinPoolSize(), "Min Pool Size=", minPoolSize, ';')
                 .AppendIf(MaxPoolSize(), "Max Pool Size=", maxPoolSize, ";Pooling=true;")
                 .ToString();
+        }
+
+        protected internal override DbContextOptionsBuilder Attach(DbContextOptionsBuilder options)
+        {
+            return options.UseSqlServer(this);
         }
     }
 }

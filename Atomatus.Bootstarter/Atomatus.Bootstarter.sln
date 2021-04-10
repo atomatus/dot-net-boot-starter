@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlserver", "Com.Atomatus.Bootstarter.Sqlserver\Com.Atomatus.Bootstarter.Sqlserver.csproj", "{A5800BCA-19D2-467C-8118-598FB8E1895A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Postgres", "Com.Atomatus.Bootstarter.Postgres\Com.Atomatus.Bootstarter.Postgres.csproj", "{B09F2C2A-E20A-4588-B35B-08401778E48C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlite", "Com.Atomatus.Bootstarter.Sqlite\Com.Atomatus.Bootstarter.Sqlite.csproj", "{31C522BA-7755-4ED8-8492-B1815A0715C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Cosmos", "Com.Atomatus.Bootstarter.Cosmos\Com.Atomatus.Bootstarter.Cosmos.csproj", "{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +27,18 @@ Global
 		{A5800BCA-19D2-467C-8118-598FB8E1895A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5800BCA-19D2-467C-8118-598FB8E1895A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5800BCA-19D2-467C-8118-598FB8E1895A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B09F2C2A-E20A-4588-B35B-08401778E48C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B09F2C2A-E20A-4588-B35B-08401778E48C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B09F2C2A-E20A-4588-B35B-08401778E48C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B09F2C2A-E20A-4588-B35B-08401778E48C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31C522BA-7755-4ED8-8492-B1815A0715C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31C522BA-7755-4ED8-8492-B1815A0715C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31C522BA-7755-4ED8-8492-B1815A0715C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31C522BA-7755-4ED8-8492-B1815A0715C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

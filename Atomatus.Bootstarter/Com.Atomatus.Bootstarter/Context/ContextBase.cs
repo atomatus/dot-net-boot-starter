@@ -30,14 +30,35 @@ namespace Com.Atomatus.Bootstarter.Context
         /// When true, try find and load <see cref="IEntityTypeConfiguration{TEntity}"/>
         /// implementation for each dbset declared in current context.
         /// </param>
-        protected ContextBase(DbContextOptions options, 
-            string schemaName = null, 
-            bool loadEntityConfigurationByEachDbSet = true) : base(options)
+        protected ContextBase(DbContextOptions options, string schemaName, bool loadEntityConfigurationByEachDbSet) : base(options)
         {
             this.SchemaName = schemaName;
             this.loadEntityConfigurationByEachDbSet = loadEntityConfigurationByEachDbSet;
             Database.EnsureCreated();
         }
+
+        /// <summary>
+        /// Context base constructor receiving build parameters options,
+        /// database schema name and defining whether attempt to load entity's
+        /// configuration for each dbSet declared in context.
+        /// </summary>
+        /// <param name="options">
+        /// The options for this context.
+        /// </param>
+        /// <param name="schemaName">
+        /// Context schema name
+        /// </param>
+        protected ContextBase(DbContextOptions options, string schemaName) : this(options, schemaName, true) { }
+
+        /// <summary>
+        /// Context base constructor receiving build parameters options,
+        /// database schema name and defining whether attempt to load entity's
+        /// configuration for each dbSet declared in context.
+        /// </summary>
+        /// <param name="options">
+        /// The options for this context.
+        /// </param>
+        protected ContextBase(DbContextOptions options) : this(options, null, true) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

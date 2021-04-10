@@ -1,4 +1,4 @@
 ﻿namespace Com.Atomatus.Bootstarter.Model
 {
-    public abstract class ModelBaseLong : ModelBase<long> { }
+    public abstract class ModelBaseIdLong : ModelBase<long> { }
 }

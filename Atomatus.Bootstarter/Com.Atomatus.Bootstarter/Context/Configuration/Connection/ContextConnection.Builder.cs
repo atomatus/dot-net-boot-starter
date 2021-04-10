@@ -1,6 +1,15 @@
 ﻿
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
+[assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Cosmos")]
+[assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Postgres")]
+[assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Sqlite")]
 [assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Sqlserver")]
 namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 {
@@ -8,26 +17,43 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
     {
         public sealed class Builder : ContextConnectionParameters
         {
-            private TryBuildContextConnectionCallback callback;
-
             #region Local Parameters
             internal delegate bool TryBuildContextConnectionCallback(Builder builder, out ContextConnection conn);
 
-            internal Builder DatabaseType(DatabaseTypes databaseType)
+            private List<TryBuildContextConnectionCallback> callbacks;
+            
+            internal Builder AddBuildCallback(TryBuildContextConnectionCallback callback)
             {
-                this.databaseType = databaseType;
+                this.callbacks ??= new List<TryBuildContextConnectionCallback>();                
+                this.callbacks.Remove(callback);
+                this.callbacks.Add(callback);
                 return this;
             }
 
-            internal Builder AddBuildCallback(TryBuildContextConnectionCallback callback)
+            internal Builder AddConfiguration(IConfiguration configuration)
             {
-                this.callback = callback;
+                this.configuration = configuration;
+                return this;
+            }
+
+            internal Builder AddConnectionStringKey(string connectionStringKey)
+            {
+                this.connectionStringKey = connectionStringKey;
                 return this;
             }
             #endregion
 
             #region Parameters
-            public Builder DatabaseName(string database)
+            internal Builder Database<TContext>() where TContext : ContextBase
+            {
+                string Replace(string target, string value) =>
+                    target.Replace(value, string.Empty,
+                    StringComparison.CurrentCultureIgnoreCase);                
+                string name = Replace(Replace(typeof(TContext).Name, "Context"), "db").ToLower() + "db";
+                return Database(name);
+            }
+
+            public Builder Database(string database)
             {
                 this.database = database;
                 return this;
@@ -35,7 +61,18 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 
             public Builder Host(string host)
             {
-                this.host = host;
+                int index;
+                if(host != null && (index = host.IndexOf(':')) != -1)
+                {
+                    this.host = host.Substring(0, index);
+                    this.port = int.TryParse(
+                        Regex.Replace(host[(index + 1)..], "[^0-9]", ""), out port) ? port : this.port;
+                }
+                else
+                {
+                    this.host = host;
+                }
+
                 return this;
             }
 
@@ -156,10 +193,33 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
             }
             #endregion
 
+            #region Parameter Endpoint
+            public Builder AccountEndpoint(string accountEndpoint)
+            {
+                if(string.IsNullOrWhiteSpace(accountEndpoint))
+                {
+                    host = null;
+                    port = 0;
+                    return this;
+                } 
+                else
+                {
+                    return Host(accountEndpoint);
+                }
+            }
+
+            public Builder AccountKey(string accountKey)
+            {
+                this.password = accountKey;
+                return this;
+            }
+            #endregion
+
             #region IDisposable
             protected override void OnDispose()
             {
-                this.callback = null;
+                this.callbacks?.Clear();
+                this.callbacks = null;
             }
             #endregion
 
@@ -168,17 +228,21 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
             {
                 using (this)
                 {
-
-                    if (callback != null && callback.Invoke(this, out ContextConnection conn))
+                    if(this.callbacks != null)
                     {
-                        return conn;
-                    }
-                    else if (string.IsNullOrWhiteSpace(connectionStringKey))
-                    {
+                        var aux = this.callbacks.AsReadOnly();
 
+                        foreach (var callback in aux)
+                        {
+                            if (callback.Invoke(this, out ContextConnection conn))
+                            {
+                                return conn;
+                            }
+                        }
                     }
 
-                    return null;
+                    throw new InvalidOperationException("Is not possible build a contextConnection without minimum data:" +
+                           "You must set an IConfiguration and/or an database type!");
                 }
             }
             #endregion

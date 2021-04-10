@@ -3,6 +3,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
+[assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Postgres")]
+[assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Sqlite")]
 [assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Sqlserver")]
 namespace Com.Atomatus.Bootstarter
 {

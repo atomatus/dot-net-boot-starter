@@ -1,4 +1,6 @@
-﻿namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 {
     public abstract partial class ContextConnection
     {
@@ -13,11 +15,15 @@
 
         protected abstract string GetConnectionString();
 
+        protected internal abstract DbContextOptionsBuilder Attach(DbContextOptionsBuilder options);
+        
         protected bool HasUsername() => !string.IsNullOrWhiteSpace(user);
 
         protected bool HasPassword() => !string.IsNullOrWhiteSpace(password);
 
         protected bool HasUsernameAndPassword() => HasUsername() && HasPassword();
+
+        protected bool HasNotUsernameAndPassword() => !HasUsername() && !HasPassword();
 
         protected bool HasIdleLifetime() => idleLifetime > 0;
 
