@@ -5,13 +5,18 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter", "Com.Atomatus.Bootstarter\Com.Atomatus.Bootstarter.csproj", "{34EBDBB9-37E3-44AC-B2EC-A104D021E404}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlserver", "Com.Atomatus.Bootstarter.Sqlserver\Com.Atomatus.Bootstarter.Sqlserver.csproj", "{A5800BCA-19D2-467C-8118-598FB8E1895A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Sqlserver", "Com.Atomatus.Bootstarter.Sqlserver\Com.Atomatus.Bootstarter.Sqlserver.csproj", "{A5800BCA-19D2-467C-8118-598FB8E1895A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Postgres", "Com.Atomatus.Bootstarter.Postgres\Com.Atomatus.Bootstarter.Postgres.csproj", "{B09F2C2A-E20A-4588-B35B-08401778E48C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Postgres", "Com.Atomatus.Bootstarter.Postgres\Com.Atomatus.Bootstarter.Postgres.csproj", "{B09F2C2A-E20A-4588-B35B-08401778E48C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlite", "Com.Atomatus.Bootstarter.Sqlite\Com.Atomatus.Bootstarter.Sqlite.csproj", "{31C522BA-7755-4ED8-8492-B1815A0715C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Sqlite", "Com.Atomatus.Bootstarter.Sqlite\Com.Atomatus.Bootstarter.Sqlite.csproj", "{31C522BA-7755-4ED8-8492-B1815A0715C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Cosmos", "Com.Atomatus.Bootstarter.Cosmos\Com.Atomatus.Bootstarter.Cosmos.csproj", "{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Cosmos", "Com.Atomatus.Bootstarter.Cosmos\Com.Atomatus.Bootstarter.Cosmos.csproj", "{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "githubActions", "githubActions", "{737EAF4D-3B95-447C-B46A-EFB6A88E28C6}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\nuget-cicd.yml = ..\.github\workflows\nuget-cicd.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
