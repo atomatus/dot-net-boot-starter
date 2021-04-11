@@ -31,4 +31,15 @@ jobs:
       - name: 'Build Project Bootstarter'
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_PATH }} --no-restore --configuration Release
+      
+      - name: 'Test Project Bootstarter'
+        if: ${{ success() }}
+        run: dotnet test ${{ env.PROJ_BS_PATH }}
 
+      - name: Publish to NuGet
+        uses: brandedoutcast/publish-nuget@v2
+        with:
+          PROJECT_FILEPATH: ${{ PROJ_BS_PATH }} 
+          VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'
+          TAG_FORMAT: '*'
+          NUGET_KEY: ${{ secrets.NUGET_COM_ATOMATUS_AUTH_KEY }}
