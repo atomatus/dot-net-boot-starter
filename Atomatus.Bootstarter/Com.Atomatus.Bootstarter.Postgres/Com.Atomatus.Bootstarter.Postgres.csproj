@@ -8,6 +8,14 @@
     <Company>Atomatus</Company>
     <Copyright>®2020-2021 Atomatus - All rights reserved</Copyright>
     <Description>Bootstarter library for postgresSQL repository</Description>
+    <PackageId>Com.Atomatus.BootStarter.Postgres</PackageId>
+    <PackageTags>ef boot starter postgres</PackageTags>
+    <PackageVersion>0.0.1</PackageVersion>
+    <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atomatus/dot-net-boot-starter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>

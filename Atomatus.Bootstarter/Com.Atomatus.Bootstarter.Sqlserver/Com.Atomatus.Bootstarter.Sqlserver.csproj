@@ -7,7 +7,15 @@
     <Authors>Carlos Matos</Authors>
     <Company>Atomatus</Company>
     <Copyright>®2020-2021 Atomatus - All rights reserved</Copyright>
-    <Description>Bootstarter library for postgresSQL repository</Description>
+    <Description>Bootstarter library for sqlserver repository</Description>
+    <PackageId>Com.Atomatus.BootStarter.Sqlserver</PackageId>
+    <PackageTags>ef boot starter sqlserver</PackageTags>
+    <PackageVersion>0.0.1</PackageVersion>
+    <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/atomatus/dot-net-boot-starter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
