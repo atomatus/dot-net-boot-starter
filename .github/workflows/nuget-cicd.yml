@@ -31,14 +31,17 @@ jobs:
         run: dotnet restore ${{ env.PROJ_BS_PATH }}
 
       - name: 'Build Project Bootstarter'
+        id: proj_bs_build
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_PATH }} --no-restore --configuration Release
       
       - name: 'Test Project Bootstarter'
+        id: proj_bs_test
         if: ${{ success() }}
         run: dotnet test ${{ env.PROJ_BS_PATH }}
 
       - name: Publish Bootstarter to NuGet
+        if: ${{ success() }}
         uses: brandedoutcast/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_PATH }}
@@ -49,18 +52,19 @@ jobs:
                 
       # region Bootstarter.Cosmos
       - name: 'Restore Project Bootstarter.Cosmos'
-        if: ${{ success() }}
+        if: ${{ proj_bs_test.success() }}
         run: dotnet restore ${{ env.PROJ_BS_COSMOS_PATH }}
 
       - name: 'Build Project Bootstarter.Cosmos'
-        if: ${{ success() }}
+        if: ${{ proj_bs_test.success() }}
         run: dotnet build ${{ env.PROJ_BS_COSMOS_PATH }} --no-restore --configuration Release
       
       - name: 'Test Project Bootstarter.Cosmos'
-        if: ${{ success() }}
+        if: ${{ proj_bs_test.success() }}
         run: dotnet test ${{ env.PROJ_BS_COSMOS_PATH }}
 
       - name: Publish Bootstarter.Cosmos to NuGet
+        if: ${{ proj_bs_test.success() }}
         uses: brandedoutcast/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_COSMOS_PATH }}
