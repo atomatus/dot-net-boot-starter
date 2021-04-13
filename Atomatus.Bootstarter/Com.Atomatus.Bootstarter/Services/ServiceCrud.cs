@@ -3,6 +3,7 @@ using Com.Atomatus.Bootstarter.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Com.Atomatus.Bootstarter.Services
@@ -16,7 +17,7 @@ namespace Com.Atomatus.Bootstarter.Services
         protected readonly TContext dbContext;
         protected readonly DbSet<TEntity> dbSet;
 
-        public ServiceCrud(TContext context, DbSet<TEntity> dbSet)
+        public ServiceCrud([NotNull] TContext context, [NotNull] DbSet<TEntity> dbSet)
         {
             this.dbContext  = context ?? throw new ArgumentNullException(nameof(context));
             this.dbSet      = dbSet ?? throw new ArgumentNullException(nameof(dbSet));

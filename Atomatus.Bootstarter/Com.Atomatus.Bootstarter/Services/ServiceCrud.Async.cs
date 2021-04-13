@@ -228,6 +228,5 @@ namespace Com.Atomatus.Bootstarter.Services
             return DeleteAsync(entity, default);
         }
         #endregion
-
     }
 }
