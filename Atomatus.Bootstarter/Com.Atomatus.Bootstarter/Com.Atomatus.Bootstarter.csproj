@@ -25,6 +25,9 @@
     <None Include="Context/ContextBase.Configuration.cs">
       <DependentUpon>Context/ContextBase.cs</DependentUpon>
     </None>
+    <None Include="Context/ContextBase.DbSet.cs">
+      <DependentUpon>Context/ContextBase.cs</DependentUpon>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -68,9 +71,6 @@
       <DependentUpon>Services/IService.cs</DependentUpon>
     </None>
     <None Include="Services/ServiceCrud.Async.cs" >
-      <DependentUpon>Services/ServiceCrud.cs</DependentUpon>
-    </None>
-    <None Include="Services/ServiceCrud.DbSet.cs" >
       <DependentUpon>Services/ServiceCrud.cs</DependentUpon>
     </None>
   </ItemGroup>

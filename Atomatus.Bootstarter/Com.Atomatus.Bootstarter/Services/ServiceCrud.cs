@@ -23,6 +23,8 @@ namespace Com.Atomatus.Bootstarter.Services
             this.dbSet      = dbSet ?? throw new ArgumentNullException(nameof(dbSet));
         }
 
+        public ServiceCrud([NotNull] TContext context) : this(context, context?.GetOrSet<TEntity>()) { }
+
         #region [C]reate
         public TEntity Insert(TEntity entity)
         {

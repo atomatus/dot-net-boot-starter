@@ -128,7 +128,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
         protected internal void DetachAllEntities()
         {
-            if (this.ChangeTracker.AutoDetectChangesEnabled)
+            if (this.ChangeTracker?.AutoDetectChangesEnabled ?? false)
             {
                 this.ChangeTracker
                     .Entries()
