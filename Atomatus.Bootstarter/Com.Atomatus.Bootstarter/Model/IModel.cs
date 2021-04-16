@@ -2,10 +2,7 @@
 
 namespace Com.Atomatus.Bootstarter.Model
 {
-    public interface IModel 
-    { 
-        object Id { get; } 
-    }
+    public interface IModel  {  }
 
     public interface IModelAltenateKey
     {
@@ -14,6 +11,6 @@ namespace Com.Atomatus.Bootstarter.Model
 
     public interface IModel<ID> : IModel
     {
-        new ID Id { get; set; }
+        ID Id { get; set; }
     }
 }

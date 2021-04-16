@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     public abstract partial class ContextConnection
     {
+        /// <summary>
+        /// Environment variable to identify whether current app is running in container.
+        /// </summary>
         protected static readonly EnvironmentVariable DotnetRunningInContainer;
 
         static ContextConnection()

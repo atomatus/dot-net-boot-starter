@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Com.Atomatus.Bootstarter
         ///
         /// <para>
         /// For any two arrays "a" and "b" such that
-        /// "<see cref="Arrays"/>.equals(a, b)", it is also the case that
+        /// "Arrays.Equals(a, b)", it is also the case that
         /// "a.GetHashCode() == b.GetHashCode()".
         /// </para>
         ///
@@ -50,7 +51,7 @@ namespace Com.Atomatus.Bootstarter
         ///
         /// <para>
         /// For any two arrays "a" and "b" such that
-        /// "<see cref="Arrays"/>.equals(a, b)", it is also the case that
+        /// "Array.Equals(a, b)", it is also the case that
         /// "a.GetHashCode() == b.GetHashCode()".
         /// </para>
         ///

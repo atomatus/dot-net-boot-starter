@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     public static class ContextConnectionCosmosExtensions
     {
@@ -62,6 +62,18 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
         /// with ASP.NET Core. For applications that don't use dependency injection, consider
         /// creating Microsoft.EntityFrameworkCore.DbContext instances directly with its
         /// constructor. 
+        /// </para>
+        /// <para>
+        /// Whether not set no one builder option using <paramref name="builderAction"/>
+        /// will try to load from appsettings.json looking for "ConnectionString[s]" key formatted, how like, the follow code:
+        /// </para>
+        /// <code>
+        /// <i>
+        ///  "ConnectionStringKey" : "AccountEndpoint=https://accountname.documents.azure.com:443/‌​;AccountKey=accountk‌​ey==;Database=database"
+        /// </i>
+        /// </code>
+        /// <para>
+        /// If not found, will throw exception because is not possible define default connection for this database type.
         /// </para>
         /// <para>
         /// The Microsoft.EntityFrameworkCore.DbContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)

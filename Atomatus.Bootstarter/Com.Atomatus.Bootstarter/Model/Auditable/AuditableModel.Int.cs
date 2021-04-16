@@ -1,4 +1,4 @@
-﻿namespace Com.Atomatus.Bootstarter.Model.Auditable
+﻿namespace Com.Atomatus.Bootstarter.Model
 {
     public abstract class AuditableModelInt : AuditableModel<int> { }
 }

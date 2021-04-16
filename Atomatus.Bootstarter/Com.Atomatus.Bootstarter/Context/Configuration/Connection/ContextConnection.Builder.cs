@@ -1,9 +1,6 @@
-﻿
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -11,7 +8,7 @@ using System.Text.RegularExpressions;
 [assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Postgres")]
 [assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Sqlite")]
 [assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Sqlserver")]
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     public abstract partial class ContextConnection : ContextConnectionParameters
     {
@@ -39,6 +36,12 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
             internal Builder AddConnectionStringKey(string connectionStringKey)
             {
                 this.connectionStringKey = connectionStringKey;
+                return this;
+            }
+
+            internal Builder AddDefaultConnectionStringOperation(ConnectionStringFunction defaultConnectionStringCallback)
+            {
+                this.connectionStringCallback = defaultConnectionStringCallback;
                 return this;
             }
             #endregion

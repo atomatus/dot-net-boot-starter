@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     public static class ContextConnectionStringExtensions
     {
@@ -23,7 +23,7 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 
         public static ContextConnection.Builder Configuration(this ContextConnection.Builder builder, IServiceProvider provider)
         {
-            return builder.Configuration((provider?.GetService<IConfiguration>() ??
+            return builder.Configuration((provider != null ? provider.GetService<IConfiguration>() :
                  throw new ArgumentNullException(nameof(provider), "Service provider can not be null!")) ??
                  throw new ArgumentException("Service provider is do not attaching IConfiguration!"));
         }

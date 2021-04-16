@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     internal sealed class ContextConnectionPostgres : ContextConnection
     {

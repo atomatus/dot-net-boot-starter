@@ -66,6 +66,7 @@ namespace Com.Atomatus.Bootstarter
         /// </summary>
         /// <param name="name">variable name</param>
         /// <param name="defaultValue">default value to be used whether the variable not found or current value is empty</param>
+        /// <param name="target">specifies the location where an environment variable is stored or retrieved</param>
         private EnvironmentVariable(string name, object defaultValue = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             this.name           = name ?? throw new ArgumentNullException(nameof(name));

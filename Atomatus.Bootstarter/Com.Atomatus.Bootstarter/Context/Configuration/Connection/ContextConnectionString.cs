@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     internal class ContextConnectionString : ContextConnection
     {
@@ -24,16 +24,20 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
                     return null;//Key not set and app is running in container, preferences to environment config.
                 }
 
-                return configuration
-                    ?.GetSection("ConnectionStrings")
+                return (
+                    configuration
+                        ?.GetSection("ConnectionStrings") ??                    
+                    configuration
+                        ?.GetSection("ConnectionString"))
                     ?.GetChildren()
                     ?.FirstOrDefault()
                     ?.Value;
             }
             else
             {
-                key = key.Contains(':') ? key : "ConnectionStrings:" + key;
-                return configuration is null ? null : configuration[key] ??
+                return configuration is null ? null : 
+                    configuration[key] ??
+                    configuration[(key.Contains(':') ? key : "ConnectionStrings:" + key)] ??
                     throw new InvalidOperationException($"ConnectionString key ({connectionStringKey}) not found in appsettings.json!");
             }
         }
@@ -42,7 +46,7 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
 
         protected internal override DbContextOptionsBuilder Attach(DbContextOptionsBuilder options)
         {
-            return options;
+            return connectionStringCallback?.Invoke(options, connectionString) ?? options;
         }
 
         internal bool IsValid() => !string.IsNullOrWhiteSpace(connectionString);

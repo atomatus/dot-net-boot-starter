@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
+namespace Com.Atomatus.Bootstarter.Context
 {
     public static class ContextConnectionSqliteExtensions
     {
@@ -24,7 +24,9 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
         /// <returns></returns>
         public static ContextConnection.Builder AsSqlite([NotNull] this ContextConnection.Builder builder)
         {
-            return builder.AddBuildCallback(OnBuildAsSqliteCallback);
+            return builder
+                .AddDefaultConnectionStringOperation((b, c) => b.UseSqlite(c))
+                .AddBuildCallback(OnBuildAsSqliteCallback);
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
                 .Build()
                 .Attach(options);
         }
-        
+
         /// <summary>
         /// <para>
         /// Registers the given context as a SQLite's DbContext service in the Microsoft.Extensions.DependencyInjection.IServiceCollection.<br/>
@@ -54,6 +56,12 @@ namespace Com.Atomatus.Bootstarter.Context.Configuration.Connection
         /// with ASP.NET Core. For applications that don't use dependency injection, consider
         /// creating Microsoft.EntityFrameworkCore.DbContext instances directly with its
         /// constructor. 
+        /// </para>
+        /// <para>
+        /// Whether not set no one builder option using <paramref name="builderAction"/>
+        /// will try to load from appsettings.json looking for "ConnectionString[s]" key,
+        /// if not found, will try to load using default database connection configurations.<br/>
+        /// For example, SQLite load memory database.
         /// </para>
         /// <para>
         /// The Microsoft.EntityFrameworkCore.DbContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)

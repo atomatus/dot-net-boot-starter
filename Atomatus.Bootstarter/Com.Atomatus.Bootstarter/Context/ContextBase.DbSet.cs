@@ -11,12 +11,14 @@ namespace Com.Atomatus.Bootstarter.Context
     public abstract partial class ContextBase
     {
         private readonly ConcurrentDictionary<Type, object> dbSetDic;
-        
-        ContextBase()
-        {
-            dbSetDic = new ConcurrentDictionary<Type, object>();
-        }
 
+        /// <summary>
+        /// Looking for <see cref="DbSet{TEntity}"/> declared how field or property (pref. it),
+        /// if not found, create a <see cref="DbSet{TEntity}"/> and store it to future usage
+        /// in same context, when context is disposed stored dbset is released too.
+        /// </summary>
+        /// <typeparam name="TEntity">entity type</typeparam>
+        /// <returns>entity dbset that can be used to query and save instances of TEntity.</returns>
         protected internal DbSet<TEntity> GetOrSet<TEntity>() where TEntity : class, IModel
         {
             if(dbSetDic.TryGetValue(typeof(TEntity), out object dbSet))
@@ -27,6 +29,7 @@ namespace Com.Atomatus.Bootstarter.Context
             var binding = BindingFlags.Instance |
                 BindingFlags.Public |
                 BindingFlags.GetField |
+                BindingFlags.DeclaredOnly |
                 BindingFlags.GetProperty;
 
             static bool IsDbSetOfTargetEntity(Type type)
@@ -56,6 +59,9 @@ namespace Com.Atomatus.Bootstarter.Context
             dbSetDic.Clear();
         }
 
+        /// <summary>
+        /// Releases the allocated resources for this context.
+        /// </summary>
         public override void Dispose()
         {
             this.DetachAllEntities();
@@ -63,6 +69,10 @@ namespace Com.Atomatus.Bootstarter.Context
             base.Dispose();
         }
 
+        /// <summary>
+        ///  Releases the allocated resources for this context.
+        /// </summary>
+        /// <returns></returns>
         public override ValueTask DisposeAsync()
         {
             this.DetachAllEntities();

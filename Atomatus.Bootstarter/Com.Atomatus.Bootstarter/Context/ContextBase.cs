@@ -1,8 +1,8 @@
 ﻿using Com.Atomatus.Bootstarter.Model;
-using Com.Atomatus.Bootstarter.Model.Auditable;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,9 +10,25 @@ using System.Threading.Tasks;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// <para>
+    /// A DbContext instance represents a session with the database and can be used to
+    /// query and save instances of your entities. DbContext is a combination of the
+    /// Unit Of Work and Repository patterns.
+    /// </para>
+    /// <para>
+    /// Database Context to be used for <see cref="IModel{ID}"/>, <see cref="AuditableModel{ID}"/>
+    /// entities.
+    /// </para>
+    /// See more in <see cref="DbContext"/>
+    /// </summary>
     public abstract partial class ContextBase : DbContext
     {
+        /// <summary>
+        /// Database schema name.
+        /// </summary>
         protected readonly string SchemaName;
+
         private readonly bool loadEntityConfigurationByEachDbSet;
 
         /// <summary>
@@ -34,6 +50,7 @@ namespace Com.Atomatus.Bootstarter.Context
         {
             this.SchemaName = schemaName;
             this.loadEntityConfigurationByEachDbSet = loadEntityConfigurationByEachDbSet;
+            this.dbSetDic = new ConcurrentDictionary<Type, object>();
             Database.EnsureCreated();
         }
 
@@ -60,13 +77,39 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </param>
         protected ContextBase(DbContextOptions options) : this(options, null, true) { }
 
+        /// <summary>
+        /// <para>
+        /// Override this method to further configure the model that was discovered by convention
+        /// from the entity types exposed in Microsoft.EntityFrameworkCore.DbSet`1 properties
+        /// on your derived context. The resulting model may be cached and re-used for subsequent
+        /// instances of your derived context.
+        /// </para>
+        /// <para>
+        /// Whether declared <see cref="DbSet{TEntity}"/> how properties for your entity,
+        /// is not necessary request <see cref="ModelBuilder.ApplyConfiguration"/> 
+        /// because this method will try to load it for autodiscovery (in same assembly).
+        /// But, if not set an entity <see cref="DbSet{TEntity}"/> how propertiy, you have
+        /// to specify your <see cref="IEntityTypeConfiguration{TEntity}"/> 
+        /// (when your are using <see cref="IModel{ID}"/> try to use <see cref="EntityConfigurationBase{TEntity, ID}"/>) 
+        /// for each not declared entity dbSet.
+        /// </para>
+        /// </summary>
+        /// <param name="modelBuilder">
+        /// The builder being used to construct the model for this context. Databases (and
+        /// other extensions) typically define extension methods on this object that allow
+        /// you to configure aspects of the model that are specific to a given database.
+        /// </param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema(SchemaName);
             base.OnModelCreating(modelBuilder);
-            this.AttemptToLoadEntityConfigurationFromDbSetDeclared(modelBuilder);
+            this.AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(modelBuilder);
         }
 
+        /// <summary>
+        /// This method will be fired previous save any entity changes in database.
+        /// </summary>
+        /// <param name="entries">target entities to change</param>
         protected virtual void OnPrevSaveChanges(IEnumerable<EntityEntry> entries) { }
 
         private void OnPrevSaveChanges()
@@ -99,7 +142,7 @@ namespace Com.Atomatus.Bootstarter.Context
                             entry.Property(nameof(IAudit.Created)).IsModified = false;
                             goto case EntityState.Modified;
                         case EntityState.Modified:
-                            entry.Property(nameof(IModel.Id)).IsModified = false;
+                            entry.Property(nameof(IModel<int>.Id)).IsModified = false;
                             entry.Property(nameof(IModelAltenateKey.Uuid)).IsModified = false;
                             break;
                         default:
@@ -126,6 +169,9 @@ namespace Com.Atomatus.Bootstarter.Context
         }
         #endregion
 
+        /// <summary>
+        /// Invoke this method to detach all entities tracked by current dbContext.
+        /// </summary>
         protected internal void DetachAllEntities()
         {
             if (this.ChangeTracker?.AutoDetectChangesEnabled ?? false)

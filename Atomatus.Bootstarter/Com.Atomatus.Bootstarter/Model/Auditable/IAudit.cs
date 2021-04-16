@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Com.Atomatus.Bootstarter.Model.Auditable
+namespace Com.Atomatus.Bootstarter.Model
 {
     public interface IAudit
     {
