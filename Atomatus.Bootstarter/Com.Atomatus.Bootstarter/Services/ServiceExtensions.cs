@@ -13,6 +13,8 @@ namespace Com.Atomatus.Bootstarter.Services
     /// </summary>
     public static class ServiceExtensions
     {
+        private static readonly AssemblyName assemblyName = new AssemblyName(Guid.NewGuid().ToString());
+
         /// <summary>
         /// Create a dynamic service type to specified service type (<typeparamref name="TService"/>)
         /// and target context <typeparamref name="TContext"/>. 
@@ -59,12 +61,11 @@ namespace Com.Atomatus.Bootstarter.Services
                 new[] { cType }, null);
 
             //create a new type from serviceCrudImpl to TContext and TEntity, ID
-            //implementing interface TService.
-            var assemblyName        = Guid.NewGuid().ToString();
+            //implementing interface TService.            
             var typeBuilder         = AssemblyBuilder
-                .DefineDynamicAssembly(new AssemblyName(assemblyName), AssemblyBuilderAccess.Run)                
-                .DefineDynamicModule("Services")
-                .DefineType($"ServiceCrudImpl{eType.Name}", TypeAttributes.Public, servImplType);
+                .DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run)                
+                .DefineDynamicModule($"Services")
+                .DefineType($"ServiceCrudImpl{eType.Name}To{cType.Name}", TypeAttributes.Public, servImplType);
 
             //add interface to new type definition
             typeBuilder.AddInterfaceImplementation(sType);
@@ -114,7 +115,7 @@ namespace Com.Atomatus.Bootstarter.Services
         }
         
         /// <summary>
-        /// Create a dynamic service type to specified service type (<typeparamref name="TService"/>)
+        /// Create a dynamic service type to specified interface service type (<typeparamref name="TService"/>)
         /// and target context <typeparamref name="TContext"/>. 
         /// Then, register it to service collection how scoped service type.
         /// </summary>

@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context connection fro SqlServer.
+    /// </summary>
     internal sealed class ContextConnectionSqlServer : ContextConnection
     {
         private const int DEFAULT_PORT = 1433;

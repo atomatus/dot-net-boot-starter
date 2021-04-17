@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context connection for NoSQL CosmoDB.
+    /// </summary>
     internal sealed class ContextConnectionCosmos : ContextConnectionString
     {
         private const string EP_GROUP       = "ep";

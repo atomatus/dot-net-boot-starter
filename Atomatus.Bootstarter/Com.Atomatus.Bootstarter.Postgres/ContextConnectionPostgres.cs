@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context connection for postgres database.
+    /// </summary>
     internal sealed class ContextConnectionPostgres : ContextConnection
     {
         private const int DEFAULT_PORT = 5432;

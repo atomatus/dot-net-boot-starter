@@ -6,6 +6,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context connection postgres extensions.
+    /// </summary>
     public static class ContextConnectionPostgresExtensions
     {
         private static bool OnBuildAsPostgresCallback(ContextConnection.Builder builder, out ContextConnection conn)
@@ -19,9 +22,10 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <para>
         /// To load by ConnectionString in appsettings.json use the default postgressql format connection
         /// string. Otherwise, inform connection credentials.
+        /// </para>
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">current builder</param>
+        /// <returns>current builder</returns>
         public static ContextConnection.Builder AsPostgres([NotNull] this ContextConnection.Builder builder)
         {
             return builder
@@ -34,9 +38,12 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <para>
         /// To load by ConnectionString in appsettings.json use the default postgressql format connection
         /// string. Otherwise, inform connection credentials.
+        /// </para>
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">current builder</param>
+        /// <param name="provider">service provider</param>
+        /// <param name="options">DbContext options builder</param>
+        /// <returns>DbContext options builder</returns>
         public static DbContextOptionsBuilder AsPostgresDbContextOptionsBuilder(
             [NotNull] this ContextConnection.Builder builder,
             [NotNull] IServiceProvider provider,

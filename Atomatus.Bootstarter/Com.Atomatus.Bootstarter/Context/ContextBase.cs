@@ -155,13 +155,77 @@ namespace Com.Atomatus.Bootstarter.Context
         }
 
         #region SaveChanges
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        /// <summary>
+        /// <para>
+        /// Saves all changes made in this context to the database.<br/>
+        /// This method will automatically call <see cref="ChangeTracker.DetectChanges"/><br/>
+        /// to discover any changes to entity instances before saving to the underlying database.<br/>
+        /// <i>This can be disabled via <see cref="ChangeTracker.AutoDetectChangesEnabled"/>.</i>
+        /// </para>
+        /// <para>
+        /// Before save changes will be executed the method <see cref="OnPrevSaveChanges(IEnumerable{EntityEntry})"/>
+        /// with all detected tracked changes.
+        /// </para>
+        /// </summary>
+        /// <param name="acceptAllChangesOnSuccess">
+        /// Indicates whether <see cref="ChangeTracker.AcceptAllChanges"/>
+        /// is called after the changes have been sent successfully to the database.
+        /// </param>
+        /// <returns>
+        /// The number of state entries written to the database.
+        /// </returns>
+        /// <exception cref="DbUpdateException">
+        /// An error is encountered while saving to the database.
+        /// </exception>
+        /// <exception cref="DbUpdateConcurrencyException">
+        /// A concurrency violation is encountered while saving to the database.<br/>
+        /// A concurrency violation occurs when an unexpected number of rows are affected during save.<br/>
+        /// This is usually because the data in the database has been modified since it was loaded into memory.
+        /// </exception>
+        public sealed override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.OnPrevSaveChanges();
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// <para>
+        /// Saves all changes made in this context to the database.<br/>
+        /// This method will automatically call <see cref="ChangeTracker.DetectChanges"/><br/>
+        /// to discover any changes to entity instances before saving to the underlying database.<br/>
+        /// <i>This can be disabled via <see cref="ChangeTracker.AutoDetectChangesEnabled"/>.</i>
+        /// </para>
+        /// <para>
+        /// Multiple active operations on the same context instance are not supported.<br/>
+        /// Use 'await' to ensure that any asynchronous operations have completed before calling
+        /// another method on this context.
+        /// </para>
+        /// <para>
+        /// Before save changes will be executed the method <see cref="OnPrevSaveChanges(IEnumerable{EntityEntry})"/>
+        /// with all detected tracked changes.
+        /// </para>
+        /// </summary>
+        /// <param name="acceptAllChangesOnSuccess">
+        /// Indicates whether <see cref="ChangeTracker.AcceptAllChanges"/>
+        /// is called after the changes have been sent successfully to the database.
+        /// </param>
+        /// <param name="cancellationToken">
+        /// A System.Threading.CancellationToken to observe while waiting 
+        /// for the task to complete.
+        /// </param>
+        /// <returns>
+        /// A task that represents the asynchronous save operation.The task result contains
+        /// the number of state entries written to the database.
+        /// </returns>
+        /// <exception cref="DbUpdateException">
+        /// An error is encountered while saving to the database.
+        /// </exception>
+        /// <exception cref="DbUpdateConcurrencyException">
+        /// A concurrency violation is encountered while saving to the database.<br/>
+        /// A concurrency violation occurs when an unexpected number of rows are affected during save.<br/>
+        /// This is usual
+        /// </exception>
+        public sealed override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             return Task.Factory.StartNew(this.OnPrevSaveChanges)
                 .ContinueWith(r => base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken), cancellationToken)

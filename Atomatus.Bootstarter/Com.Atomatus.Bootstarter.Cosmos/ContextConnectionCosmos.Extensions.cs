@@ -1,11 +1,13 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context connection CosmoDB extensions.
+    /// </summary>
     public static class ContextConnectionCosmosExtensions
     {
         private static bool OnBuildAsCosmosCallback(ContextConnection.Builder builder, out ContextConnection conn)
@@ -24,8 +26,8 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </para>
         /// Otherwise, inform connection credentials.
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">current builder</param>
+        /// <returns>current builder</returns>
         public static ContextConnection.Builder AsCosmos(this ContextConnection.Builder builder)
         {
             return builder.AddBuildCallback(OnBuildAsCosmosCallback);
@@ -36,13 +38,18 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <para>
         /// To load by ConnectionString in appsettings.json use the follow format:<br/>
         /// <i>
-        ///  "ConnectionStringKey" : "AccountEndpoint=https://accountname.documents.azure.com:443/‌​;AccountKey=accountk‌​ey==;Database=database"
+        ///  "ConnectionStringKey" : "
+        ///  AccountEndpoint=https://accountname.documents.azure.com:443/‌​;
+        ///  AccountKey=accountk‌​ey==;
+        ///  Database=database"
         /// </i>
         /// </para>
         /// Otherwise, inform connection credentials.
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">current builder</param>
+        /// <param name="provider">service provider</param>
+        /// <param name="options">DbContext options builder</param>
+        /// <returns>DbContext options builder</returns>
         public static DbContextOptionsBuilder AsCosmosDbContextOptionsBuilder(
             [NotNull] this ContextConnection.Builder builder,
             [NotNull] IServiceProvider provider,
@@ -107,6 +114,5 @@ namespace Com.Atomatus.Bootstarter.Context
                 contextLifetime: contextLifetime,
                 optionsLifetime: optionsLifetime);
         }
-
     }
 }

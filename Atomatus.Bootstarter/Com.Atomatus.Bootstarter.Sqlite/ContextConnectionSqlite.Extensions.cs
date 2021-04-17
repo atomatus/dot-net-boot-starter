@@ -6,6 +6,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context connection sqlite extensions.
+    /// </summary>
     public static class ContextConnectionSqliteExtensions
     {
         private static bool OnBuildAsSqliteCallback(ContextConnection.Builder builder, out ContextConnection conn)
@@ -19,9 +22,10 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <para>
         /// This context can not be loaded by ConnectionString,
         /// always, inform connection credentials, otherwise will be created a memory database.
+        /// </para>
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">current builder</param>
+        /// <returns>current builder</returns>
         public static ContextConnection.Builder AsSqlite([NotNull] this ContextConnection.Builder builder)
         {
             return builder
@@ -34,9 +38,12 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <para>
         /// This context can not be loaded by ConnectionString,
         /// always, inform connection credentials, otherwise will be created a memory database.
+        /// </para>
         /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
+        /// <param name="builder">current builder</param>
+        /// <param name="provider">service provider</param>
+        /// <param name="options">DbContext options builder</param>
+        /// <returns>DbContext options builder</returns>
         public static DbContextOptionsBuilder AsSqliteDbContextOptionsBuilder(
             [NotNull] this ContextConnection.Builder builder,
             [NotNull] IServiceProvider provider,

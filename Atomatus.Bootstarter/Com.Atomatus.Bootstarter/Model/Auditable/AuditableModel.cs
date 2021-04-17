@@ -10,12 +10,12 @@ namespace Com.Atomatus.Bootstarter.Model
     public abstract class AuditableModel<ID> : ModelBase<ID>, IAudit
     {
         /// <summary>
-        /// Created in date.
+        /// Created at date.
         /// </summary>
         public DateTime Created { get; set; }
         
         /// <summary>
-        /// Updated in date.
+        /// Updated at date.
         /// </summary>
         public DateTime? Updated { get; set; }
     }

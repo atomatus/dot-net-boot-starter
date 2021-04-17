@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// Context Connection for Sqlite.
+    /// </summary>
     internal sealed class ContextConnectionSqlite : ContextConnection
     {
         public ContextConnectionSqlite(Builder builder) : base(builder) { }

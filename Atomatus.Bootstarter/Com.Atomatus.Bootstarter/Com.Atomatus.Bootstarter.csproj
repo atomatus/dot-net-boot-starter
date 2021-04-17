@@ -12,15 +12,14 @@
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.5</PackageVersion>
+    <PackageVersion>0.0.6</PackageVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/atomatus/design-template/master/logos/atomatus/logo512x512.png?token=ACNS4LJJGHPDFLXVQRCXN5TAPW3JK</PackageIconUrl>
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/atomatus/dot-net-boot-starter</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>1701;1702;CS1591</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>    
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,27 +40,6 @@
     </None>
     <None Include="Context/Configuration/Connection/ContextConnectionString.Extensions.cs">
       <DependentUpon>Context/Configuration/Connection/ContextConnectionString.cs</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Model/ModelBase.Int.cs">
-      <DependentUpon>Model/ModelBase.cs</DependentUpon>
-    </None>
-    <None Include="Model/ModelBase.Long.cs">
-      <DependentUpon>Model/ModelBase.cs</DependentUpon>
-    </None>
-    <None Include="Model/ModelBase.String.cs">
-      <DependentUpon>Model/ModelBase.cs</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Model/Auditable/AuditableModel.Int.cs">
-      <DependentUpon>Model/Auditable/AuditableModel.cs</DependentUpon>
-    </None>
-    <None Include="Model/Auditable/AuditableModel.Long.cs">
-      <DependentUpon>Model/Auditable/AuditableModel.cs</DependentUpon>
     </None>
   </ItemGroup>
 

@@ -21,7 +21,8 @@ namespace Com.Atomatus.Bootstarter
     /// </para>
     /// </summary>
     /// <author>Carlos Matos</author>
-    /// <date>2021-01-19</date>
+    /// <date>2021-01-19</date>    
+    #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     public struct EnvironmentVariable : IComparable, IComparable<EnvironmentVariable>, IConvertible, IEquatable<EnvironmentVariable>
     {
         private delegate bool TryParse<T>(string value, out T result);
@@ -296,4 +297,5 @@ namespace Com.Atomatus.Bootstarter
         }
         #endregion
     }
+    #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

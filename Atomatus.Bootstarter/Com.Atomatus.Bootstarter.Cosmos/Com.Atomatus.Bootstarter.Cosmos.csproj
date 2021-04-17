@@ -10,7 +10,7 @@
     <Description>Bootstarter library for noSql CosmoDB repository</Description>
     <PackageId>Com.Atomatus.BootStarter.Cosmos</PackageId>
     <PackageTags>ef boot starter cosmos</PackageTags>
-    <PackageVersion>0.0.4</PackageVersion>
+    <PackageVersion>0.0.5</PackageVersion>
     <PackageIconUrl>https://raw.githubusercontent.com/atomatus/design-template/master/logos/atomatus/logo512x512.png?token=ACNS4LJJGHPDFLXVQRCXN5TAPW3JK</PackageIconUrl>
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/atomatus/dot-net-boot-starter</RepositoryUrl>
