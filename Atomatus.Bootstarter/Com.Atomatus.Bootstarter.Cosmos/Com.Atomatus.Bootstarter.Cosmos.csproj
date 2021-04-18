@@ -4,13 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>8.0</LangVersion>
-    <Authors>Carlos Matos</Authors>
+    <Authors>Atomatus</Authors>
     <Company>Atomatus</Company>
     <Copyright>®2020-2021 Atomatus - All rights reserved</Copyright>
     <Description>Bootstarter library for noSql CosmoDB repository</Description>
     <PackageId>Com.Atomatus.BootStarter.Cosmos</PackageId>
     <PackageTags>ef boot starter cosmos</PackageTags>
-    <PackageVersion>0.0.6</PackageVersion>
+    <PackageVersion>0.0.7</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://raw.githubusercontent.com/atomatus/design-template/master/logos/atomatus/logo512x512.png?token=ACNS4LJJGHPDFLXVQRCXN5TAPW3JK</PackageIconUrl>

@@ -101,7 +101,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(SchemaName);
+            modelBuilder.HasDefaultSchema(SchemaName);            
             base.OnModelCreating(modelBuilder);
             this.AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(modelBuilder);
         }

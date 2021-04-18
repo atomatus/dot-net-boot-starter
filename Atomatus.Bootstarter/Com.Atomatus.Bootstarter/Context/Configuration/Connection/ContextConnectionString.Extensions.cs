@@ -46,8 +46,8 @@ namespace Com.Atomatus.Bootstarter.Context
         public static ContextConnection.Builder Configuration(this ContextConnection.Builder builder, IServiceProvider provider)
         {
             return builder.Configuration((provider != null ? provider.GetService<IConfiguration>() :
-                 throw new ArgumentNullException(nameof(provider), "Service provider can not be null!")) ??
-                 throw new ArgumentException("Service provider is do not attaching IConfiguration!"));
+                 throw new ArgumentNullException(nameof(provider), "Service provider can not be null!"))/* ??
+                 throw new ArgumentException("Service provider is do not attaching IConfiguration!")*/);
         }
 
         /// <summary>

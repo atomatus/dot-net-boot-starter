@@ -6,13 +6,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
     <LangVersion>8.0</LangVersion>
-    <Authors>Carlos Matos</Authors>
+    <Authors>Atomatus</Authors>
     <Company>Atomatus</Company>    
     <Copyright>®2020-2021 Atomatus - All rights reserved</Copyright>
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.8</PackageVersion>
+    <PackageVersion>0.0.9</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
