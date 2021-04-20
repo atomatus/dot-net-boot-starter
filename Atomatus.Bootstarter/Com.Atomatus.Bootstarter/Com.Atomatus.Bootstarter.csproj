@@ -12,7 +12,7 @@
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.9</PackageVersion>
+    <PackageVersion>0.0.10</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
@@ -52,6 +52,19 @@
     </None>
     <None Include="Context/Configuration/Connection/ContextConnectionString.Extensions.cs">
       <DependentUpon>Context/Configuration/Connection/ContextConnectionString.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="Util/DynamicType.Factory.cs">
+      <DependentUpon>Util/DynamicType.cs</DependentUpon>
+    </None>
+    <None Include="Util/DynamicType.Context.cs">
+      <DependentUpon>Util/DynamicType.cs</DependentUpon>
+    </None>
+    <None Include="Util/DynamicType.Service.cs">
+      <DependentUpon>Util/DynamicType.cs</DependentUpon>
     </None>
   </ItemGroup>
 

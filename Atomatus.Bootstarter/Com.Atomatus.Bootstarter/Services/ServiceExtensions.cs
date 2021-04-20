@@ -23,7 +23,7 @@ namespace Com.Atomatus.Bootstarter.Services
             where TContext : ContextBase
             where TService : IService
         {
-            var sFinalType  = ServiceDynamicAssembly.GetInstance().GetOrCreateType<TContext, TService>();
+            var sFinalType  = DynamicTypeFactory.AsService().GetOrCreateType<TContext, TService>();
             var sType       = typeof(TService);
             return addServiceCallback.Invoke(sType, sFinalType);
         }

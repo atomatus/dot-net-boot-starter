@@ -98,21 +98,71 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <typeparam name="TContext">Context target</typeparam>
         /// <param name="services">Current service collection</param>
         /// <param name="builderAction">Can set builder options</param>
+        /// <param name="serviceAction">Can set dbcontext contract services as dependency injection</param>
         /// <param name="contextLifetime">The lifetime with which to register the DbContext service in the container.</param>
         /// <param name="optionsLifetime">The lifetime with which to register the DbContextOptions service in the container.</param>
         /// <returns>The same service collection so that multiple calls can be chained.</returns>
         public static IServiceCollection AddDbContextAsCosmos<TContext>(
             [NotNull] this IServiceCollection services,
             [AllowNull] Action<ContextConnection.Builder> builderAction = null,
+            [AllowNull] Action<IContextServiceCollection> serviceAction = null,
             ServiceLifetime contextLifetime = ServiceLifetime.Scoped, 
             ServiceLifetime optionsLifetime = ServiceLifetime.Scoped) where TContext : ContextBase
         {
-            var builder = new ContextConnection.Builder().Database<TContext>();
-            builderAction?.Invoke(builder);
-            return services.AddDbContext<TContext>(
-                optionsAction: (prov, opt) => builder.AsCosmosDbContextOptionsBuilder(prov, opt),
-                contextLifetime: contextLifetime,
-                optionsLifetime: optionsLifetime);
+            return services.AddDbContextAs<TContext>(
+                (builder, prov, opt) => builder.AsCosmosDbContextOptionsBuilder(prov, opt),
+                builderAction,
+                serviceAction,
+                contextLifetime,
+                optionsLifetime);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Register an dynamic context type as a Cosmos's DbContext service in the Microsoft.Extensions.DependencyInjection.IServiceCollection.<br/>
+        /// Use this method when using dependency injection in your application, such as
+        /// with ASP.NET Core. For applications that don't use dependency injection, consider
+        /// creating Microsoft.EntityFrameworkCore.DbContext instances directly with its
+        /// constructor. 
+        /// </para>
+        /// <para>
+        /// Whether not set no one builder option using <paramref name="builderAction"/>
+        /// will try to load from appsettings.json looking for "ConnectionString[s]" key formatted, how like, the follow code:
+        /// </para>
+        /// <code>
+        /// <i>
+        ///  "ConnectionStringKey" : "AccountEndpoint=https://accountname.documents.azure.com:443/‌​;AccountKey=accountk‌​ey==;Database=database"
+        /// </i>
+        /// </code>
+        /// <para>
+        /// If not found, will throw exception because is not possible define default connection for this database type.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// When using this operation must be set the entity services
+        /// by <paramref name="serviceAction"/> to be possible identify target entities for dbContext.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="services">Current service collection</param>
+        /// <param name="builderAction">Can set builder options</param>
+        /// <param name="serviceAction">Can set dbcontext contract services as dependency injection</param>
+        /// <param name="contextLifetime">The lifetime with which to register the DbContext service in the container.</param>
+        /// <param name="optionsLifetime">The lifetime with which to register the DbContextOptions service in the container.</param>
+        /// <returns>The same service collection so that multiple calls can be chained.</returns>
+        public static IServiceCollection AddDbContextAsCosmos(
+            [NotNull] this IServiceCollection services,
+            [AllowNull] Action<ContextConnection.Builder> builderAction = null,
+            [AllowNull] Action<IContextServiceCollection> serviceAction = null,
+            [NotNull] ServiceLifetime contextLifetime = ServiceLifetime.Scoped,
+            [NotNull] ServiceLifetime optionsLifetime = ServiceLifetime.Scoped)
+        {
+            return services.AddDbContextAs(
+                (builder, prov, opt) => builder.AsCosmosDbContextOptionsBuilder(prov, opt),
+                builderAction,
+                serviceAction,
+                contextLifetime,
+                optionsLifetime);
         }
     }
 }

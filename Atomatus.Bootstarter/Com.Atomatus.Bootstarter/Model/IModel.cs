@@ -10,7 +10,7 @@ namespace Com.Atomatus.Bootstarter.Model
     /// <summary>
     /// Model alternate key.
     /// </summary>
-    public interface IModelAltenateKey
+    public interface IModelAltenateKey : IModel
     {
         /// <summary>
         /// Uuid (alternate key).
