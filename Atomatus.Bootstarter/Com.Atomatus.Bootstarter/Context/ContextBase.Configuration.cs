@@ -1,8 +1,6 @@
-﻿using Com.Atomatus.Bootstarter.Model;
+﻿using Com.Atomatus.Bootstarter.Context.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -10,12 +8,6 @@ namespace Com.Atomatus.Bootstarter.Context
 {
     public abstract partial class ContextBase
     {
-        private class EntityConfigurationInternal<TEntity, ID> : EntityConfigurationBase<TEntity, ID>
-            where TEntity : class, IModel<ID>
-        {
-            protected override void OnConfigure(EntityTypeBuilder<TEntity> builder) { }
-        }
-
         private static bool CheckIsEntityTypeConfiguration(Type type, out Type entityType)
         {
             Type aux1  = type.GetGenericInterfaceType(typeof(IEntityTypeConfiguration<>));
@@ -23,34 +15,6 @@ namespace Com.Atomatus.Bootstarter.Context
             return entityType != default;
         }
 
-        private void LoadEntityConfigurationsDefault(IEnumerable<Type> types, ModelBuilder modelBuilder)
-        {
-            var gconfigType = typeof(EntityConfigurationInternal<,>);
-
-            var gApplyConfigMethod = modelBuilder.GetType()
-                .GetMethod(nameof(ModelBuilder.ApplyConfiguration));
-
-            foreach(Type type in types)
-            {
-                Type idType = typeof(IModel).IsAssignableFrom(type) ?
-                    (type.GetProperty(nameof(IModel<int>.Id), BindingFlags.Instance | BindingFlags.Public)
-                        ?.PropertyType ??
-                    type.GetField(nameof(IModel<int>.Id), BindingFlags.Instance | BindingFlags.Public)
-                        ?.FieldType) : null;
-
-                if (idType is null)
-                {
-                    continue;
-                }
-
-                var configType = gconfigType.MakeGenericType(type, idType);
-                var config = configType.GetConstructors().First().Invoke(null);
-
-                var applyConfigMethod = gApplyConfigMethod.MakeGenericMethod(type);
-                applyConfigMethod.Invoke(modelBuilder, new[] { config });
-            }
-        }
-        
         private void AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(ModelBuilder modelBuilder)
         {
             if (!loadEntityConfigurationByEachDbSet)
@@ -82,16 +46,16 @@ namespace Com.Atomatus.Bootstarter.Context
             foreach (var g in groups)
             {
                 var itens = g.ToList();
-
+                
                 //attempt to find classes generated implementing IEntityTypeConfiguration.
                 //when found, remove the entity from list and load it configuation to current context.
-                modelBuilder.ApplyConfigurationsFromAssembly(g.Key, 
-                    t => CheckIsEntityTypeConfiguration(t, out Type entityType) && 
+                modelBuilder.ApplyConfigurationsFromAssembly(g.Key,
+                    t => CheckIsEntityTypeConfiguration(t, out Type entityType) &&
                     itens.Remove(entityType));
 
                 //attempt to create and load minimum default configuration
                 //to entities than does not contains explit IEntityConfiguration using EntityConfigurationInternal.
-                LoadEntityConfigurationsDefault(itens, modelBuilder);
+                EntityTypeConfigurationReflection.ApplyConfigurationToEntities(modelBuilder, itens);
             }
         }
     }

@@ -27,7 +27,7 @@ namespace Com.Atomatus.Bootstarter.Context
     /// </summary>
     /// <typeparam name="TEntity">entity type</typeparam>
     /// <typeparam name="ID">entity id type</typeparam>
-    public abstract class EntityConfigurationBase<TEntity, ID> : 
+    public abstract class EntityTypeConfigurationBase<TEntity, ID> : 
         IEntityTypeConfiguration<TEntity>
         where TEntity : class, IModel<ID>
     {

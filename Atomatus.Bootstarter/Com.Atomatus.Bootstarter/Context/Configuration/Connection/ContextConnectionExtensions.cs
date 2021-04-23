@@ -27,9 +27,9 @@ namespace Com.Atomatus.Bootstarter.Context
                 string message = $"builderAction was not set to " +
                     $"{dbTypeName} dbContext build at \"IServiceCollection#{memberName}\" request.\r\n" +
                     "Therefore will be used the default connection parameters to " +
-                    $"build the DbContext ({cType.Name}).\r\n";
+                    $"build the DbContext ({cType.Name}).";
 
-                Debug.Write($"{prefix}{message}");
+                Debug.WriteLine($"{prefix}{message}");
 
                 #if DEBUG
                 Debug.Write(
@@ -37,22 +37,14 @@ namespace Com.Atomatus.Bootstarter.Context
                     $"\t- Operation\t: {memberName}\r\n");
                 #endif
 
-                var color = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine(prefix);
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(message);
-                Console.ForegroundColor = color;
+                ConsoleColored.Write(prefix, ConsoleColor.DarkYellow);
+                ConsoleColored.WriteLine(message, ConsoleColor.Yellow);
                 #if DEBUG
-                Console.Write(" - Path\t\t: ");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine(filePath);
-                Console.ForegroundColor = color;
-                Console.Write(" - Operation\t: ");
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine(memberName);
+                ConsoleColored.Write(" - Path\t\t: ");
+                ConsoleColored.WriteLine(filePath, ConsoleColor.Blue);                    
+                ConsoleColored.Write(" - Operation\t: ");
+                ConsoleColored.WriteLine(memberName, ConsoleColor.Blue);
                 #endif
-                Console.ForegroundColor = color;
             }
         }
 
@@ -124,6 +116,5 @@ namespace Com.Atomatus.Bootstarter.Context
                 }
             }
         }
-
     }
 }

@@ -139,8 +139,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <i>Obs.: The TModel can be assigned as property in target context.</i>
         /// </para>
         /// </summary>
-        /// <typeparam name="TModel">model to generate service type</typeparam>
-        /// <typeparam name="TID">id model type</typeparam>
+        /// <typeparam name="TModel">model to generate service type</typeparam>        
         /// <param name="serviceLifetime">service lifetime mode</param>
         /// <returns>current context service collection instance</returns>
         IContextModelOperationCollection AddServiceTo<TModel>(ServiceLifetime serviceLifetime = ServiceLifetime.Scoped) where TModel : IModel;
@@ -153,8 +152,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <i>Obs.: The TModel can be assigned as property in target context.</i>
         /// </para>
         /// </summary>
-        /// <typeparam name="TModel">model to generate service type</typeparam>
-        /// <typeparam name="TID">id model type</typeparam>
+        /// <typeparam name="TModel">model to generate service type</typeparam>        
         /// <returns>current context service collection instance</returns>
         IContextModelOperationCollection AddScoped<TModel>() where TModel : IModel;
 
@@ -167,7 +165,6 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </para>
         /// </summary>
         /// <typeparam name="TModel">model to generate service type</typeparam>
-        /// <typeparam name="TID">id model type</typeparam>
         /// <returns>current context service collection instance</returns>
         IContextModelOperationCollection AddSingleton<TModel>() where TModel : IModel;
 
@@ -180,7 +177,6 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </para>
         /// </summary>
         /// <typeparam name="TModel">model to generate service type</typeparam>
-        /// <typeparam name="TID">id model type</typeparam>
         /// <returns>current context service collection instance</returns>
         IContextModelOperationCollection AddTransient<TModel>() where TModel : IModel;
     }

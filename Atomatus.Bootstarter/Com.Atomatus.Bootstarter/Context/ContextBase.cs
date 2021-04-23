@@ -90,7 +90,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// because this method will try to load it for autodiscovery (in same assembly).
         /// But, if not set an entity <see cref="DbSet{TEntity}"/> how propertiy, you have
         /// to specify your <see cref="IEntityTypeConfiguration{TEntity}"/> 
-        /// (when your are using <see cref="IModel{ID}"/> try to use <see cref="EntityConfigurationBase{TEntity, ID}"/>) 
+        /// (when your are using <see cref="IModel{ID}"/> try to use <see cref="EntityTypeConfigurationBase{TEntity, ID}"/>) 
         /// for each not declared entity dbSet.
         /// </para>
         /// </summary>
