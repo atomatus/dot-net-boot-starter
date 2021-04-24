@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -22,29 +21,25 @@ namespace Com.Atomatus.Bootstarter.Context
             if (noBuilderAction)
             {
                 Type cType = typeof(TContext);
-                string dbTypeName = memberName.Replace(nameof(AddDbContextAs), "");
-                string prefix = "[Warning]: ";
-                string message = $"builderAction was not set to " +
-                    $"{dbTypeName} dbContext build at \"IServiceCollection#{memberName}\" request.\r\n" +
-                    "Therefore will be used the default connection parameters to " +
-                    $"build the DbContext ({cType.Name}).";
-
-                Debug.WriteLine($"{prefix}{message}");
-
+                string dbTypeName = memberName.Replace(nameof(AddDbContextAs), "");                
+                
+                ConsoleLog
+                    .Warn()
+                    .Console()
+                    .Debug()
+                    .WriteLine($"The DbContext ({cType.Name}) Service was defined to start as \"{dbTypeName}\"")
+                    .WriteLine($"in \"IServiceCollection#{memberName}\", however, no construction value has")
+                    .WriteLine("been defined (in builderAction parameter). Therefore, the connection will be")
+                    .WriteLine("initialized by the \"ConnectionString\" if defined it in \"appsettings.json\",")
+                    .WriteLine("otherwise using the standard connection parameters according to the")
+                    .WriteLine($"{dbTypeName} supplier's documentation.")
                 #if DEBUG
-                Debug.Write(
-                    $"\t- Path\t\t: {filePath}\r\n" +
-                    $"\t- Operation\t: {memberName}\r\n");
+                    .Write("- Path:      ")
+                    .WriteLine(filePath, ConsoleColor.Blue)
+                    .Write("- Operation: ")
+                    .WriteLine(memberName, ConsoleColor.Blue)
                 #endif
-
-                ConsoleColored.Write(prefix, ConsoleColor.DarkYellow);
-                ConsoleColored.WriteLine(message, ConsoleColor.Yellow);
-                #if DEBUG
-                ConsoleColored.Write(" - Path\t\t: ");
-                ConsoleColored.WriteLine(filePath, ConsoleColor.Blue);                    
-                ConsoleColored.Write(" - Operation\t: ");
-                ConsoleColored.WriteLine(memberName, ConsoleColor.Blue);
-                #endif
+                    .Dispose();
             }
         }
 
