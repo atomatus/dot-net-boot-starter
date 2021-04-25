@@ -7,8 +7,8 @@
 
 <p>
   Boot Starter project contains abstract and contract classes 
-  [a IModel](../Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs) 
-  , IAudit, ModelBase, AuditableModel) 
+  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs">IModel</a>, 
+  IAudit, ModelBase, AuditableModel) 
   to modularize domain entities, services (IService) pipelines as Repositories mode to persist data using 
   Entity Framework and DbContext (ContextBase) as UnityOfWork.
 </p>
