@@ -60,16 +60,17 @@
   
 - Infrastructure
   - Layer that supports the other layers. Which is currently divided into two layers (Infra and CrossCutting) with their respective contents.
-    - Infra:
-      -  Sublayer of infrascture, responsible to persist data.
-        -  Respositories;
-        -  Data Model;
-        -  Data Persistence;
-    -  CrossCutting:
-      -  Sublayer of infrascture, responsible to cross all other layers applying Ioc (Inversion of control), dependency-injection.
-        -  Ioc;
-        -  Dependency Injection;
-        -  Register all Dependency reference and implementation, see more about it [here](https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/ioc);
+    - Infra:    
+      - Sublayer of infrascture, responsible to persist data.
+          - Respositories;
+          - Data Model;
+          - Data Persistence;
+          
+    - CrossCutting:
+      - Sublayer of infrascture, responsible to cross all other layers applying Ioc (Inversion of control), dependency-injection.
+          - Ioc;
+          - Dependency Injection;
+          - Register all Dependency reference and implementation, see more about it [here](https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/ioc);
   
 ### Domain
 <p>
