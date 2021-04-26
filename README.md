@@ -24,6 +24,18 @@
   <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Context/ContextBase.cs">ContextBase</a>) as UnityOfWork.
 </p>
 
+## How to Use?
+<p>
+  First, choose your infrastructe strategy, for example, Domain Aplication Infrastructure.
+</p>
+
+### * Domain
+<p>
+  Then, in your <i>Domain layer</i> contains the domain entities and stand-alone domain services.
+  Remember that any domain concepts that depends on external resouces, are defined by interfaces.
+  And this interfaces implementations have to be in <i>Infrascture Layer</i>.
+</p>
+
 ## License
 
 .NET (including the runtime repo) is licensed under the [Apache](LICENSE) license.
