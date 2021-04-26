@@ -29,18 +29,29 @@
   First, choose your strategy design, for example, [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 </p>
 
-### Resume About DDD Layers
+### Small resume about DDD Layers
 
-* Apresentacao:
-  *  Camada responsável por abranger a interface de usuário (UI);
-    *  Desktop UI (WinForms, WPF)
-    *  Web UI (Angular, React, Vue)
-    *  Mobile UI (Android, Xamarin)
-* Servico
-* Aplicacao
-* Dominio
-* Infraestrutura
-
+* Presentation:
+  *  Layer responsible for covering everything that concerns the UI (user interface):
+    *  - Desktop UI (WinForms, WPF);
+    *  - Web UI (Angular, React, Vue);
+    *  - Mobile UI (Android, Xamarin).
+    
+* Service:
+  * All ways of remote communication must take place here:
+    * - Web API (REST);
+    * - SignalR
+    * - WebSockets
+    
+* Application
+  * a
+  
+* Domain
+  * a
+  
+* Infrastructure
+  * a
+  
 ### Domain
 <p>
   Then, in your <i>Domain layer</i> contains the domain entities, stand-alone domain services.<br/>
