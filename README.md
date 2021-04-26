@@ -4,7 +4,7 @@
 
 [![NuGet version (SoftCircuits.Silk)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter/)
 
-[![GitHub Status](https://img.shields.io/github/checks-status/atomatus/dot-net-boot-starter/main?style=flat-square)
+[![GitHub Status](https://img.shields.io/github/checks-status/atomatus/dot-net-boot-starter/main?style=flat-square)]
 
 ## What is BootStarter?
 <p>
