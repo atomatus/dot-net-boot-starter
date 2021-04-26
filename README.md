@@ -32,25 +32,25 @@
 ### Small resume about DDD layers
 
 * Presentation:
- *  Layer responsible for covering everything that concerns the UI (user interface):
-  * Desktop UI (WinForms, WPF);
-  * Web UI (Angular, React, Vue);
-  * Mobile UI (Android, Xamarin).
-    
+  *  Layer responsible for covering everything that concerns the UI (user interface).
+    * Desktop UI (WinForms, WPF);
+    * Web UI (Angular, React, Vue);
+    * Mobile UI (Android, Xamarin).
+
 * Service:
- * All ways of remote communication must take place here:
-    * Web API (REST);
-    * SignalR
-    * WebSockets
+  * All ways of remote communication must take place here.
+   * Web API (REST);
+   * SignalR;
+   * WebSockets.
     
 * Application
-  * a
+* a
   
 * Domain
-  * a
+* a
   
 * Infrastructure
-  * a
+* a
   
 ### Domain
 <p>
