@@ -26,4 +26,4 @@
 
 ## License
 
-.NET (including the runtime repo) is licensed under the [MIT](LICENSE.TXT) license.
+.NET (including the runtime repo) is licensed under the [APACHE](LICENSE.TXT) license.
