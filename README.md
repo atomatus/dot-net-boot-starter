@@ -26,15 +26,24 @@
 
 ## How to Use?
 <p>
-  First, choose your infrastructe strategy, for example, Domain Aplication Infrastructure.
+  First, choose your strategy design, for example, [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 </p>
 
-  ### Domain
-  <p>
-    Then, in your <i>Domain layer</i> contains the domain entities and stand-alone domain services.
-    Remember that any domain concepts that depends on external resouces, are defined by interfaces.
-    And this interfaces implementations have to be in <i>Infrascture Layer</i>.
-  </p>
+### Domain
+<p>
+  Then, in your <i>Domain layer</i> contains the domain entities, stand-alone domain services.<br/>
+  Remember that any domain concepts that depends on external resouces, are defined by interfaces
+  and this interfaces implementations have to be in <i>Infrascture Layer</i>.  
+</p>
+<p>
+  Now, following up the above concept were created the entity class Client.  
+</p>
+
+* Domain class from IModel<> Full Implementatin
+* Domain class from ModelBase
+  *  
+* Domain class from AuditableModel
+
 
 ## License
 
