@@ -29,6 +29,18 @@
   First, choose your strategy design, for example, [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 </p>
 
+### Resume About DDD Layers
+
+* Apresentacao:
+  *  Camada responsável por abranger a interface de usuário (UI);
+    *  Desktop UI (WinForms, WPF)
+    *  Web UI (Angular, React, Vue)
+    *  Mobile UI (Android, Xamarin)
+* Servico
+* Aplicacao
+* Dominio
+* Infraestrutura
+
 ### Domain
 <p>
   Then, in your <i>Domain layer</i> contains the domain entities, stand-alone domain services.<br/>
@@ -41,7 +53,6 @@
 
 * Domain class from IModel<> Full Implementatin
 * Domain class from ModelBase
-  *  
 * Domain class from AuditableModel
 
 
