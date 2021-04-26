@@ -82,8 +82,8 @@
   Now, following up the above concept were created the entity class Client.  
 </p>
 
-- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L25">IModel<ID></a> Full Implementatin
-  - ![image](https://user-images.githubusercontent.com/10169901/116135710-ce8c9100-a6a7-11eb-8a33-db034bcff1b9.png)
+- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L25">IModel<ID></a> (and optionally of <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L13">IModelAltenateKey</a>) Full Implementatin
+![image](https://user-images.githubusercontent.com/10169901/116135710-ce8c9100-a6a7-11eb-8a33-db034bcff1b9.png)
 
 - Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs">ModelBase</a>
 
