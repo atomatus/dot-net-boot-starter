@@ -32,29 +32,44 @@
 ### Small resume about DDD layers
 
 - Presentation:
- -  Layer responsible for covering everything that concerns the UI (user interface).
-  - Desktop UI (WinForms, WPF);
-  - Web UI (Angular, React, Vue);
-  - Mobile UI (Android, Xamarin).
+  - Layer responsible for covering everything that concerns the UI (user interface).
+    - Desktop UI (WinForms, WPF);
+    - Web UI (Angular, React, Vue);
+    - Mobile UI (Android, Xamarin).
 
 - Service:
- - All ways of remote communication must take place here.
-  - Web API (REST);
-  - SignalR;
-  - WebSockets.
+  - All ways of remote communication must take place here.
+    - Web API (REST);
+    - SignalR;
+    - WebSockets.
     
 - Application
- - Layer responsible for direct communication with the Domain layer. Implementing here:
-  -  Application services Classes;
-  -  Contracts (Interfaces);
-  -  Data Transfer Objects (DTO);
-  -  Auto Mapper.
+  - Layer responsible for direct communication with the Domain layer. Implementing here:
+    - Application services Classes;
+    - Contracts (Interfaces);
+    - Data Transfer Objects (DTO);
+    - Auto Mapper.
   
-* Domain
-* a
+- Domain
+  - This layer contains the domain entities, stand-alone domain services, respositories contracts (interfaces), domain entity validation and bussines rules. So, DDD happens here.
+    - Entities;
+    - Service Contracts;
+    - Respository Contracts;
+    - Stand-Alone domain services;
+    - Validations;
   
-* Infrastructure
-* a
+- Infrastructure
+  - Layer that supports the other layers. Which is currently divided into two layers (Infra and CrossCutting) with their respective contents.
+    - Infra:
+      -  Sublayer of infrascture, responsible to persist data.
+        -  Respositories;
+        -  Data Model;
+        -  Data Persistence;
+    -  CrossCutting:
+      -  Sublayer of infrascture, responsible to cross all other layers applying Ioc (Inversion of control), dependency-injection.
+        -  Ioc;
+        -  Dependency Injection;
+        -  Register all Dependency reference and implementation, see more about it [here](https://docs.microsoft.com/en-us/windows/communitytoolkit/mvvm/ioc);
   
 ### Domain
 <p>
