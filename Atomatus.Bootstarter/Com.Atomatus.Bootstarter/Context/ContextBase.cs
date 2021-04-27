@@ -51,7 +51,7 @@ namespace Com.Atomatus.Bootstarter.Context
             this.SchemaName = schemaName;
             this.loadEntityConfigurationByEachDbSet = loadEntityConfigurationByEachDbSet;
             this.dbSetDic = new ConcurrentDictionary<Type, object>();
-            Database.EnsureCreated();
+            this.Database.EnsureCreated();
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Com.Atomatus.Bootstarter.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema(SchemaName);            
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);            
             this.AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(modelBuilder);
         }
 
@@ -140,14 +140,13 @@ namespace Com.Atomatus.Bootstarter.Context
                         case EntityState.Modified when model is IAudit audit:
                             audit.Updated = now;
                             entry.Property(nameof(IAudit.Created)).IsModified = false;
+                            if(model is IModelAltenateKey) entry.Property(nameof(IModelAltenateKey.Uuid)).IsModified = false;
+                            goto case EntityState.Modified;
+                        case EntityState.Modified when model is IModelAltenateKey:
+                            entry.Property(nameof(IModelAltenateKey.Uuid)).IsModified = false;
                             goto case EntityState.Modified;
                         case EntityState.Modified:
                             entry.Property(nameof(IModel<int>.Id)).IsModified = false;
-                            entry.Property(nameof(IModelAltenateKey.Uuid)).IsModified = false;
-                            break;
-                        default:
-                            entry.Property(nameof(IAudit.Created)).IsModified = false;
-                            entry.Property(nameof(IAudit.Updated)).IsModified = false;
                             break;
                     }
                 }

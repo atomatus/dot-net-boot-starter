@@ -21,16 +21,25 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">target entity</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with entity</returns>
-        Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default);
         #endregion
 
         #region [R]ead
         /// <summary>
-        /// Check whether current uuid exists on persistence base.
+        /// Check whether current uuid exists on persistence base.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">alternate key uuid</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true value exists, otherwhise false</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         Task<bool> ExistsAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -50,12 +59,21 @@ namespace Com.Atomatus.Bootstarter.Services
         Task<TEntity> GetAsync(ID id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Get entity by alternate key.
+        /// Get entity by alternate key.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">target alternate key</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
-        Task<TEntity> GetAsync(Guid uuid, CancellationToken cancellationToken = default);
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
+        Task<TEntity> GetByUuidAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// List entities by paging.

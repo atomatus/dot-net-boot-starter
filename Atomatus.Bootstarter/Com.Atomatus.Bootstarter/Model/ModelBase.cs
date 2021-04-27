@@ -37,7 +37,7 @@ namespace Com.Atomatus.Bootstarter.Model
         {
             return this.GetHashCodeFromPublicFields();
         }
-
+        
         /// <summary>
         /// Compare objects.
         /// </summary>
@@ -47,16 +47,20 @@ namespace Com.Atomatus.Bootstarter.Model
         {
             return other != null && other == this || this.CompareTo(other) == 0;
         }
+        #endregion
 
+        #region IModelEquatable
         /// <summary>
         /// Compare objects id
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public virtual bool EqualsId(ModelBase<ID> other)
+        public virtual bool EqualsId(object other)
         {
-            return other != null && this.GetType() == other.GetType() && 
-                Objects.Compare(this.Id, other.Id);
+            return other != null && 
+                this.GetType() == other.GetType() &&
+                other is IModel<ID> otherID && 
+                Objects.Compare(this.Id, otherID.Id);
         }
 
         /// <summary>
@@ -64,10 +68,11 @@ namespace Com.Atomatus.Bootstarter.Model
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool EqualsAnyId(ModelBase<ID> other)
+        public bool EqualsAnyId(object other)
         {
-            return other != null && this.GetType() == other.GetType() && 
-                (Objects.Compare(this.Id, other.Id) || Objects.Compare(this.Uuid, other.Uuid));
+            return other != null && this.GetType() == other.GetType() && (
+                (other is IModel<ID> otherID && Objects.Compare(this.Id, otherID.Id)) || 
+                (other is IModelAltenateKey otherAlt && Objects.Compare(this.Uuid, otherAlt.Uuid)));
         }
         #endregion
 

@@ -15,7 +15,7 @@ namespace Com.Atomatus.Bootstarter.Services
     /// <typeparam name="TEntity">target entity</typeparam>
     /// <typeparam name="ID">target entity id</typeparam>
     public abstract partial class ServiceCrud<TContext, TEntity, ID> : IServiceCrud<TEntity, ID>
-        where TEntity : ModelBase<ID>, new()
+        where TEntity : class, IModel<ID>, new()
         where TContext : ContextBase
     {
         /// <summary>
@@ -53,7 +53,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">target entity</param>
         /// <returns>entity within ids</returns>
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
-        public TEntity Insert(TEntity entity)
+        public TEntity Save(TEntity entity)
         {
             dbSet.Add(entity ?? throw new ArgumentNullException(nameof(entity)));
             dbContext.SaveChanges();
@@ -63,16 +63,36 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region [R]ead        
+        private void RequireEntityImplementIModelAlternateKey()
+        {
+            if(!typeof(IModelAltenateKey).IsAssignableFrom(typeof(TEntity))) 
+            {
+                throw new InvalidCastException($"Is not possible manipulate, find or delete " +
+                    $"value of Entity \"{typeof(TEntity).Name}\" using Uuid, because " +
+                    $"this class does not implements {typeof(IModelAltenateKey).Name} contract!");
+            }
+        }
 
         /// <summary>
-        /// Check whether current uuid exists on persistence base.
+        /// Check whether current uuid exists on persistence base.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">alternate key uuid</param>
         /// <returns>true, value exists, otherwhise false</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public bool Exists(Guid uuid)
         {
+            this.RequireEntityImplementIModelAlternateKey();
             return dbSet
                 .AsNoTracking()
+                .OfType<IModelAltenateKey>()
                 .Any(e => e.Uuid == uuid);
         }
 
@@ -83,9 +103,19 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>true, value exists, otherwhise false</returns>
         public bool Exists(TEntity e)
         {
-            return dbSet
-                .AsNoTracking()
-                .Any(c => c.Uuid == e.Uuid);
+            if (e is IModelAltenateKey eAlt)
+            {
+                return dbSet
+                    .AsNoTracking()
+                    .OfType<IModelAltenateKey>()
+                    .Any(c => c.Uuid == eAlt.Uuid);
+            }
+            else
+            {
+                return dbSet
+                    .AsNoTracking()
+                    .Any(c => c.Id.Equals(e.Id));
+            }
         }
 
         /// <summary>
@@ -101,17 +131,27 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
-        /// Get entity by alternate key.
+        /// Get entity by alternate key.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
-        /// <param name="uuid">target alternate key</param>
+        /// <param name="uuid">alternate key uuid</param>
         /// <returns>found entity, otherwise null value</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public TEntity GetByUuid(Guid uuid)
         {
             return dbSet
                 .AsNoTracking()
+                .OfType<IModelAltenateKey>()
                 .Where(t => t.Uuid == uuid)
-                .OrderBy(e => e.Id)
                 .Take(1)
+                .OfType<TEntity>()
                 .FirstOrDefault();
         }
 
@@ -177,7 +217,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">target entity</param>
         /// <returns>updated target entity</returns>
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid (when implementing <see cref="IModelAltenateKey"/>).</exception>
         /// <exception cref="DbUpdateException">throws when is not possible update value, value does not exists, for example.</exception>
         public TEntity Update(TEntity entity)
         {
@@ -185,13 +225,26 @@ namespace Com.Atomatus.Bootstarter.Services
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            else if (Objects.Compare(entity.Id, default) && Objects.Compare(entity.Uuid, default))
+            else if (Objects.Compare(entity.Id, default))
             {
-                throw new InvalidOperationException($"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
-                    "thus can not be updated! " +
-                    "Because it does not contains an Id or Uuid.");
+                if(entity is IModelAltenateKey altKey)
+                {
+                    if(Objects.Compare(altKey.Uuid, default))
+                    {
+                        throw new InvalidOperationException(
+                            $"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
+                            "thus can not be updated! Because it does not contains an Id or Uuid.");
+                    }
+                } 
+                else
+                {
+                    throw new InvalidOperationException(
+                      $"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
+                      "thus can not be updated! Because it does not contains an Id.");
+                }
             }
 
+            //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local.FirstOrDefault(entity.EqualsAnyId);
 
             if (curr != null)
@@ -202,15 +255,21 @@ namespace Com.Atomatus.Bootstarter.Services
             }
             else if(Objects.Compare(entity.Id, default))
             {
+                IModelAltenateKey altKey = entity as IModelAltenateKey ??
+                    throw new InvalidCastException($"Entity \"{typeof(TEntity).Name}\" " +
+                        $"does not implements {typeof(IModelAltenateKey).Name}!");
+
                 curr = dbSet
-                   .Where(t => t.Uuid == entity.Uuid)
-                   .OrderBy(e => e.Id)
+                   .OfType<IModelAltenateKey>()
+                   .Where(t => t.Uuid == altKey.Uuid)                   
                    .Take(1)
+                   .OfType<TEntity>()
                    .FirstOrDefault();
 
                 if (curr == null)
                 {
-                    throw new DbUpdateException($"Entity \"{typeof(TEntity).Name}\" with Uuid \"{entity.Uuid}\" does not exist on database!");
+                    throw new DbUpdateException($"Entity \"{typeof(TEntity).Name}\" " +
+                        $"with Uuid \"{altKey.Uuid}\" does not exists on database!");
                 }
 
                 entity.Id = curr.Id;
@@ -230,23 +289,31 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region [D]elete
-        private IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<TEntity> entity)
+        private IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<TEntity> entities)
         {
-            foreach(TEntity e in entity)
+            foreach(TEntity e in entities)
             {
-                TEntity curr = dbSet.Local.FirstOrDefault(e.EqualsAnyId);                
-                if(curr != null || (Objects.Compare(e.Id, default) && (curr = GetByUuid(e.Uuid)) != null))
+                TEntity curr = dbSet.Local.FirstOrDefault(e.EqualsAnyId);
+
+                if(curr != null)
                 {
                     yield return curr;
                 }
                 else if(Objects.Compare(e.Id, default))
                 {
-                    #if DEBUG
-                    throw new InvalidOperationException($"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
-                        $"thus can not be attached to delete!");
-                    #else
-                    continue;
-                    #endif
+                    if(e is IModelAltenateKey altKey && GetByUuid(altKey.Uuid) is TEntity found)
+                    {
+                        yield return found;
+                    }
+                    else
+                    {
+                        #if DEBUG
+                        throw new InvalidOperationException($"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
+                            $"thus can not be attached to delete!");
+                        #else
+                        continue;
+                        #endif
+                    }
                 }
                 else
                 {
@@ -255,10 +322,21 @@ namespace Com.Atomatus.Bootstarter.Services
             }
         }
 
+        private IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<Guid> uuids)
+        {
+            this.RequireEntityImplementIModelAlternateKey();
+            return AttachRangeNonExists(uuids.Select(uuid => 
+            {
+                TEntity t = new TEntity { };
+                IModelAltenateKey altKey = (IModelAltenateKey) t;
+                altKey.Uuid = uuid;
+                return t;
+            }));
+        }
+
         private int DeleteLocal(IEnumerable<Guid> uuids)
         {
-            var aux     = uuids.Select(i => new TEntity() { Uuid = i });
-            var entity  = AttachRangeNonExists(aux).ToList();
+            var entity  = AttachRangeNonExists(uuids).ToList();
             dbSet.RemoveRange(entity);
             int count   = dbContext.SaveChanges();
             if(count > 0) OnDeletedCallback(entity);
@@ -266,33 +344,60 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuids">uuids target</param>
         /// <returns>amount of values removed</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public int Delete(IEnumerable<Guid> uuids)
         {
             return DeleteLocal(uuids);
         }
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="args">uuids target</param>
         /// <returns>amount of values removed</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public int Delete(params Guid[] args)
         {
             return DeleteLocal(args);
         }
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">uuids target</param>
         /// <returns>true, removed value, otherwhise false.</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public bool Delete(Guid uuid)
         {
             return DeleteLocal(new Guid[] { uuid }) == 1;

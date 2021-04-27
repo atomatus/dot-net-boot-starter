@@ -1,4 +1,5 @@
 ﻿using Com.Atomatus.Bootstarter.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -18,15 +19,24 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="entity">target entity</param>
         /// <returns>entity within ids</returns>
-        TEntity Insert(TEntity entity);
+        TEntity Save(TEntity entity);
         #endregion
 
         #region [R]ead
         /// <summary>
-        /// Check whether current uuid exists on persistence base.
+        /// Check whether current uuid exists on persistence base.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">alternate key uuid</param>
         /// <returns>true, value exists, otherwhise false</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         bool Exists(Guid uuid);
 
         /// <summary>
@@ -44,10 +54,19 @@ namespace Com.Atomatus.Bootstarter.Services
         TEntity Get(ID id);
 
         /// <summary>
-        /// Get entity by alternate key.
+        /// Get entity by alternate key.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
-        /// <param name="uuid">target alternate key</param>
+        /// <param name="uuid">alternate key uuid</param>
         /// <returns>found entity, otherwise null value</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         TEntity GetByUuid(Guid uuid);
 
         /// <summary>
@@ -79,29 +98,62 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="entity">target entity</param>
         /// <returns>updated target entity</returns>
+        /// <exception cref="ArgumentNullException">throws when entity is null</exception>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid (when implementing <see cref="IModelAltenateKey"/>).</exception>
+        /// <exception cref="DbUpdateException">throws when is not possible update value, value does not exists, for example.</exception>
         TEntity Update(TEntity entity);
         #endregion
 
         #region [D]elete
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">uuids target</param>
         /// <returns>amount of values removed</returns>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         int Delete(IEnumerable<Guid> uuid);
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">uuids target</param>
         /// <returns>amount of values removed</returns>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         int Delete(params Guid[] uuid);
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">uuids target</param>
         /// <returns>true, removed value, otherwhise false.</returns>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         bool Delete(Guid uuid);
 
         /// <summary>
@@ -109,6 +161,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="entity">entities target</param>
         /// <returns>true, removed value, otherwhise false.</returns>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
         bool Delete(IEnumerable<TEntity> entity);
 
         /// <summary>
@@ -116,6 +169,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="entity">entities target</param>
         /// <returns>true, removed value, otherwhise false.</returns>
+        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
         bool Delete(params TEntity[] entity);
         #endregion
     }

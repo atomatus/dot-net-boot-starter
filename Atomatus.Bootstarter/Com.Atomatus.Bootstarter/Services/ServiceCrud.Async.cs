@@ -1,5 +1,4 @@
-﻿using Com.Atomatus.Bootstarter.Context;
-using Com.Atomatus.Bootstarter.Model;
+﻿using Com.Atomatus.Bootstarter.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,6 @@ using System.Threading.Tasks;
 namespace Com.Atomatus.Bootstarter.Services
 {
     public abstract partial class ServiceCrud<TContext, TEntity, ID> : IServiceCrudAsync<TEntity, ID>
-        where TEntity : ModelBase<ID>, new()
-        where TContext : ContextBase
     {
         #region [C]reate
         /// <summary>
@@ -21,7 +18,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with entity</returns>
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
-        public async Task<TEntity> InsertAsync(TEntity entity, CancellationToken cancellationToken)
+        public async Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken)
         {
             await dbSet.AddAsync(entity ?? throw new ArgumentNullException(nameof(entity)), cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -32,15 +29,26 @@ namespace Com.Atomatus.Bootstarter.Services
 
         #region [R]ead
         /// <summary>
-        /// Check whether current uuid exists on persistence base.
+        /// Check whether current uuid exists on persistence base.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">alternate key uuid</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true value exists, otherwhise false</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public Task<bool> ExistsAsync(Guid uuid, CancellationToken cancellationToken)
         {
+            this.RequireEntityImplementIModelAlternateKey();
             return dbSet
                 .AsNoTracking()
+                .OfType<IModelAltenateKey>()
                 .AnyAsync(e => e.Uuid == uuid, cancellationToken);
         }
 
@@ -52,9 +60,19 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>task representation with result, true value exists, otherwhise false</returns>
         public Task<bool> ExistsAsync(TEntity e, CancellationToken cancellationToken)
         {
-            return dbSet
-                .AsNoTracking()
-                .AnyAsync(c => c.Uuid == e.Uuid, cancellationToken);
+            if (e is IModelAltenateKey eAlt)
+            {
+                return dbSet
+                    .AsNoTracking()
+                    .OfType<IModelAltenateKey>()
+                    .AnyAsync(c => c.Uuid == eAlt.Uuid);
+            }
+            else
+            {
+                return dbSet
+                    .AsNoTracking()
+                    .AnyAsync(c => c.Id.Equals(e.Id));
+            }
         }
 
         /// <summary>
@@ -71,18 +89,28 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
-        /// Get entity by alternate key.
+        /// Get entity by alternate key.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">target alternate key</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
-        public Task<TEntity> GetAsync(Guid uuid, CancellationToken cancellationToken)
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
+        public Task<TEntity> GetByUuidAsync(Guid uuid, CancellationToken cancellationToken)
         {
             return dbSet
                 .AsNoTracking()
+                .OfType<IModelAltenateKey>()
                 .Where(t => t.Uuid == uuid)
-                .OrderBy(e => e.Id)
                 .Take(1)
+                .OfType<TEntity>()
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -160,13 +188,26 @@ namespace Com.Atomatus.Bootstarter.Services
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            else if (Objects.Compare(entity.Id, default) && Objects.Compare(entity.Uuid, default))
+            else if (Objects.Compare(entity.Id, default))
             {
-                throw new InvalidOperationException($"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
-                    "thus can not be updated! " +
-                    "Because it does not contains an Id or Uuid.");
+                if (entity is IModelAltenateKey altKey)
+                {
+                    if (Objects.Compare(altKey.Uuid, default))
+                    {
+                        throw new InvalidOperationException(
+                            $"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
+                            "thus can not be updated! Because it does not contains an Id or Uuid.");
+                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                      $"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
+                      "thus can not be updated! Because it does not contains an Id.");
+                }
             }
 
+            //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local
                 .AsParallel()
                 .FirstOrDefault(entity.EqualsAnyId);
@@ -179,15 +220,21 @@ namespace Com.Atomatus.Bootstarter.Services
             }
             else if (Objects.Compare(entity.Id, default))
             {
+                IModelAltenateKey altKey = entity as IModelAltenateKey ??
+                       throw new InvalidCastException($"Entity \"{typeof(TEntity).Name}\" " +
+                           $"does not implements {typeof(IModelAltenateKey).Name}!");
+
                 curr = await dbSet
-                   .Where(t => t.Uuid == entity.Uuid)
-                   .OrderBy(e => e.Id)
+                   .OfType<IModelAltenateKey>()
+                   .Where(t => t.Uuid == altKey.Uuid)                   
                    .Take(1)
+                   .OfType<TEntity>()
                    .FirstOrDefaultAsync(cancellationToken);
 
                 if (curr == null)
                 {
-                    throw new DbUpdateException($"Entity \"{typeof(TEntity).Name}\" with Uuid \"{entity.Uuid}\" does not exist on database!");
+                    throw new DbUpdateException($"Entity \"{typeof(TEntity).Name}\" " +
+                        $"with Uuid \"{altKey.Uuid}\" does not exist on database!");
                 }
 
                 entity.Id = curr.Id;
@@ -207,25 +254,33 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region [D]elete
-        private async Task<List<TEntity>> AttachRangeNonExistsAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken)
+        private async Task<List<TEntity>> AttachRangeNonExistsAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken)
         {
             List<TEntity> result = new List<TEntity>();
 
-            foreach (TEntity e in entity)
+            foreach(TEntity e in entities)
             {
                 TEntity curr = dbSet.Local.FirstOrDefault(e.EqualsAnyId);
-                if (curr != null || (Objects.Compare(e.Id, default) && (curr = await GetAsync(e.Uuid, cancellationToken)) != null))
+
+                if(curr != null)
                 {
                     result.Add(curr);
                 }
-                else if (Objects.Compare(e.Id, default))
+                else if(Objects.Compare(e.Id, default))
                 {
-#if DEBUG
-                    throw new InvalidOperationException($"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
-                        $"thus can not be attached to delete!");
-#else
-                    continue;
-#endif
+                    if(e is IModelAltenateKey altKey && await GetByUuidAsync(altKey.Uuid, cancellationToken) is TEntity found)
+                    {
+                        result.Add(found);
+                    }
+                    else
+                    {
+                        #if DEBUG
+                        throw new InvalidOperationException($"Entity \"{typeof(TEntity).Name}\" is untrackable, " +
+                            $"thus can not be attached to delete!");
+                        #else
+                        continue;
+                        #endif
+                    }
                 }
                 else
                 {
@@ -236,10 +291,21 @@ namespace Com.Atomatus.Bootstarter.Services
             return result;
         }
 
+        private Task<List<TEntity>> AttachRangeNonExistsAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
+        {
+            this.RequireEntityImplementIModelAlternateKey();
+            return AttachRangeNonExistsAsync(uuids.Select(uuid =>
+            {
+                TEntity t = new TEntity { };
+                IModelAltenateKey altKey = (IModelAltenateKey)t;
+                altKey.Uuid = uuid;
+                return t;
+            }), cancellationToken);
+        }
+
         private async Task<int> DeleteLocalAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
         {
-            var aux = uuids.Select(i => new TEntity() { Uuid = i });
-            var entity = await AttachRangeNonExistsAsync(aux, cancellationToken);
+            var entity = await AttachRangeNonExistsAsync(uuids, cancellationToken);
             dbSet.RemoveRange(entity);
             return await dbContext.SaveChangesAsync(cancellationToken)                
                 .ContinueWith(t =>
@@ -257,41 +323,72 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, amount of values removed</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public Task<int> DeleteAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
         {
             return DeleteLocalAsync(uuids, cancellationToken);
         }
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="args">uuids target</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, amount of values removed</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public Task<int> DeleteAsync(Guid[] args, CancellationToken cancellationToken)
         {
             return DeleteLocalAsync(args, cancellationToken);
         }
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="args">uuids target</param>
         /// <returns>task representation with result, amount of values removed</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public Task<int> DeleteAsync(params Guid[] args)
         {
             return DeleteLocalAsync(args, default);
         }
 
         /// <summary>
-        /// Attempt to delete values by uuid.
+        /// Attempt to delete values by uuid.<br/>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
         /// </summary>
         /// <param name="uuid">uuids target</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
         public Task<bool> DeleteAsync(Guid uuid, CancellationToken cancellationToken)
         {
             return DeleteLocalAsync(new Guid[] { uuid }, cancellationToken).ContinueWith(t => t.Result == 1);
