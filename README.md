@@ -106,4 +106,4 @@ for current Entities defined in DbSet<> properties, or by explicit definition, l
 
 ## License
 
-.NET (including the runtime repo) is licensed under the [Apache](LICENSE) license.
+BootStarter (including the runtime repo) is licensed under the [Apache](LICENSE) license.
