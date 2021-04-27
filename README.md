@@ -79,15 +79,19 @@
   and this interfaces implementations have to be in <i>Infrascture Layer</i>.  
 </p>
 <p>
-  Now, following up the above concept were created the entity class Client.  
+  Now, following up the above concept were created the entity example class Client.  
 </p>
 
-- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L25">IModel<ID></a> (and optionally of <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L13">IModelAltenateKey</a>) Full Implementatin
+- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L25">IModel<ID></a> (and optionally of <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L13">IModelAltenateKey</a>) Full Implementatin<br/>
 ![image](https://user-images.githubusercontent.com/10169901/116135710-ce8c9100-a6a7-11eb-8a33-db034bcff1b9.png)
 
-- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs">ModelBase</a>
+- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs">ModelBase</a><br/>
+*This class contains the properties Id and Uuid defined it.* <br/>
+![image](https://user-images.githubusercontent.com/10169901/116171240-c6037d00-a6de-11eb-800b-75c3d5f84ece.png)
 
-- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/AuditableModel.cs">AuditableModel</a>
+- Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/AuditableModel.cs">AuditableModel</a><br/>
+*This class contains the properties Id and Uuid defined it, and when created or updated register the date time for it in entity.* <br/>
+![image](https://user-images.githubusercontent.com/10169901/116171623-7ffae900-a6df-11eb-985d-a362112c5d30.png)
 
 
 ## License
