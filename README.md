@@ -93,6 +93,16 @@
 *This class contains the properties Id and Uuid defined it, and when created or updated register the date time for it in entity.* <br/>
 ![image](https://user-images.githubusercontent.com/10169901/116171623-7ffae900-a6df-11eb-985d-a362112c5d30.png)
 
+- Domain class Validation<br/>
+*Sometimes you must implement somes validations, for it, override Validate method from IModel<> implementation.*<br/>
+![image](https://user-images.githubusercontent.com/10169901/116171982-3959be80-a6e0-11eb-974d-bcdb3815ca7d.png)
+
+- Domain class as Repository Entity<br/>
+*When use the domain class as Repository Entity, you can explicit create a non public Configure method to define entity creationg rules.<br/> 
+Then your ContextBase object (DBContext) when creating or migrating database in OnModelCreating(ModelBuilder) will find for explicit definition of IEntityTypeConfiguration
+for current Entities defined in DbSet<> properties, or by explicit definition, like below.*<br/>
+![image](https://user-images.githubusercontent.com/10169901/116172471-37dcc600-a6e1-11eb-9c78-294f54f2fa65.png)<br/>
+*Warning: Define only your own Properties, the Id and UUid (when present) are defined automatically*
 
 ## License
 
