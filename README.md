@@ -29,7 +29,7 @@
   First, choose your strategy design, for example, [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 </p>
 
-### Resume about DDD layers
+### Short abstract about DDD layers
 
 - Presentation:
   - Layer responsible for covering everything that concerns the UI (user interface).
