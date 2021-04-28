@@ -1,4 +1,5 @@
 ﻿using Com.Atomatus.Bootstarter.Context;
+using Com.Atomatus.Bootstarter.Context.Ensures;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,13 @@ namespace Com.Atomatus.Bootstarter
 {
     internal sealed class DynamicTypeContext : DynamicType
     {
+        private Type cType;
+
         internal DynamicTypeContext() : base() { }
 
         private Type CreateType(Key key, IEnumerable<Type> entities)
         {
-            Type cType = typeof(ContextBase);
+            this.cType ??= typeof(ContextBase);
             Type oType = typeof(DbContextOptions);
 
             AssemblyName aname  = GetAssemblyName(cType);
@@ -42,6 +45,27 @@ namespace Com.Atomatus.Bootstarter
         {
             Key key = new Key(entities);
             return this.GetOrAdd(key, k => CreateType(k, entities));
+        }
+
+        internal DynamicTypeContext Ensures(ContextConnectionParameters parameters)
+        {
+            bool hasMigrate = parameters.ensureMigrate.HasValue && parameters.ensureMigrate.Value;
+            bool hasCreated = !parameters.ensureCreated.HasValue || parameters.ensureCreated.Value;
+            bool hasDeletedOnDispose = parameters.ensureDeletedOnDispose.HasValue && parameters.ensureDeletedOnDispose.Value;
+            
+            this.cType =
+
+                hasMigrate ?
+                    typeof(ContextBaseForEnsureMigration) :
+
+                hasCreated ?
+                    hasDeletedOnDispose ? typeof(ContextBaseForEnsureCreationAndDeletedOnDispose) :
+                    typeof(ContextBaseForEnsureCreation) :
+
+                hasDeletedOnDispose ? typeof(ContextBaseForEnsureDeletedOnDispose) :
+                    null;
+
+            return this;
         }
     }
 }

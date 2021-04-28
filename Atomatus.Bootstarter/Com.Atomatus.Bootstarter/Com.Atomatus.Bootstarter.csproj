@@ -12,7 +12,7 @@
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.13</PackageVersion>
+    <PackageVersion>0.0.14</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
@@ -23,6 +23,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>privatekey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyVersion>1.0.0.14</AssemblyVersion>
+    <FileVersion>1.0.0.14</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -57,6 +59,20 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Context/Ensures/ContextBaseForEnsure.Creation.cs">
+      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    </None>
+    <None Include="Context/Ensures/ContextBaseForEnsure.Creation.DeletedOnDispose.cs">
+      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    </None>
+    <None Include="Context/Ensures/ContextBaseForEnsure.DeletedOnDispose.cs">
+      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    </None>
+    <None Include="Context/Ensures/ContextBaseForEnsure.Migration.cs">
+      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="Util/DynamicType.Factory.cs">
@@ -84,6 +100,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />

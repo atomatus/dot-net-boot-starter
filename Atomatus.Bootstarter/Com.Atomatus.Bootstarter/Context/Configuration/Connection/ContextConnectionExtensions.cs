@@ -55,15 +55,18 @@ namespace Com.Atomatus.Bootstarter.Context
             where TContext : ContextBase
         {
             CheckAndWriteNoBuilderActionWarning<TContext>(builderAction is null, memberName, filePath);
-            var builder = new ContextConnection.Builder().Database<TContext>();
-            builderAction?.Invoke(builder);
-
+            
             var service = new ContextServiceCollection<TContext>(services);
             serviceAction?.Invoke(service);
             service.Dispose();
 
             return services.AddDbContext<TContext>(
-                optionsAction: (prov, opt) => dbContextOptionsBuilderCallback.Invoke(builder, prov, opt),
+                optionsAction: (prov, opt) => 
+                {
+                    var builder = new ContextConnection.Builder().Database<TContext>();
+                    builderAction?.Invoke(builder);
+                    dbContextOptionsBuilderCallback.Invoke(builder, prov, opt);
+                },
                 contextLifetime: contextLifetime,
                 optionsLifetime: optionsLifetime);
         }
@@ -88,8 +91,12 @@ namespace Com.Atomatus.Bootstarter.Context
 
             using (var service = new ContextServiceTypeCollection())
             {
+                var builder = new ContextConnection.Builder();
+                builderAction?.Invoke(builder);
+
                 serviceAction.Invoke(service);
-                using (var ctBuilder = new ContextTypeBuilder(service))
+
+                using (var ctBuilder = new ContextTypeBuilder(builder, service))
                 {
                     Type dbContextType = ctBuilder.Build();
                     typeof(ContextConnectionExtensions)

@@ -90,6 +90,25 @@ namespace Com.Atomatus.Bootstarter.Context
         protected ConnectionStringFunction connectionStringCallback;
         #endregion
 
+        #region Creation Ensures fields
+        /// <summary>
+        /// Ensures that the database for the target context exists,
+        /// if the database does not exists will be created.
+        /// </summary>
+        internal bool? ensureCreated;
+
+        /// <summary>
+        /// Ensures that the database for the target context will be
+        /// deleted on context dispose.
+        /// </summary>
+        internal bool? ensureDeletedOnDispose;
+
+        /// <summary>
+        /// Ensures that the database for the target context will request Migrate operations.
+        /// </summary>
+        internal bool? ensureMigrate;
+        #endregion
+
         #region Constructor/Deconstructor
         /// <summary>
         /// Destructor.
@@ -119,6 +138,9 @@ namespace Com.Atomatus.Bootstarter.Context
             this.configuration              = other.configuration;
             this.connectionStringKey        = other.connectionStringKey;
             this.connectionStringCallback   = other.connectionStringCallback;
+            this.ensureCreated              = other.ensureCreated;
+            this.ensureDeletedOnDispose     = other.ensureDeletedOnDispose;
+            this.ensureMigrate              = other.ensureMigrate;
         }
 
         /// <summary>
@@ -144,6 +166,9 @@ namespace Com.Atomatus.Bootstarter.Context
             this.configuration              = null;
             this.connectionStringKey        = null;
             this.connectionStringCallback   = null;
+            this.ensureCreated              = null;
+            this.ensureDeletedOnDispose     = null;
+            this.ensureMigrate              = null;
         }
 
         void IDisposable.Dispose()

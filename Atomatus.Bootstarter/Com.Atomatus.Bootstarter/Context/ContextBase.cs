@@ -51,7 +51,6 @@ namespace Com.Atomatus.Bootstarter.Context
             this.SchemaName = schemaName;
             this.loadEntityConfigurationByEachDbSet = loadEntityConfigurationByEachDbSet;
             this.dbSetDic = new ConcurrentDictionary<Type, object>();
-            this.Database.EnsureCreated();
         }
 
         /// <summary>
@@ -101,9 +100,9 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(SchemaName);            
-            base.OnModelCreating(modelBuilder);            
-            this.AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(modelBuilder);
+            modelBuilder.HasDefaultSchema(SchemaName);
+            this.AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(modelBuilder);            
+            base.OnModelCreating(modelBuilder);
         }
 
         /// <summary>

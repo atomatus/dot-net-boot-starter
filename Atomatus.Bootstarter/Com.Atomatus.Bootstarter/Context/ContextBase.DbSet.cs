@@ -62,8 +62,14 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <summary>
         /// Releases the allocated resources for this context.
         /// </summary>
-        public override void Dispose()
+        protected virtual void OnDispose() { }
+
+        /// <summary>
+        /// Releases the allocated resources for this context.
+        /// </summary>
+        public sealed override void Dispose()
         {
+            this.OnDispose();
             this.DetachAllEntities();
             this.DisposeDBSetDictionary();
             base.Dispose();
@@ -73,8 +79,9 @@ namespace Com.Atomatus.Bootstarter.Context
         ///  Releases the allocated resources for this context.
         /// </summary>
         /// <returns></returns>
-        public override ValueTask DisposeAsync()
-        {
+        public sealed override ValueTask DisposeAsync()
+        {   
+            this.OnDispose();
             this.DetachAllEntities();
             this.DisposeDBSetDictionary();
             return base.DisposeAsync();

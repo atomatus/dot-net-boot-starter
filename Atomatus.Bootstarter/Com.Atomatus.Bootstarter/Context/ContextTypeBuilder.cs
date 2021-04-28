@@ -5,15 +5,18 @@ namespace Com.Atomatus.Bootstarter.Context
 {
     internal sealed class ContextTypeBuilder : IDisposable
     {
+        private ContextConnection.Builder builder;
         private IContextServiceTypes service;
-
-        public ContextTypeBuilder(IContextServiceTypes service)
+        
+        public ContextTypeBuilder(ContextConnection.Builder builder, IContextServiceTypes service)
         {
+            this.builder = builder;
             this.service = service;
         }
 
         void IDisposable.Dispose()
         {
+            this.builder = null;
             this.service = null;
         }
 
@@ -21,6 +24,7 @@ namespace Com.Atomatus.Bootstarter.Context
         {
             return DynamicTypeFactory
                 .AsContext()
+                .Ensures(builder)
                 .GetOrCreate(service
                     .Select(st => st.GetIServiceGenericArgument())
                     .Distinct());

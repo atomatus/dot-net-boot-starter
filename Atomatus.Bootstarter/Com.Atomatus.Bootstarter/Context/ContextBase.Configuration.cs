@@ -17,7 +17,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
         private void AttemptLoadEntityConfigurationsDeclaredToDbSetDeclared(ModelBuilder modelBuilder)
         {
-            if (!loadEntityConfigurationByEachDbSet)
+            if (!loadEntityConfigurationByEachDbSet || !this.Database.IsRelational())
             {
                 return;
             }
