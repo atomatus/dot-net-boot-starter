@@ -62,7 +62,7 @@
   - Layer that supports the other layers. Which is currently divided into two layers (Infra and CrossCutting) with their respective contents.
     - Infra:    
       - Sublayer of infrascture, responsible to persist data.
-          - Respositories;
+          - Repositories;
           - Data Model;
           - Data Persistence;
           
@@ -103,6 +103,25 @@ Then your ContextBase object (DBContext) when creating or migrating database in 
 for current Entities defined in DbSet<> properties or by explicit definition, like below.*<br/>
 ![image](https://user-images.githubusercontent.com/10169901/116172471-37dcc600-a6e1-11eb-9c78-294f54f2fa65.png)<br/>
 *Warning: Define only your own Properties, the Id and UUid (when present) are defined automatically*
+
+### Infrastructure 
+In *Infrastructure* project layer, you can define explicitly the ContextBase as an UnitOfWork, the entities repositroy configuration map.<br/>
+How like, displaying bellow.<br/>
+
+#### Entity Configuration mapping
+
+//TODO add image
+
+#### [Db]ContextBase as UnitOfWork
+
+//TODO add image
+
+Or can you register the context base as dynamic and using Ioc concept to register the entities services CRUD.<br/>
+How like, displaying bellow.<br/>
+
+#### [Db]ContextBase as UnitOfWork dynamic type with Ioc.
+
+//TODO add image
 
 ## License
 
