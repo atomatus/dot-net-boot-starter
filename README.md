@@ -99,8 +99,8 @@
 
 - Domain class as Repository Entity<br/>
 *When use the domain class as Repository Entity, you can explicit create a non public Configure method to define entity creationg rules.<br/> 
-Then your ContextBase object (DBContext) when creating or migrating database in OnModelCreating(ModelBuilder) will find for explicit definition of IEntityTypeConfiguration
-for current Entities defined in DbSet<> properties, or by explicit definition, like below.*<br/>
+Then your ContextBase object (DBContext) when creating or migrating database in OnModelCreating(ModelBuilder) will looking for explicit definition of IEntityTypeConfiguration
+for current Entities defined in DbSet<> properties or by explicit definition, like below.*<br/>
 ![image](https://user-images.githubusercontent.com/10169901/116172471-37dcc600-a6e1-11eb-9c78-294f54f2fa65.png)<br/>
 *Warning: Define only your own Properties, the Id and UUid (when present) are defined automatically*
 
