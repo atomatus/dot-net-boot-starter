@@ -110,7 +110,9 @@ How like, displaying bellow.<br/>
 
 #### Entity Configuration mapping
 
-//TODO add image
+![image](https://user-images.githubusercontent.com/10169901/116485288-3c2fed00-a861-11eb-8cd5-76bd6d5c5562.png)<br/>
+*Mapping entity explicitly, if using ContextBase class all entities mapping will be found automatically as along as existing
+at same assembly entity definition. Otherwise, must setup this configurations mapping on ContextBase.OnModelCreating(ModelBuilder)*<br/>
 
 #### [Db]ContextBase as UnitOfWork
 
