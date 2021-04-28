@@ -116,7 +116,9 @@ at same assembly entity definition. Otherwise, must setup this configurations ma
 
 #### [Db]ContextBase as UnitOfWork
 
-//TODO add image
+Take on that the client mapping below is not present in the same assembly of entity client definition,<br/>
+We must set it manually.<br/><br/>
+![image](https://user-images.githubusercontent.com/10169901/116485969-f07e4300-a862-11eb-921f-dc363740a438.png)<br/><br/>
 
 Or can you register the context base as dynamic and using Ioc concept to register the entities services CRUD.<br/>
 How like, displaying bellow.<br/>
