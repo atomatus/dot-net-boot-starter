@@ -29,7 +29,7 @@
   First, choose your strategy design, for example, [DDD](https://en.wikipedia.org/wiki/Domain-driven_design).
 </p>
 
-### Small resume about DDD layers
+### Resume about DDD layers
 
 - Presentation:
   - Layer responsible for covering everything that concerns the UI (user interface).
@@ -50,7 +50,7 @@
     - Data Transfer Objects (DTO);
     - Auto Mapper.
   
-- Domain
+- [Domain](#domain)
   - This layer contains the domain entities, stand-alone domain services, respositories contracts (interfaces), domain entity validation and bussines rules. So, DDD happens here.
     - Entities;
     - Service Contracts;
