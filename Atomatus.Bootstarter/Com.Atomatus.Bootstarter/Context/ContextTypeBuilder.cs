@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
@@ -25,9 +24,8 @@ namespace Com.Atomatus.Bootstarter.Context
             return DynamicTypeFactory
                 .AsContext()
                 .Ensures(builder)
-                .GetOrCreate(service
-                    .Select(st => st.GetIServiceGenericArgument())
-                    .Distinct());
+                .Entities(service)
+                .GetOrCreate();
         }
     }
 }

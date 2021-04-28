@@ -15,9 +15,9 @@ namespace Com.Atomatus.Bootstarter
             private readonly Guid guid;
             private readonly int hashCode;
 
-            public Key(params Type[] args) : this(args.Select(t => t.GUID).ToArray()) { }
+            public Key(params Type[] args) : this(args.ToFlattenGuids().ToArray()) { }
             
-            public Key(IEnumerable<Type> args) : this(args.Select(t => t.GUID).ToArray()) { }
+            public Key(IEnumerable<Type> args) : this(args.ToFlattenGuids().ToArray()) { }
 
             public Key(params Guid[] args)
             {
@@ -49,7 +49,7 @@ namespace Com.Atomatus.Bootstarter
             public override string ToString() => guid.ToString();
         }
 
-        private readonly ConcurrentDictionary<Key, Type> dictionary;
+        protected ConcurrentDictionary<Key, Type> dictionary;
 
         protected DynamicType()
         {

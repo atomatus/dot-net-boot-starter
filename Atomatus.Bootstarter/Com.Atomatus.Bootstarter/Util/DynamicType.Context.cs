@@ -3,6 +3,7 @@ using Com.Atomatus.Bootstarter.Context.Ensures;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Com.Atomatus.Bootstarter
@@ -10,12 +11,47 @@ namespace Com.Atomatus.Bootstarter
     internal sealed class DynamicTypeContext : DynamicType
     {
         private Type cType;
+        private IEnumerable<Type> entities;
+        private bool disposed;
 
-        internal DynamicTypeContext() : base() { }
-
-        private Type CreateType(Key key, IEnumerable<Type> entities)
+        private readonly bool disposeAfterRequest;
+        
+        ~DynamicTypeContext()
         {
-            this.cType ??= typeof(ContextBase);
+            this.Dispose(false);
+        }
+
+        internal DynamicTypeContext() : base() 
+        {
+            this.cType              = typeof(ContextBase);
+            this.entities           = Enumerable.Empty<Type>();
+            this.disposeAfterRequest = false;
+        }
+
+        private DynamicTypeContext(DynamicTypeContext other, Type cType = null, IEnumerable<Type> entities = null)
+        {
+            this.dictionary = other.dictionary;
+            this.cType = cType ?? other.cType;
+            this.entities = entities ?? other.entities;
+            this.disposeAfterRequest = true;
+        }
+
+        private void Dispose(bool _)
+        {
+            this.cType = null;
+            this.entities = null;
+            this.dictionary = null;
+            this.disposed = true;
+        }
+
+        private void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private Type CreateType(Key key)
+        {
             Type oType = typeof(DbContextOptions);
 
             AssemblyName aname  = GetAssemblyName(cType);
@@ -38,13 +74,29 @@ namespace Com.Atomatus.Bootstarter
 
             //build the new dynamic type
             Type sFinalType = typeBuilder.CreateType();
+
             return sFinalType;
         }
 
-        internal Type GetOrCreate(IEnumerable<Type> entities)
+        internal Type GetOrCreate()
         {
-            Key key = new Key(entities);
-            return this.GetOrAdd(key, k => CreateType(k, entities));
+            if (disposed)
+            {
+                throw new ObjectDisposedException(nameof(DynamicTypeContext));
+            }
+
+            try
+            {
+                Key key = new Key(entities.Union(new[] { cType }));
+                return this.GetOrAdd(key, k => CreateType(k));
+            }
+            finally
+            {
+                if (disposeAfterRequest)
+                {
+                    this.Dispose();
+                }
+            }
         }
 
         internal DynamicTypeContext Ensures(ContextConnectionParameters parameters)
@@ -53,7 +105,7 @@ namespace Com.Atomatus.Bootstarter
             bool hasCreated = !parameters.ensureCreated.HasValue || parameters.ensureCreated.Value;
             bool hasDeletedOnDispose = parameters.ensureDeletedOnDispose.HasValue && parameters.ensureDeletedOnDispose.Value;
             
-            this.cType =
+            var cType =
 
                 hasMigrate ?
                     typeof(ContextBaseForEnsureMigration) :
@@ -65,7 +117,19 @@ namespace Com.Atomatus.Bootstarter
                 hasDeletedOnDispose ? typeof(ContextBaseForEnsureDeletedOnDispose) :
                     null;
 
-            return this;
+            return new DynamicTypeContext(this, cType: cType);
+        }
+
+        internal DynamicTypeContext Entities(IEnumerable<Type> entities)
+        {
+            return new DynamicTypeContext(this, entities: entities);
+        }
+
+        internal DynamicTypeContext Entities(IContextServiceTypes services)
+        {
+            return Entities(services
+                .Select(st => st.GetIServiceGenericArgument())
+                .Distinct());
         }
     }
 }

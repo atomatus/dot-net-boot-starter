@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Com.Atomatus.Bootstarter
@@ -18,6 +19,13 @@ namespace Com.Atomatus.Bootstarter
                 .FirstOrDefault(i =>
                     i.IsGenericType &&
                     i.GetGenericTypeDefinition() == genericInterfaceType);
+        }
+
+        public static IEnumerable<Guid> ToFlattenGuids(this IEnumerable<Type> types)
+        {
+            return types.SelectMany(t => t.IsGenericType ?
+                t.GetGenericArguments().ToFlattenGuids() :
+                new[] { t.GUID });
         }
     }
 }
