@@ -9,9 +9,8 @@ namespace Com.Atomatus.Bootstarter.Services
     /// Entity service CRUD for DbContext.
     /// </summary>
     /// <typeparam name="TEntity">entity type</typeparam>
-    /// <typeparam name="ID">entity id type</typeparam>
-    public interface IServiceCrud<TEntity, ID> : IService<TEntity, ID>
-        where TEntity : IModel<ID>
+    public interface IServiceCrud<TEntity> : IService<TEntity>
+        where TEntity : IModel
     {
         #region [C]reate
         /// <summary>
@@ -37,7 +36,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        bool Exists(Guid uuid);
+        bool ExistsByUuid(Guid uuid);
 
         /// <summary>
         /// Check whether current entity exists on persistence base.
@@ -45,13 +44,6 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="e">target entity</param>
         /// <returns>true, value exists, otherwhise false</returns>
         bool Exists(TEntity e);
-
-        /// <summary>
-        /// Get entity by primary key.
-        /// </summary>
-        /// <param name="id">target id</param>
-        /// <returns>found entity, otherwise null value</returns>
-        TEntity Get(ID id);
 
         /// <summary>
         /// Get entity by alternate key.<br/>
@@ -120,7 +112,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        int Delete(IEnumerable<Guid> uuid);
+        int DeleteByUuid(IEnumerable<Guid> uuid);
 
         /// <summary>
         /// Attempt to delete values by uuid.<br/>
@@ -137,7 +129,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        int Delete(params Guid[] uuid);
+        int DeleteByUuid(params Guid[] uuid);
 
         /// <summary>
         /// Attempt to delete values by uuid.<br/>
@@ -154,7 +146,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        bool Delete(Guid uuid);
+        bool DeleteByUuid(Guid uuid);
 
         /// <summary>
         /// Attempt to delete entities.
@@ -171,6 +163,40 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>true, removed value, otherwhise false.</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
         bool Delete(params TEntity[] entity);
+        #endregion
+    }
+
+    /// <summary>
+    /// Entity service CRUD for DbContext.
+    /// </summary>
+    /// <typeparam name="TEntity">entity type</typeparam>
+    /// <typeparam name="ID">entity id type</typeparam>
+    public interface IServiceCrud<TEntity, ID> : IServiceCrud<TEntity>, IService<TEntity, ID>
+        where TEntity : IModel<ID>
+    {
+        #region [R]ead      
+        /// <summary>
+        /// Check whether current ID exists on persistence base.<br/>
+        /// </summary>
+        /// <param name="id">primary key</param>
+        /// <returns>true, value exists, otherwhise false</returns>
+        bool Exists(ID id);
+        
+        /// <summary>
+        /// Get entity by primary key.
+        /// </summary>
+        /// <param name="id">target id</param>
+        /// <returns>found entity, otherwise null value</returns>
+        TEntity Get(ID id);
+        #endregion
+
+        #region [D]elete
+        /// <summary>
+        /// Attempt to delete values by id.<br/>
+        /// </summary>
+        /// <param name="id">target id</param>
+        /// <returns>value removed</returns>
+        bool Delete(ID id);
         #endregion
     }
 }

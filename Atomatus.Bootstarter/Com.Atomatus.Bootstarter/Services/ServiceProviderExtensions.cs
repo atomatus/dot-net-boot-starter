@@ -13,7 +13,7 @@ namespace Com.Atomatus.Bootstarter.Services
     /// </summary>
     public static class ServiceProviderExtensions
     {
-        #region IServiceCrud
+        #region IServiceCrud<TEntity, ID>
         /// <summary>
         /// Retrieve service CRUD of Entity model defined in 
         /// AddDbContextAs[DatabaseType] by <see cref="IContextServiceCollection"/>.
@@ -40,6 +40,34 @@ namespace Com.Atomatus.Bootstarter.Services
             where TEntity : IModel<TID>
         {
             return provider.GetService<IServiceCrudAsync<TEntity, TID>>();
+        }
+        #endregion
+
+        #region IServiceCrud<TEntity>
+        /// <summary>
+        /// Retrieve service CRUD of Entity model defined in 
+        /// AddDbContextAs[DatabaseType] by <see cref="IContextServiceCollection"/>.
+        /// </summary>
+        /// <typeparam name="TEntity">target entity type</typeparam>
+        /// <param name="provider">service provider</param>
+        /// <returns>service CRUD to target entity</returns>
+        public static IServiceCrud<TEntity> GetServiceTo<TEntity>([NotNull] this IServiceProvider provider)
+            where TEntity : IModel
+        {
+            return provider.GetService<IServiceCrud<TEntity>>();
+        }
+
+        /// <summary>
+        /// Retrieve service CRUD async of Entity model defined in 
+        /// AddDbContextAs[DatabaseType] by <see cref="IContextServiceCollection"/>.
+        /// </summary>
+        /// <typeparam name="TEntity">target entity type</typeparam>
+        /// <param name="provider">service provider</param>
+        /// <returns>service CRUD to target entity</returns>
+        public static IServiceCrudAsync<TEntity> GetServiceAsyncTo<TEntity>([NotNull] this IServiceProvider provider)
+            where TEntity : IModel
+        {
+            return provider.GetService<IServiceCrudAsync<TEntity>>();
         }
         #endregion
     }

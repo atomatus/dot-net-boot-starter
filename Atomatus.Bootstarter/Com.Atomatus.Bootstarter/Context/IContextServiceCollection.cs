@@ -218,12 +218,18 @@ namespace Com.Atomatus.Bootstarter.Context
         }
 
         #region IContextServiceOperationCollection
-        public IContextServiceOperationCollection AddService<TService>(ServiceLifetime serviceLifetime = ServiceLifetime.Scoped) where TService : IService
+        private IContextServiceOperationCollection AddServiceInternal<TService>(ServiceLifetime serviceLifetime, ref Type implementedType) where TService : IService
         {
             this.RequireNonDisposed();
-            this.services?.AddService<TContext, TService>(serviceLifetime);
+            this.services?.AddService<TContext, TService>(serviceLifetime, ref implementedType);
             this.serviceTypes.Add(typeof(TService));
             return this;
+        }
+
+        public IContextServiceOperationCollection AddService<TService>(ServiceLifetime serviceLifetime = ServiceLifetime.Scoped) where TService : IService
+        {
+            Type aux = null;
+            return this.AddServiceInternal<TService>(serviceLifetime, ref aux);
         }
 
         public IContextServiceOperationCollection AddScoped<TService>() where TService : IService => AddService<TService>(ServiceLifetime.Scoped);
@@ -236,8 +242,11 @@ namespace Com.Atomatus.Bootstarter.Context
         #region IContextModelOperationCollection
         public IContextModelIdOperationCollection AddServiceTo<TModel, TID>(ServiceLifetime serviceLifetime = ServiceLifetime.Scoped) where TModel : IModel<TID>
         {
-            this.AddService<IServiceCrud<TModel, TID>>(serviceLifetime);
-            this.AddService<IServiceCrudAsync<TModel, TID>>(serviceLifetime);            
+            Type implementedType = null;
+            this.AddServiceInternal<IServiceCrud<TModel, TID>>(serviceLifetime, ref implementedType);
+            this.AddServiceInternal<IServiceCrud<TModel>>(serviceLifetime, ref implementedType);
+            this.AddServiceInternal<IServiceCrudAsync<TModel, TID>>(serviceLifetime, ref implementedType);
+            this.AddServiceInternal<IServiceCrudAsync<TModel>>(serviceLifetime, ref implementedType);
             return this;
         }
 

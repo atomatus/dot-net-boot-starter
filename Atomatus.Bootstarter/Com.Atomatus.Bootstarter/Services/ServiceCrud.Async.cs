@@ -43,7 +43,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<bool> ExistsAsync(Guid uuid, CancellationToken cancellationToken)
+        public Task<bool> ExistsByUuidAsync(Guid uuid, CancellationToken cancellationToken)
         {
             this.RequireEntityImplementIModelAlternateKey();
             return dbSet
@@ -65,14 +65,27 @@ namespace Com.Atomatus.Bootstarter.Services
                 return dbSet
                     .AsNoTracking()
                     .OfType<IModelAltenateKey>()
-                    .AnyAsync(c => c.Uuid == eAlt.Uuid);
+                    .AnyAsync(c => c.Uuid == eAlt.Uuid, cancellationToken);
             }
             else
             {
                 return dbSet
                     .AsNoTracking()
-                    .AnyAsync(c => c.Id.Equals(e.Id));
+                    .AnyAsync(c => c.Id.Equals(e.Id), cancellationToken);
             }
+        }
+
+        /// <summary>
+        /// Check whether current ID exists on persistence base.<br/>
+        /// </summary>
+        /// <param name="id">primary key</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>task representation with result, true value exists, otherwhise false</returns>
+        public Task<bool> ExistsAsync(ID id, CancellationToken cancellationToken = default)
+        {
+            return dbSet
+                    .AsNoTracking()
+                    .AnyAsync(c => c.Id.Equals(id), cancellationToken);
         }
 
         /// <summary>
@@ -315,6 +328,19 @@ namespace Com.Atomatus.Bootstarter.Services
                     return res;
                 }, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
+        
+        /// <summary>
+        /// Attempt to delete values by id.
+        /// </summary>
+        /// <param name="id">target id</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
+        public Task<bool> DeleteAsync(ID id, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(
+                new[] { new TEntity { Id = id } }, 
+                cancellationToken);
+        }
 
         /// <summary>
         /// Attempt to delete values by uuid.
@@ -327,7 +353,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<int> DeleteAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
+        public Task<int> DeleteByUuidAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
         {
             return DeleteLocalAsync(uuids, cancellationToken);
         }
@@ -348,7 +374,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<int> DeleteAsync(Guid[] args, CancellationToken cancellationToken)
+        public Task<int> DeleteByUuidAsync(Guid[] args, CancellationToken cancellationToken)
         {
             return DeleteLocalAsync(args, cancellationToken);
         }
@@ -368,7 +394,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<int> DeleteAsync(params Guid[] args)
+        public Task<int> DeleteByUuidAsync(params Guid[] args)
         {
             return DeleteLocalAsync(args, default);
         }
@@ -389,7 +415,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<bool> DeleteAsync(Guid uuid, CancellationToken cancellationToken)
+        public Task<bool> DeleteByUuidAsync(Guid uuid, CancellationToken cancellationToken)
         {
             return DeleteLocalAsync(new Guid[] { uuid }, cancellationToken).ContinueWith(t => t.Result == 1);
         }

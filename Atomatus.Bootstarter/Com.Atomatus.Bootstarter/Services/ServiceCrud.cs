@@ -74,6 +74,19 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// Check whether current ID exists on persistence base.<br/>
+        /// </summary>
+        /// <param name="id">primary key</param>
+        /// <returns>true, value exists, otherwhise false</returns>
+        public bool Exists(ID id)
+        {
+            this.RequireEntityImplementIModelAlternateKey();
+            return dbSet
+                .AsNoTracking()
+                .Any(e => e.Id.Equals(id));
+        }
+
+        /// <summary>
         /// Check whether current uuid exists on persistence base.<br/>
         /// <i>
         /// Obs.: <typeparamref name="TEntity"/> must contains 
@@ -87,7 +100,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public bool Exists(Guid uuid)
+        public bool ExistsByUuid(Guid uuid)
         {
             this.RequireEntityImplementIModelAlternateKey();
             return dbSet
@@ -344,6 +357,16 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// Attempt to delete values by id.<br/>
+        /// </summary>
+        /// <param name="id">target id</param>
+        /// <returns>value removed</returns>
+        public bool Delete(ID id)
+        {
+            return Delete(new TEntity { Id = id });
+        }
+
+        /// <summary>
         /// Attempt to delete values by uuid.<br/>
         /// <i>
         /// Obs.: <typeparamref name="TEntity"/> must contains 
@@ -358,7 +381,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public int Delete(IEnumerable<Guid> uuids)
+        public int DeleteByUuid(IEnumerable<Guid> uuids)
         {
             return DeleteLocal(uuids);
         }
@@ -378,7 +401,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public int Delete(params Guid[] args)
+        public int DeleteByUuid(params Guid[] args)
         {
             return DeleteLocal(args);
         }
@@ -398,7 +421,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public bool Delete(Guid uuid)
+        public bool DeleteByUuid(Guid uuid)
         {
             return DeleteLocal(new Guid[] { uuid }) == 1;
         }
