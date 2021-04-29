@@ -23,6 +23,7 @@ namespace Com.Atomatus.Bootstarter.Context
                 .AppendIf(HasPassword(), "Password=", password, ';')
                 .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer, "Integrated Security=True;")
                 .AppendIf(HasNotUsernameAndPassword(), "Trusted_Connection=True;")
+                .AppendIf(IsReadOnly(), "ApplicationIntent=ReadOnly;")
                 .Append("MultipleActiveResultSets=True;")
                 .Append("Connection Timeout=").AppendOrElse(timeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(";")
                 .AppendIf(HasIdleLifetime(), "Connection Lifetime=", idleLifetime, ';')                

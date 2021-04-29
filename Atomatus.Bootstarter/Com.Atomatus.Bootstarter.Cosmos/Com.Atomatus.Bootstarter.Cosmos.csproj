@@ -10,7 +10,7 @@
     <Description>Bootstarter library for noSql CosmoDB repository</Description>
     <PackageId>Com.Atomatus.BootStarter.Cosmos</PackageId>
     <PackageTags>ef boot starter cosmos</PackageTags>
-    <PackageVersion>0.0.13</PackageVersion>
+    <PackageVersion>0.0.14</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://raw.githubusercontent.com/atomatus/design-template/master/logos/atomatus/logo512x512.png?token=ACNS4LJJGHPDFLXVQRCXN5TAPW3JK</PackageIconUrl>
@@ -22,8 +22,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>privatekey.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>1.0.0.13</AssemblyVersion>
-    <FileVersion>1.0.0.13</FileVersion>
+    <AssemblyVersion>1.0.0.14</AssemblyVersion>
+    <FileVersion>1.0.0.14</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -14,7 +14,8 @@ namespace Com.Atomatus.Bootstarter.Context
         {
             return new StringBuilder()
                 .Append("Data Source=").AppendOrElse(database, ":memory:").Append(';')                
-                .AppendIf(string.IsNullOrEmpty(host), "New=True;")
+                .AppendIf(IsReadOnly(), "Mode=ReadOnly;")
+                .AppendIf(IsSharedCache(), "Cache=Shared;")
                 .AppendIf(HasPassword(), "Password=", password, ';')
                 .ToString();
         }

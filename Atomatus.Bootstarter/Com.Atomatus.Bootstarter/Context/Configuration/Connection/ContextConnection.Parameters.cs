@@ -69,6 +69,16 @@ namespace Com.Atomatus.Bootstarter.Context
         protected int maxPoolSize;
 
         /// <summary>
+        /// Database connection as readOnly.
+        /// </summary>
+        protected bool readOnly;
+
+        /// <summary>
+        /// Database as shared mode.
+        /// </summary>
+        protected bool sharedCache;
+
+        /// <summary>
         /// Application name.
         /// </summary>
         protected string applicationName;
@@ -134,7 +144,9 @@ namespace Com.Atomatus.Bootstarter.Context
             this.idleLifetime               = other.idleLifetime;
             this.minPoolSize                = other.minPoolSize;
             this.maxPoolSize                = other.maxPoolSize;
-            this.applicationName            = other.applicationName;            
+            this.applicationName            = other.applicationName;
+            this.readOnly                   = other.readOnly;
+            this.sharedCache                = other.sharedCache;
             this.configuration              = other.configuration;
             this.connectionStringKey        = other.connectionStringKey;
             this.connectionStringCallback   = other.connectionStringCallback;

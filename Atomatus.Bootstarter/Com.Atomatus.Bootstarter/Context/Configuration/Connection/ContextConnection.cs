@@ -82,6 +82,18 @@ namespace Com.Atomatus.Bootstarter.Context
         protected bool MaxPoolSize() => maxPoolSize > 0;
 
         /// <summary>
+        /// Check whether database connection is readonly.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsReadOnly() => readOnly;
+
+        /// <summary>
+        /// Check whether database is in shared cache.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsSharedCache() => sharedCache;
+
+        /// <summary>
         /// Get explicit defined or generate connection string.
         /// </summary>
         /// <returns></returns>

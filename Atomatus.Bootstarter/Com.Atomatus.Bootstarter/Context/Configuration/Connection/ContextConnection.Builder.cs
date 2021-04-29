@@ -200,6 +200,26 @@ namespace Com.Atomatus.Bootstarter.Context
                 this.applicationName = applicationName;
                 return this;
             }
+
+            /// <summary>
+            /// Database connection as readonly.
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder ReadOnly()
+            {
+                this.readOnly = true;
+                return this;
+            }
+
+            /// <summary>
+            /// Database cache as shared.
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder SharedCache()
+            {
+                this.sharedCache = true;
+                return this;
+            }
             #endregion
 
             #region Parameters From Environment
