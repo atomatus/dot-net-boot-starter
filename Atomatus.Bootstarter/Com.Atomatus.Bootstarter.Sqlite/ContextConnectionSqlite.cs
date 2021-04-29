@@ -13,11 +13,9 @@ namespace Com.Atomatus.Bootstarter.Context
         protected override string GetConnectionString()
         {
             return new StringBuilder()
-                .Append("Data Source=").AppendOrElse(database, ":memory:").Append(';')
-                .Append("Version=3;")
+                .Append("Data Source=").AppendOrElse(database, ":memory:").Append(';')                
                 .AppendIf(string.IsNullOrEmpty(host), "New=True;")
                 .AppendIf(HasPassword(), "Password=", password, ';')
-                .AppendIf(MaxPoolSize(), "Pooling=True;Max Pool Size=", maxPoolSize, ';')
                 .ToString();
         }
 
