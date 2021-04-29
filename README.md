@@ -58,7 +58,7 @@
     - Stand-Alone domain services;
     - Validations;
   
-- Infrastructure
+- Infrastructure (#infrastructure)
   - Layer that supports the other layers. Which is currently divided into two layers (Infra and CrossCutting) with their respective contents.
     - Infra:    
       - Sublayer of infrascture, responsible to persist data.
@@ -137,7 +137,7 @@ Or can you register the context base as dynamic and using Ioc concept to registe
 
 ![image](https://user-images.githubusercontent.com/10169901/116490585-2117aa00-a86e-11eb-9d84-ad881aea9eaa.png)
 
-#### Bootstarter database types avaliables
+#### Bootstarter database types available
 
 - Relational
   - SQL Server
@@ -145,10 +145,12 @@ Or can you register the context base as dynamic and using Ioc concept to registe
   - SQLite
 - NoSQL
   - Cosmos
-  
-#### [Db]ContextBase as UnitOfWork dynamic type with Ioc.
 
-//TODO add image
+###  Infrastructure CrossCuting
+Generate and add services to Entities. You can setup it explity or from implicit way in dynamic context.
+
+![image](https://user-images.githubusercontent.com/10169901/116491638-b7e56600-a870-11eb-92d9-ea11ba401778.png)
+
 
 ## License
 
