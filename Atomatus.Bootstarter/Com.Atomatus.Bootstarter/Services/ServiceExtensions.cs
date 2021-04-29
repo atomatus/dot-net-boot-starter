@@ -32,46 +32,46 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
-        /// Create a dynamic service type to specified service type (<typeparamref name="TModel"/>)
+        /// Create a dynamic service type to specified service type (<typeparamref name="TService"/>)
         /// and target context <typeparamref name="TContext"/>. 
         /// Then, register it to service collection how <paramref name="serviceLifetime"/> defined it.
         /// </summary>
         /// <typeparam name="TContext">database context type.</typeparam>
-        /// <typeparam name="TModel">service interface type.</typeparam>
+        /// <typeparam name="TService">service interface type.</typeparam>
         /// <param name="services">current service collection.</param>
         /// <param name="serviceLifetime">The lifetime with which to register the Service in the container.</param>
         /// <param name="implementedType">implemented type generated to target context and service contract type, or null to request generate a new value</param>
         /// <returns>current service collection</returns>
-        internal static IServiceCollection AddService<TContext, TModel>([NotNull] this IServiceCollection services, ServiceLifetime serviceLifetime, ref Type implementedType)
+        internal static IServiceCollection AddService<TContext, TService>([NotNull] this IServiceCollection services, ServiceLifetime serviceLifetime, ref Type implementedType)
             where TContext : ContextBase
-            where TModel : IService
+            where TService : IService
         {
             return serviceLifetime switch
             {
-                ServiceLifetime.Singleton   => CreateAndAddServiceDynamicType<TContext, TModel>(services.AddSingleton, ref implementedType),
-                ServiceLifetime.Scoped      => CreateAndAddServiceDynamicType<TContext, TModel>(services.AddScoped, ref implementedType),
-                ServiceLifetime.Transient   => CreateAndAddServiceDynamicType<TContext, TModel>(services.AddTransient, ref implementedType),
+                ServiceLifetime.Singleton   => CreateAndAddServiceDynamicType<TContext, TService>(services.AddSingleton, ref implementedType),
+                ServiceLifetime.Scoped      => CreateAndAddServiceDynamicType<TContext, TService>(services.AddScoped, ref implementedType),
+                ServiceLifetime.Transient   => CreateAndAddServiceDynamicType<TContext, TService>(services.AddTransient, ref implementedType),
                 _ => throw new NotImplementedException(),
             };
         }
 
         /// <summary>
-        /// Create a dynamic service type to specified service type (<typeparamref name="TModel"/>)
+        /// Create a dynamic service type to specified service type (<typeparamref name="TService"/>)
         /// and target context <typeparamref name="TContext"/>. 
         /// Then, register it to service collection how <paramref name="serviceLifetime"/> defined it.
         /// </summary>
         /// <typeparam name="TContext">database context type.</typeparam>
-        /// <typeparam name="TModel">service interface type.</typeparam>
+        /// <typeparam name="TService">service interface type.</typeparam>
         /// <param name="services">current service collection.</param>
         /// <param name="serviceLifetime">The lifetime with which to register the Service in the container.</param>
         /// <returns>current service collection</returns>
-        public static IServiceCollection AddService<TContext, TModel>([NotNull] this IServiceCollection services,
+        public static IServiceCollection AddService<TContext, TService>([NotNull] this IServiceCollection services,
             ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
             where TContext : ContextBase
-            where TModel : IService
+            where TService : IService
         {
             Type aux = null;
-            return services.AddService<TContext, TModel>(serviceLifetime, ref aux);
+            return services.AddService<TContext, TService>(serviceLifetime, ref aux);
         }
 
         /// <summary>
