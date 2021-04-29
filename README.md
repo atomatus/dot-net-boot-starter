@@ -1,7 +1,7 @@
 # Atomatus BootStarter
 
 [![Help Wanted](https://img.shields.io/github/issues/atomatus/runtime/dot-net-boot-starter?style=flat-square&color=%232EA043&label=help%20wanted)](https://github.com/atomatus/dot-net-boot-starter/issues?q=is%3Aissue+is%3Aopen+label%3A%22up-for-grabs%22)
-[![NuGet version (SoftCircuits.Silk)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter/)
+[![NuGet version (Com.Atomatus.BootStarter)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter/)
 
 ## What is BootStarter?
 <p>
@@ -23,6 +23,18 @@
   Entity Framework and DbContext (
   <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Context/ContextBase.cs">ContextBase</a>) as UnityOfWork.
 </p>
+
+### How to Install?
+Install by Nuget [![NuGet version (Com.Atomatus.BootStarter)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter/)
+
+### Bootstarter database types available
+
+- Relational
+  - SQL Server [![NuGet version (Com.Atomatus.BootStarter.SqlServer)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.SqlServer.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.SqlServer/)
+  - Postgres [![NuGet version (Com.Atomatus.BootStarter.Postgres)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.Postgres.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.Postgres/)
+  - SQLite [![NuGet version (Com.Atomatus.BootStarter.SqlServer)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.SQLite.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.SQLite/)
+- NoSQL
+  - Cosmos [![NuGet version (Com.Atomatus.BootStarter.Cosmos)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.Cosmos.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.Cosmos/)
 
 ## How to Use?
 <p>
@@ -136,15 +148,6 @@ Or can you register the context base as dynamic and using Ioc concept to registe
 </p>
 
 ![image](https://user-images.githubusercontent.com/10169901/116490585-2117aa00-a86e-11eb-9d84-ad881aea9eaa.png)
-
-#### Bootstarter database types available
-
-- Relational
-  - SQL Server
-  - Postgres
-  - SQLite
-- NoSQL
-  - Cosmos
 
 ###  Infrastructure CrossCuting
 Generate and add services to Entities. You can setup it explity or from implicit way in dynamic context.
