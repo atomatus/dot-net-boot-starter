@@ -115,10 +115,15 @@ How like, displaying bellow.<br/>
 at same assembly entity definition. Otherwise, must setup this configurations mapping on ContextBase.OnModelCreating(ModelBuilder)*<br/>
 
 #### [Db]ContextBase as UnitOfWork
-
-Take on that the client mapping below is not present in the same assembly of entity client definition,<br/>
-We must set it manually.<br/><br/>
-![image](https://user-images.githubusercontent.com/10169901/116485969-f07e4300-a862-11eb-921f-dc363740a438.png)<br/><br/>
+<p>
+Take on that the client mapping below is not present in the same assembly of entity client definition,
+We must set it manually.
+</p>
+![image](https://user-images.githubusercontent.com/10169901/116485969-f07e4300-a862-11eb-921f-dc363740a438.png)
+<p>
+Registering the context setup direct to database type. 
+The [IServiceCollection](https://docs.microsoft.com/pt-br/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=dotnet-plat-ext-5.0) with Entity Framework Core can setup the dbContext using the method [AddDbContext](https://docs.microsoft.com/pt-br/ef/core/dbcontext-configuration/), to use as Bootstarter the method name start is the same, but  with sufix AddDbContext[AsDatabaseType]. 
+</p>
 
 Or can you register the context base as dynamic and using Ioc concept to register the entities services CRUD.<br/>
 How like, displaying bellow.<br/>
