@@ -21,8 +21,17 @@ namespace Com.Atomatus.Bootstarter.Services
         public async Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken)
         {
             await dbSet.AddAsync(entity ?? throw new ArgumentNullException(nameof(entity)), cancellationToken);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            OnInsertedCallback(entity);
+            
+            try
+            {
+                await dbContext.SaveChangesAsync(cancellationToken);
+                OnInsertedCallback(entity);
+            }
+            finally
+            {
+                dbContext.Entry(entity).State = EntityState.Detached;
+            }
+
             return entity;
         }
         #endregion
@@ -122,9 +131,36 @@ namespace Com.Atomatus.Bootstarter.Services
                 .AsNoTracking()
                 .OfType<IModelAltenateKey>()
                 .Where(t => t.Uuid == uuid)
-                .Take(1)
                 .OfType<TEntity>()
+                .OrderBy(t => t.Id)
+                .Take(1)
                 .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the first entity in collection.
+        /// </summary>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        public Task<TEntity> FirstAsync()
+        {
+            return dbSet
+                .AsNoTracking()
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Get the last entity in collection.
+        /// </summary>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        public Task<TEntity> LastAsync()
+        {
+            return dbSet
+                .AsNoTracking()
+                .OrderByDescending(t => t.Id)
+                .Take(1)
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -175,13 +211,72 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
         /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
         /// </summary>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, list all values possible</returns>
         public Task<List<TEntity>> ListAsync(CancellationToken cancellationToken)
         {
             return PagingIndexAsync(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT, cancellationToken);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery an amount of values sorted by id.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count"> amount of data</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>list values requested sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/>task representation with result, value is less or equals zero.
+        /// </exception>
+        public Task<List<TEntity>> TakeAsync(int count, CancellationToken cancellationToken)
+        {
+            return PagingIndexAsync(0, count, cancellationToken);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery an sample of values non sorted.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count">amount of data</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>list values requested non sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/>task representation with result, value is less or equals zero.
+        /// </exception>
+        public Task<List<TEntity>> SampleAsync(int count, CancellationToken cancellationToken)
+        {
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            //oh! a "Take" request without "OrderBy", it's ok!
+            //check de method message it is the purpose.
+            return this.dbSet
+                .AsNoTracking()
+                .Take(count)
+                .ToListAsync();
         }
         #endregion
 
@@ -239,9 +334,10 @@ namespace Com.Atomatus.Bootstarter.Services
 
                 curr = await dbSet
                    .OfType<IModelAltenateKey>()
-                   .Where(t => t.Uuid == altKey.Uuid)                   
-                   .Take(1)
+                   .Where(t => t.Uuid == altKey.Uuid)
                    .OfType<TEntity>()
+                   .OrderBy(t => t.Id)
+                   .Take(1)
                    .FirstOrDefaultAsync(cancellationToken);
 
                 if (curr == null)
@@ -260,8 +356,23 @@ namespace Com.Atomatus.Bootstarter.Services
                 dbContext.Entry(entity).State = EntityState.Modified;
             }
 
-            await dbContext.SaveChangesAsync(cancellationToken);
-            OnUpdatedCallback(entity);
+            try
+            {
+                await dbContext.SaveChangesAsync(cancellationToken);
+
+                if (curr != null)
+                {
+                    dbContext.Entry(curr).State = EntityState.Detached;
+                    dbContext.Entry(entity).CurrentValues.SetValues(curr);
+                }
+
+                OnUpdatedCallback(entity);
+            }
+            finally
+            {
+                dbContext.Entry(entity).State = EntityState.Detached;
+            }
+
             return entity;
         }
         #endregion

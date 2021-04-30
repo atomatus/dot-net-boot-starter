@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "githubActions", "githubActi
 		..\.github\workflows\nuget-cicd.yml = ..\.github\workflows\nuget-cicd.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{096D2E48-D1B0-42A8-9C6A-B49F895182BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlite.Test", "Com.Atomatus.Bootstarter.Sqlite.Test\Com.Atomatus.Bootstarter.Sqlite.Test.csproj", "{D7EAA702-5593-4379-95AD-EFAA31760792}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,9 +48,16 @@ Global
 		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7EAA702-5593-4379-95AD-EFAA31760792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7EAA702-5593-4379-95AD-EFAA31760792}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7EAA702-5593-4379-95AD-EFAA31760792}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7EAA702-5593-4379-95AD-EFAA31760792}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D7EAA702-5593-4379-95AD-EFAA31760792} = {096D2E48-D1B0-42A8-9C6A-B49F895182BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8CD3D6D7-46CD-4C49-89CA-359C1C85D8A8}

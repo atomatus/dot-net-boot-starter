@@ -69,9 +69,9 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </summary>
         public sealed override void Dispose()
         {
-            this.OnDispose();
             this.DetachAllEntities();
             this.DisposeDBSetDictionary();
+            this.OnDispose();
             base.Dispose();
         }
 
@@ -81,9 +81,9 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <returns></returns>
         public sealed override ValueTask DisposeAsync()
         {   
-            this.OnDispose();
             this.DetachAllEntities();
             this.DisposeDBSetDictionary();
+            this.OnDispose();
             return base.DisposeAsync();
         }
     }

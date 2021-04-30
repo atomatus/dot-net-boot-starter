@@ -62,6 +62,18 @@ namespace Com.Atomatus.Bootstarter.Services
         TEntity GetByUuid(Guid uuid);
 
         /// <summary>
+        /// Get the first entity in collection.
+        /// </summary>
+        /// <returns>found entity, otherwise null value</returns>
+        TEntity First();
+
+        /// <summary>
+        /// Get the last entity in collection.
+        /// </summary>
+        /// <returns>found entity, otherwise null value</returns>
+        TEntity Last();
+
+        /// <summary>
         /// List entities by paging.
         /// </summary>
         /// <param name="index">item index on persistence base, from 0</param>
@@ -78,10 +90,51 @@ namespace Com.Atomatus.Bootstarter.Services
         List<TEntity> Paging(int page = 0, int limit = -1);
 
         /// <summary>
+        /// <para>
         /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
         /// </summary>
         /// <returns>list all values possible</returns>
         List<TEntity> List();
+        
+        /// <summary>
+        /// <para>
+        /// Recovery an amount of values sorted by id.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count"> amount of data</param>
+        /// <returns>list values requested sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        List<TEntity> Take(int count);
+
+        /// <summary>
+        /// <para>
+        /// Recovery an sample of values non sorted.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count">amount of data</param>
+        /// <returns>list values requested non sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        List<TEntity> Sample(int count);
         #endregion
 
         #region [U]pdate

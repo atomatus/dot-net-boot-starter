@@ -35,8 +35,8 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="dbSet">target dbset.</param>
         public ServiceCrud([NotNull] TContext context, [NotNull] DbSet<TEntity> dbSet)
         {
-            this.dbContext  = context ?? throw new ArgumentNullException(nameof(context));
-            this.dbSet      = dbSet ?? throw new ArgumentNullException(nameof(dbSet));
+            this.dbContext = context ?? throw new ArgumentNullException(nameof(context));
+            this.dbSet = dbSet ?? throw new ArgumentNullException(nameof(dbSet));
         }
 
         /// <summary>
@@ -56,8 +56,17 @@ namespace Com.Atomatus.Bootstarter.Services
         public TEntity Save(TEntity entity)
         {
             dbSet.Add(entity ?? throw new ArgumentNullException(nameof(entity)));
-            dbContext.SaveChanges();
-            OnInsertedCallback(entity);
+
+            try
+            {
+                dbContext.SaveChanges();
+                OnInsertedCallback(entity);
+            }
+            finally
+            {
+                dbContext.Entry(entity).State = EntityState.Detached;
+            }
+
             return entity;
         }
         #endregion
@@ -65,7 +74,7 @@ namespace Com.Atomatus.Bootstarter.Services
         #region [R]ead        
         private void RequireEntityImplementIModelAlternateKey()
         {
-            if(!typeof(IModelAltenateKey).IsAssignableFrom(typeof(TEntity))) 
+            if (!typeof(IModelAltenateKey).IsAssignableFrom(typeof(TEntity)))
             {
                 throw new InvalidCastException($"Is not possible manipulate, find or delete " +
                     $"value of Entity \"{typeof(TEntity).Name}\" using Uuid, because " +
@@ -163,8 +172,35 @@ namespace Com.Atomatus.Bootstarter.Services
                 .AsNoTracking()
                 .OfType<IModelAltenateKey>()
                 .Where(t => t.Uuid == uuid)
-                .Take(1)
                 .OfType<TEntity>()
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the first entity in collection.
+        /// </summary>
+        /// <returns>found entity, otherwise null value</returns>
+        public TEntity First()
+        {
+            return dbSet
+                .AsNoTracking()
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the last entity in collection.
+        /// </summary>
+        /// <returns>found entity, otherwise null value</returns>
+        public TEntity Last()
+        {
+            return dbSet
+                .AsNoTracking()
+                .OrderByDescending(t => t.Id)
+                .Take(1)
                 .FirstOrDefault();
         }
 
@@ -214,12 +250,69 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
         /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
         /// </summary>
         /// <returns>list all values possible</returns>
         public List<TEntity> List()
         {
             return PagingIndex(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery an amount of values sorted by id.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count"> amount of data</param>
+        /// <returns>list values requested sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        public List<TEntity> Take(int count)
+        {
+            return PagingIndex(0, count);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery an sample of values non sorted.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count">amount of data</param>
+        /// <returns>list values requested non sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        public List<TEntity> Sample(int count)
+        {
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            //oh! a "Take" request without "OrderBy", it's ok!
+            //check de method message it is the purpose.
+            return this.dbSet
+                .AsNoTracking()                
+                .Take(count)
+                .ToList();
         }
         #endregion
 
@@ -274,9 +367,10 @@ namespace Com.Atomatus.Bootstarter.Services
 
                 curr = dbSet
                    .OfType<IModelAltenateKey>()
-                   .Where(t => t.Uuid == altKey.Uuid)                   
-                   .Take(1)
+                   .Where(t => t.Uuid == altKey.Uuid)
                    .OfType<TEntity>()
+                   .OrderBy(t => t.Id)
+                   .Take(1)
                    .FirstOrDefault();
 
                 if (curr == null)
@@ -295,8 +389,23 @@ namespace Com.Atomatus.Bootstarter.Services
                 dbContext.Entry(entity).State = EntityState.Modified;
             }
 
-            dbContext.SaveChanges();
-            OnUpdatedCallback(entity);
+            try
+            {
+                dbContext.SaveChanges();
+
+                if(curr != null)
+                {
+                    dbContext.Entry(curr).State = EntityState.Detached;
+                    dbContext.Entry(entity).CurrentValues.SetValues(curr);
+                }
+
+                OnUpdatedCallback(entity);
+            }
+            finally
+            {
+                dbContext.Entry(entity).State = EntityState.Detached;
+            }
+
             return entity;
         }
         #endregion

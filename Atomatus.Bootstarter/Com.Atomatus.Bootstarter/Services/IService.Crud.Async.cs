@@ -67,6 +67,18 @@ namespace Com.Atomatus.Bootstarter.Services
         Task<TEntity> GetByUuidAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get the first entity in collection.
+        /// </summary>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        Task<TEntity> FirstAsync();
+
+        /// <summary>
+        /// Get the last entity in collection.
+        /// </summary>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        Task<TEntity> LastAsync();
+
+        /// <summary>
         /// List entities by paging.
         /// </summary>
         /// <param name="index">item index on persistence base, from 0</param>
@@ -85,11 +97,54 @@ namespace Com.Atomatus.Bootstarter.Services
         Task<List<TEntity>> PagingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// <para>
         /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
         /// </summary>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, list all values possible</returns>
         Task<List<TEntity>> ListAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// <para>
+        /// Recovery an amount of values sorted by id.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count"> amount of data</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>list values requested sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/>task representation with result, value is less or equals zero.
+        /// </exception>
+        Task<List<TEntity>> TakeAsync(int count, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// <para>
+        /// Recovery an sample of values non sorted.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="count">amount of data</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>list values requested non sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/>task representation with result, value is less or equals zero.
+        /// </exception>
+        Task<List<TEntity>> SampleAsync(int count, CancellationToken cancellationToken = default);
         #endregion
 
         #region [U]pdate

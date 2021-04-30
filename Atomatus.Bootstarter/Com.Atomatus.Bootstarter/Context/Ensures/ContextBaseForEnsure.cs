@@ -58,8 +58,8 @@ namespace Com.Atomatus.Bootstarter.Context.Ensures
         /// <returns></returns>
         protected bool IsEnsured()
         {
-            return counters.TryGetValue(key, out AtomicCounter counter) &&
-                counter.Decrement() <= 0L && counters.TryRemove(key, out _);
+            return !counters.TryGetValue(key, out AtomicCounter counter) ||
+                (counter.Decrement() <= 0L && counters.TryRemove(key, out _));
         }
     }
 }

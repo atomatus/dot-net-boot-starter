@@ -245,5 +245,17 @@ namespace Com.Atomatus.Bootstarter.Context
                     .ForAll(e => e.State = EntityState.Detached);
             }
         }
+
+        /// <summary>
+        /// Check if contains pending changes for current context.
+        /// </summary>
+        /// <returns></returns>
+        public bool HasPendingChanges()
+        {
+            return this.ChangeTracker.Entries()
+                          .Any(e => e.State == EntityState.Added
+                                 || e.State == EntityState.Deleted
+                                 || e.State == EntityState.Modified);
+        }
     }
 }
