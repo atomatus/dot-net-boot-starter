@@ -23,11 +23,9 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
 
         public IServiceCrudAsync<ClientTest> ClientServiceAsync => Provider.GetServiceAsyncTo<ClientTest>();
 
-        private static int count;
-
         public ServiceProvider BuildServiceProvider()
         {
-            string dbName = $"dbTest{Interlocked.Increment(ref count)}.db";
+            string dbName = "dbTest.db";
             IServiceCollection services = new ServiceCollection();
             services.AddDbContextAsSqlite(
                 b => b.Database(dbName)
