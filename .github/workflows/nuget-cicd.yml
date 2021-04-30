@@ -14,7 +14,8 @@ env:
   PROJ_BS_COSMOS_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Cosmos/Com.Atomatus.Bootstarter.Cosmos.csproj'
   PROJ_BS_POSTGRES_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Postgres/Com.Atomatus.Bootstarter.Postgres.csproj'
   PROJ_BS_SQLITE_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlite/Com.Atomatus.Bootstarter.Sqlite.csproj'
-  PROJ_BS_SQLSERVER_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlserver/Com.Atomatus.Bootstarter.Sqlserver.csproj'
+  PROJ_BS_SQLSERVER_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlserver/Com.Atomatus.Bootstarter.Sqlserver.csproj'  
+  PROJ_BS_TEST_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlite.Test/Com.Atomatus.Bootstarter.Sqlite.Test.csproj'
 
 jobs:
   deploy:
@@ -28,7 +29,7 @@ jobs:
         with:
           dotnet-version: '3.1.x'
           
-      # region Bootstarter
+      # region Bootstarter Test
       - name: 'Restore Bootstarter'
         if: ${{ success() }}
         run: dotnet restore ${{ env.PROJ_BS_PATH }}
@@ -36,11 +37,21 @@ jobs:
       - name: 'Build Bootstarter'        
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_PATH }} --no-restore --configuration Release
-      
+     
+      - name: 'Restore Bootstarter.Sqlite'
+        if: ${{ success() }}
+        run: dotnet restore ${{ env.PROJ_BS_SQLITE_PATH }}
+
+      - name: 'Build Bootstarter.Sqlite'
+        if: ${{ success() }}
+        run: dotnet build ${{ env.PROJ_BS_SQLITE_PATH }} --no-restore --configuration Release
+       
       - name: 'Test Bootstarter'        
         if: ${{ success() }}
-        run: dotnet test ${{ env.PROJ_BS_PATH }}
+        run: dotnet test ${{ env.PROJ_BS_TEST_PATH }}   
+      # endregion
 
+      # region Bootstarter      
       - name: Publish Bootstarter to NuGet
         if: ${{ success() }}
         uses: brandedoutcast/publish-nuget@v2
@@ -51,7 +62,19 @@ jobs:
           NUGET_KEY: ${{ secrets.NUGET_COM_ATOMATUS_AUTH_KEY }}
           INCLUDE_SYMBOLS: true
       # endregion 
-                
+             
+      # region Bootstarter.Sqlite     
+      - name: Publish Bootstarter.Sqlite to NuGet
+        if: ${{ success() }}
+        uses: brandedoutcast/publish-nuget@v2
+        with:
+          PROJECT_FILE_PATH: ${{ env.PROJ_BS_SQLITE_PATH }}
+          VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
+          NUGET_KEY: ${{ secrets.NUGET_COM_ATOMATUS_AUTH_KEY }}
+          TAG_COMMIT: false
+          INCLUDE_SYMBOLS: true
+      # endregion 
+         
       # region Bootstarter.Cosmos
       - name: 'Restore Bootstarter.Cosmos'
         if: ${{ success() }}
@@ -61,10 +84,6 @@ jobs:
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_COSMOS_PATH }} --no-restore --configuration Release
       
-      - name: 'Test Bootstarter.Cosmos'
-        if: ${{ success() }}
-        run: dotnet test ${{ env.PROJ_BS_COSMOS_PATH }}
-
       - name: Publish Bootstarter.Cosmos to NuGet
         if: ${{ success() }}
         uses: brandedoutcast/publish-nuget@v2
@@ -85,10 +104,6 @@ jobs:
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_POSTGRES_PATH }} --no-restore --configuration Release
       
-      - name: 'Test Bootstarter.Postgres'
-        if: ${{ success() }}
-        run: dotnet test ${{ env.PROJ_BS_POSTGRES_PATH }}
-
       - name: Publish Bootstarter.Postgres to NuGet
         if: ${{ success() }}
         uses: brandedoutcast/publish-nuget@v2
@@ -100,30 +115,6 @@ jobs:
           INCLUDE_SYMBOLS: true
       # endregion 
 
-      # region Bootstarter.Sqlite
-      - name: 'Restore Bootstarter.Sqlite'
-        if: ${{ success() }}
-        run: dotnet restore ${{ env.PROJ_BS_SQLITE_PATH }}
-
-      - name: 'Build Bootstarter.Sqlite'
-        if: ${{ success() }}
-        run: dotnet build ${{ env.PROJ_BS_SQLITE_PATH }} --no-restore --configuration Release
-      
-      - name: 'Test Bootstarter.Sqlite'
-        if: ${{ success() }}
-        run: dotnet test ${{ env.PROJ_BS_SQLITE_PATH }}
-
-      - name: Publish Bootstarter.Sqlite to NuGet
-        if: ${{ success() }}
-        uses: brandedoutcast/publish-nuget@v2
-        with:
-          PROJECT_FILE_PATH: ${{ env.PROJ_BS_SQLITE_PATH }}
-          VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
-          NUGET_KEY: ${{ secrets.NUGET_COM_ATOMATUS_AUTH_KEY }}
-          TAG_COMMIT: false
-          INCLUDE_SYMBOLS: true
-      # endregion 
-      
       # region Bootstarter.Sqlserver
       - name: 'Restore Bootstarter.Sqlserver'
         if: ${{ success() }}
@@ -133,10 +124,6 @@ jobs:
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_SQLSERVER_PATH }} --no-restore --configuration Release
       
-      - name: 'Test Bootstarter.Sqlserver'
-        if: ${{ success() }}
-        run: dotnet test ${{ env.PROJ_BS_SQLSERVER_PATH }}
-
       - name: Publish Bootstarter.Sqlserver to NuGet
         if: ${{ success() }}
         uses: brandedoutcast/publish-nuget@v2
