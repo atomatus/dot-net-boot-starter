@@ -1,18 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Com.Atomatus.Bootstarter.Sqlite.Test
 {
-    [TestCaseOrderer("Com.Atomatus.Bootstarter.TestPriorityOrderer", "Com.Atomatus.Bootstarter.Sqlite.Test")]
-    [Collection("DynamicContextProvider")]
-    public class UnitTestForDbContextAndServiceDynamicAsync : IClassFixture<DynamicContextProviderFixture>
+    [TestCaseOrderer("Com.Atomatus.Bootstarter.TestPriorityOrderer", "Com.Atomatus.Bootstarter.Sqlite.Test")]    
+    public abstract class UnitTestBaseForClient<TProviderFixture> : IClassFixture<TProviderFixture>
+        where TProviderFixture : ProviderFixture<ClientTest, long>
     {
-        private readonly DynamicContextProviderFixture provider;
+        private readonly TProviderFixture provider;
 
-        public UnitTestForDbContextAndServiceDynamicAsync(DynamicContextProviderFixture provider)
+        public UnitTestBaseForClient(TProviderFixture provider)
         {
             this.provider = provider;
         }
@@ -20,31 +19,28 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
         #region Requires
         [Fact, TestPriorityXHigh]
         [Trait("Operation", "Require")]
-        [Trait("Operation", "Async")]
-        public void RequireFromProvider_ServiceCrud_NotNull_Async()
+        public void RequireFromProvider_ServiceCrud_NotNull()
         {
-            Assert.NotNull(provider.ClientServiceAsync);
+            Assert.NotNull(provider.Service);
         }
         
         [Fact, TestPriorityXHigh]
         [Trait("Operation", "Require")]
-        [Trait("Operation", "Async")]
-        public void RequireFromProvider_ServiceCrud_WithId_NotNull_Async()
+        public void RequireFromProvider_ServiceCrud_WithId_NotNull()
         {
-            Assert.NotNull(provider.ClientServiceWithIdAsync);
+            Assert.NotNull(provider.ServiceWithId);
         }
         #endregion
 
         #region Save
         [Theory, TestPriorityHigh]
-        [InlineData(ClientTest.MIN_AGE, "Stuart Bloom")]
-        [InlineData(ClientTest.MIN_AGE + 1, "Alex Jensen")]
-        [InlineData(ClientTest.MAX_AGE - 1, "Barry Kripke")]
-        [InlineData(ClientTest.MAX_AGE, "Dr. Beverly Hofstadter")]
+        [InlineData(ClientTest.MIN_AGE, "Lucy")]
+        [InlineData(ClientTest.MIN_AGE + 1, "Wil Wheaton")]
+        [InlineData(ClientTest.MAX_AGE - 1, "Priya Koothrappali")]
+        [InlineData(ClientTest.MAX_AGE, "Mary Cooper")]
         [Trait("Operation", "Save")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Successfully")]
-        public async Task Service_Save_Successfully_Async(int age, string name)
+        public void Service_Save_Successfully(int age, string name)
         {
             //[A]rrange
             ClientTest client   = new ClientTest
@@ -55,7 +51,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
 
             //[A]ct
             var beforeSave      = DateTime.Now;
-            ClientTest result   = await provider.ClientServiceAsync.SaveAsync(client);
+            ClientTest result   = provider.Service.Save(client);
 
             //[A]ssert            
             Assert.Equal(client, result);
@@ -65,12 +61,11 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
         }
 
         [Theory, TestPriorityHigh]
-        [InlineData(ClientTest.MIN_AGE, "Dr. Eric Gablehauser")]
+        [InlineData(ClientTest.MIN_AGE, "Sra. Wolowitz")]
         [Trait("Operation", "Save")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Error")]
         [Trait("Result", "Constraint")]
-        public async Task Service_Save_Error_UniqueConstraintPrimaryKey_Async(int age, string name)
+        public void Service_Save_Error_UniqueConstraintPrimaryKey(int age, string name)
         {
             //[A]rrange
             ClientTest client = new ClientTest
@@ -80,8 +75,8 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             };
 
             //[A]ct
-            ClientTest result = await provider.ClientServiceAsync.SaveAsync(client);
-            var ex = await Assert.ThrowsAnyAsync<DbUpdateException>(() => provider.ClientServiceAsync.SaveAsync(result));
+            ClientTest result = provider.Service.Save(client);
+            var ex = Assert.ThrowsAny<DbUpdateException>(() => provider.Service.Save(result));
 
             //[A]ssert
             Assert.NotNull(ex);
@@ -90,10 +85,9 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
         [Theory, TestPriorityHigh]
         [InlineData(ClientTest.MIN_AGE, null)]
         [Trait("Operation", "Save")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Error")]
         [Trait("Result", "FieldRequired")]
-        public async Task Service_Save_Error_FieldRequired_Async(int age, string name)
+        public void Service_Save_Error_FieldRequired(int age, string name)
         {
             //[A]rrange
             ClientTest client = new ClientTest
@@ -103,23 +97,23 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             };
 
             //[A]ct
-            var ex = await Assert.ThrowsAnyAsync<DbUpdateException>(() => provider.ClientServiceAsync.SaveAsync(client));
+            var ex = Assert.ThrowsAny<DbUpdateException>(() => provider.Service.Save(client));
 
             //[A]ssert
             Assert.NotNull(ex);
         }
         #endregion
 
-        #region Update
+        #region Update        
         [Fact, TestPriorityLow]
         [Trait("Operation", "Update")]
         [Trait("Result", "Successfully")]
-        public async Task Service_Update_Without_Id_Successfully_Async()
+        public void Service_Update_Without_Id_Successfully()
         {
             //[A]rrange
             ClientTest client = new ClientTest { Age = ClientTest.MAX_AGE, Name = "Arthur Jeffries" };
             //[A]ct
-            ClientTest result = await provider.ClientServiceAsync.SaveAsync(client);
+            ClientTest result = provider.Service.Save(client);
             //[A]ssert            
             Assert.Equal(client, result);
 
@@ -128,7 +122,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             client.Id = 0;
 
             var beforeSave = DateTime.Now;
-            result = await provider.ClientServiceAsync.UpdateAsync(client);
+            result = provider.Service.Update(client);
 
             //[A]ssert            
             Assert.Equal(client, result);
@@ -140,12 +134,12 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
         [Fact, TestPriorityLow]
         [Trait("Operation", "Update")]
         [Trait("Result", "Successfully")]
-        public async Task Service_Update_Without_Uuid_Successfully_Async()
+        public void Service_Update_Without_Uuid_Successfully()
         {
             //[A]rrange
             ClientTest client = new ClientTest { Age = ClientTest.MAX_AGE, Name = "Dr. Crawley" };
             //[A]ct
-            ClientTest result = await provider.ClientServiceAsync.SaveAsync(client);
+            ClientTest result = provider.Service.Save(client);
             //[A]ssert            
             Assert.Equal(client, result);
 
@@ -155,7 +149,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
 
             //[A]ct            
             var beforeSave = DateTime.Now;
-            result = await provider.ClientServiceAsync.UpdateAsync(client);
+            result = provider.Service.Update(client);
 
             //[A]ssert            
             Assert.Equal(client, result);
@@ -164,22 +158,56 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             Assert.True(result.Updated > beforeSave, "After update, result does not contains a valid auditable Updated date time!");
         }
 
-        [Theory, TestPriorityXLow]
-        [InlineData(0, 1, ClientTest.MAX_AGE - 1, "Dr. & Sra. Koothrappali")]
-        [InlineData(1, 2, ClientTest.MAX_AGE - 2, "Leslie Winkle")]
+        [Fact, TestPriorityLow]
         [Trait("Operation", "Update")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Successfully")]
-        public async Task Service_Update_Successfully_Async(int page, int limit, int age, string name)
+        public void Service_Update_ByRecoveryId_Successfully()
         {
             //[A]rrange
-            ClientTest client = (await provider.ClientServiceAsync.PagingAsync(page, limit)).Last();
+            ClientTest client = new ClientTest { Age = ClientTest.MAX_AGE, Name = "Dr. Crawley" };
+            //[A]ct
+            ClientTest result = provider.Service.Save(client);
+            //[A]ssert            
+            Assert.Equal(client, result);
+
+            //[A]ct
+            client = provider.ServiceWithId.Get(result.Id);
+            //[A]ssert            
+            Assert.Equal(client.Id, result.Id);
+            Assert.Equal(client.Uuid, result.Uuid);
+            Assert.Equal(client.Age, result.Age);
+            Assert.Equal(client.Name, result.Name);
+
+            //[A]rrange            
+            client.Age--;
+            client.Uuid = Guid.Empty;
+
+            //[A]ct            
+            var beforeSave = DateTime.Now;
+            result = provider.Service.Update(client);
+
+            //[A]ssert            
+            Assert.Equal(client, result);
+            Assert.True(result.Id > 0L, "After update, result does not contains an ID!");
+            Assert.True(result.Uuid != Guid.Empty, "After update, result does not contains an Uuid!");
+            Assert.True(result.Updated > beforeSave, "After update, result does not contains a valid auditable Updated date time!");
+        }
+
+        [Theory, TestPriorityLow]
+        [InlineData(0, 1, ClientTest.MAX_AGE - 1, "Sra. Wolowitz")]
+        [InlineData(1, 2, ClientTest.MAX_AGE - 2, "Zack")]
+        [Trait("Operation", "Update")]
+        [Trait("Result", "Successfully")]
+        public void Service_Update_Successfully(int page, int limit, int age, string name)
+        {
+            //[A]rrange
+            ClientTest client = provider.Service.Paging(page, limit).Last();
             client.Age = age;
             client.Name = name;
 
             //[A]ct            
             var beforeSave = DateTime.Now;
-            ClientTest result = await provider.ClientServiceAsync.UpdateAsync(client);
+            ClientTest result = provider.Service.Update(client);
 
             //[A]ssert            
             Assert.Equal(client, result);
@@ -188,30 +216,28 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             Assert.True(result.Updated > beforeSave, "After update, result does not contains a valid auditable Updated date time!");
         }
 
-        [Fact, TestPriorityXLow]
+        [Fact, TestPriorityLow]
         [Trait("Operation", "Update")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Error")]
         [Trait("Result", "FieldRequired")]
-        public async Task Service_Update_Error_FieldRequired_Async()
+        public void Service_Update_Error_FieldRequired()
         {
             //[A]rrange
-            ClientTest client = await provider.ClientServiceAsync.FirstAsync();
+            ClientTest client = provider.Service.First();
             client.Name = null;//required it.
 
             //[A]ct
-            var ex = await Assert.ThrowsAnyAsync<DbUpdateException>(() => provider.ClientServiceAsync.UpdateAsync(client));
+            var ex = Assert.ThrowsAny<DbUpdateException>(() => provider.Service.Update(client));
 
             //[A]ssert
             Assert.NotNull(ex);
         }
 
-        [Fact, TestPriorityXLow]
+        [Fact, TestPriorityLow]
         [Trait("Operation", "Update")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Error")]
         [Trait("Result", "Untrackable")]
-        public async Task Service_Update_Error_Untrackable_Async()
+        public void Service_Update_Error_Untrackable()
         {
             //[A]rrange
             ClientTest client = new ClientTest
@@ -221,7 +247,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             };
 
             //[A]ct
-            var ex = await Assert.ThrowsAnyAsync<InvalidOperationException>(() => provider.ClientServiceAsync.UpdateAsync(client));
+            var ex = Assert.ThrowsAny<InvalidOperationException>(() => provider.Service.Update(client));
 
             //[A]ssert
             Assert.NotNull(ex);
@@ -231,15 +257,14 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
         #region Delete
         [Fact, TestPriorityXXLow]
         [Trait("Operation", "Delete")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Successfully")]
-        public async Task Service_Delete_Successfully_Async()
+        public void Service_Delete_Successfully()
         {
             //[A]rrange
-            ClientTest client = await provider.ClientServiceAsync.FirstAsync();
+            ClientTest client = provider.Service.First();
 
             //[A]ct            
-            bool result = await provider.ClientServiceAsync.DeleteAsync(client);
+            bool result = provider.Service.Delete(client);
 
             //[A]ssert            
             Assert.True(result, "Does not possible to delete value!");
@@ -247,15 +272,14 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
 
         [Fact, TestPriorityXXLow]
         [Trait("Operation", "Delete")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Successfully")]
-        public async Task Service_Delete_By_Uuid_Successfully_Async()
+        public void Service_Delete_By_Uuid_Successfully()
         {
             //[A]rrange
-            ClientTest client = await provider.ClientServiceAsync.FirstAsync();
+            ClientTest client = provider.Service.First();
 
             //[A]ct            
-            bool result = await provider.ClientServiceAsync.DeleteByUuidAsync(client.Uuid);
+            bool result = provider.Service.DeleteByUuid(client.Uuid);
 
             //[A]ssert            
             Assert.True(result, "Does not possible to delete value!");
@@ -263,10 +287,9 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
 
         [Fact, TestPriorityXXLow]
         [Trait("Operation", "Delete")]
-        [Trait("Operation", "Async")]
         [Trait("Result", "Error")]
         [Trait("Result", "Untrackable")]
-        public async Task Service_Delete_Error_Untrackable_Async()
+        public void Service_Delete_Error_Untrackable()
         {
             //[A]rrange
             ClientTest client = new ClientTest
@@ -276,7 +299,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             };
 
             //[A]ct
-            var ex = await Assert.ThrowsAnyAsync<InvalidOperationException>(() => provider.ClientServiceAsync.UpdateAsync (client));
+            var ex = Assert.ThrowsAny<InvalidOperationException>(() => provider.Service.Delete(client));
 
             //[A]ssert
             Assert.NotNull(ex);

@@ -98,6 +98,16 @@ namespace Com.Atomatus.Bootstarter.Context
         /// Connection string callback.
         /// </summary>
         protected ConnectionStringFunction connectionStringCallback;
+
+        /// <summary>
+        /// Grant dynamic context rules.
+        /// </summary>
+        protected bool grantDynamicContext;
+
+        /// <summary>
+        /// Explicit context name.
+        /// </summary>
+        protected string contextName;
         #endregion
 
         #region Creation Ensures fields
@@ -153,6 +163,8 @@ namespace Com.Atomatus.Bootstarter.Context
             this.ensureCreated              = other.ensureCreated;
             this.ensureDeletedOnDispose     = other.ensureDeletedOnDispose;
             this.ensureMigrate              = other.ensureMigrate;
+            this.grantDynamicContext        = other.grantDynamicContext;
+            this.contextName                = other.contextName;
         }
 
         /// <summary>

@@ -91,8 +91,14 @@ namespace Com.Atomatus.Bootstarter.Context
 
             using (var service = new ContextServiceTypeCollection())
             {
-                var builder = new ContextConnection.Builder();
+                var builder = new ContextConnection.Builder().GrantDynamicContext();
                 builderAction?.Invoke(builder);
+                Action<ContextConnection.Builder> auxBuilderAction = builderAction;
+                builderAction = (b) => 
+                {
+                    b.GrantDynamicContext();
+                    auxBuilderAction?.Invoke(b); 
+                };
 
                 serviceAction.Invoke(service);
 

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -25,6 +24,42 @@
     </None>
     <None Include="ClientTest.Validate.cs">
       <DependentUpon>ClientTest.cs</DependentUpon>
+    </None>    
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ProviderFixture.DynamicContext.cs">
+      <DependentUpon>ProviderFixture.cs</DependentUpon>
+    </None>
+    <None Include="ProviderFixture.ExplicitContext.cs">
+      <DependentUpon>ProviderFixture.cs</DependentUpon>
+    </None>
+    <None Include="ProviderFixture.ExplicitContextService.cs">
+      <DependentUpon>ProviderFixture.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="UnitTestBaseForClient.DynamicContext.cs">
+      <DependentUpon>UnitTestBaseForClient.cs</DependentUpon>
+    </None>
+    <None Include="UnitTestBaseForClient.ExplicitContext.cs">
+      <DependentUpon>UnitTestBaseForClient.cs</DependentUpon>
+    </None>
+    <None Include="UnitTestBaseForClient.ExplicitContextService.cs">
+      <DependentUpon>UnitTestBaseForClient.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="UnitTestBaseForClientAsync.DynamicContext.cs">
+      <DependentUpon>UnitTestBaseForClientAsync.cs</DependentUpon>
+    </None>
+    <None Include="UnitTestBaseForClientAsync.ExplicitContext.cs">
+      <DependentUpon>UnitTestBaseForClientAsync.cs</DependentUpon>
+    </None>
+    <None Include="UnitTestBaseForClientAsync.ExplicitContextService.cs">
+      <DependentUpon>UnitTestBaseForClientAsync.cs</DependentUpon>
     </None>
   </ItemGroup>
   

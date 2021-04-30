@@ -17,6 +17,12 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </summary>
         public sealed class Builder : ContextConnectionParameters
         {
+            #region Constructor
+            internal Builder() { }
+
+            internal Builder(Builder other) : base(other) { }
+            #endregion
+
             #region Local Parameters
             internal delegate bool TryBuildContextConnectionCallback(Builder builder, out ContextConnection conn);
 
@@ -56,7 +62,7 @@ namespace Com.Atomatus.Bootstarter.Context
                     target.Replace(value, string.Empty,
                     StringComparison.CurrentCultureIgnoreCase);                
                 string name = Replace(Replace(typeof(TContext).Name, "Context"), "db").ToLower() + "db";
-                return Database(name);
+                return Database(name).DenyDynamicContext<TContext>();
             }
 
             /// <summary>
@@ -403,6 +409,31 @@ namespace Com.Atomatus.Bootstarter.Context
             #endregion
 
             #region Parameter Database Creation Rules
+            private void RequireGrantDynamicContext()
+            {
+                if (!this.grantDynamicContext)
+                {
+                    throw new InvalidCastException("Attempt to define Creation or Deletion rule for Explicit Context" +
+                        (string.IsNullOrEmpty(contextName) ? "" : $" ({contextName})") + ".\r\n" +
+                        "Unfortunately it is not allowed.\r\n" +
+                        "For an explicit context you must setup all creation rules" +
+                        "(Context.Database.EnsureCreated(), Context.Database.EnsureDeleted(), Context.Database.Migrate(), and more) inner it or explicitly.");
+                }
+            }
+
+            private Builder DenyDynamicContext<TContext>()
+            {
+                this.contextName = typeof(TContext).Name;
+                this.grantDynamicContext = false;
+                return this;
+            }
+
+            internal Builder GrantDynamicContext()
+            {
+                this.grantDynamicContext = true;
+                return this;
+            }
+
             /// <summary>
             /// <para>
             /// Ensures that the database for the context exists. If it exists, no action is
@@ -426,8 +457,15 @@ namespace Com.Atomatus.Bootstarter.Context
             /// </para>
             /// </summary>
             /// <returns>current builder</returns>
+            /// <exception cref="InvalidOperationException">
+            /// Throws exception in attempt of define creation or deletion rule out of dynamic context builder.
+            /// Therefore, trying to define rule in explicit context. For a contextBase (DBContext) 
+            /// explicitly defined, set all (ContextBase.Database.EnsureCreated(), ContextBase.Database.EnsureDeleted(), 
+            /// ContextBase.Database.Migrate(),...) rules inner it.
+            /// </exception>
             public Builder EnsureCreated()
             {
+                this.RequireGrantDynamicContext();
                 this.ensureCreated = true;
                 return this;
             }
@@ -450,8 +488,15 @@ namespace Com.Atomatus.Bootstarter.Context
             /// </para>
             /// </summary>
             /// <returns>current builder</returns>
+            /// <exception cref="InvalidOperationException">
+            /// Throws exception in attempt of define creation or deletion rule out of dynamic context builder.
+            /// Therefore, trying to define rule in explicit context. For a contextBase (DBContext) 
+            /// explicitly defined, set all (ContextBase.Database.EnsureCreated(), ContextBase.Database.EnsureDeleted(), 
+            /// ContextBase.Database.Migrate(),...) rules inner it.
+            /// </exception>
             public Builder EnsureDeletedOnDispose()
             {
+                this.RequireGrantDynamicContext();
                 this.ensureCreated ??= false;
                 this.ensureDeletedOnDispose = true;
                 return this;
@@ -477,8 +522,15 @@ namespace Com.Atomatus.Bootstarter.Context
             /// </para>
             /// </summary>
             /// <returns>current builder</returns>
+            /// <exception cref="InvalidOperationException">
+            /// Throws exception in attempt of define creation or deletion rule out of dynamic context builder.
+            /// Therefore, trying to define rule in explicit context. For a contextBase (DBContext) 
+            /// explicitly defined, set all (ContextBase.Database.EnsureCreated(), ContextBase.Database.EnsureDeleted(), 
+            /// ContextBase.Database.Migrate(),...) rules inner it.
+            /// </exception>
             public Builder EnsureMigrate()
             {
+                this.RequireGrantDynamicContext();
                 this.ensureMigrate = true;
                 this.ensureCreated = false;
                 this.ensureDeletedOnDispose = false;
