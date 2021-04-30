@@ -48,7 +48,7 @@ jobs:
        
       - name: 'Test Bootstarter'        
         if: ${{ success() }}
-        run: dotnet test ${{ env.PROJ_BS_TEST_PATH }}   
+        run: dotnet test ${{ env.PROJ_BS_TEST_PATH }} --no-restore --logger "console;verbosity=detailed"
       # endregion
 
       # region Bootstarter      
