@@ -175,6 +175,32 @@ namespace Com.Atomatus.Bootstarter.Services
             Type aux = null;
             return services.AddServiceTransient<TContext, TService>(ref aux);
         }
+
+        /// <summary>
+        /// Adds a service of the type specified in <typeparamref name="TImplementation"/> name="TService" /> with an
+        /// implementation of the type specified in <typeparamref name="TImplementation"/> to the
+        /// specified <see cref="IServiceCollection"/> and his <paramref name="lifetime" />.
+        /// </summary>
+        /// <typeparam name="TService">The type of the service to register.</typeparam>
+        /// <typeparam name="TImplementation">The implementation type of the service.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+        /// <param name="lifetime">specify current service instance mode</param>
+        /// <returns>A reference to this instance after the operation has completed.</returns>
+        /// <seealso cref="ServiceLifetime.Scoped"/>
+        /// <seealso cref="ServiceLifetime.Singleton"/>
+        /// <seealso cref="ServiceLifetime.Transient"/>
+        public static IServiceCollection AddServiceImpl<TService, TImplementation>([NotNull] this IServiceCollection services, [NotNull] ServiceLifetime lifetime)
+            where TService : class
+            where TImplementation : class, TService
+        {
+            return lifetime switch
+            {
+                ServiceLifetime.Scoped => services.AddScoped<TService, TImplementation>(),
+                ServiceLifetime.Singleton => services.AddSingleton<TService, TImplementation>(),
+                ServiceLifetime.Transient => services.AddTransient<TService, TImplementation>(),
+                _ => throw new NotImplementedException($"Service lifetime not implemented: {lifetime}"),
+            };
+        }
         #endregion
 
         #region IModel

@@ -7,10 +7,10 @@
     <Authors>Atomatus</Authors>
     <Company>Atomatus</Company>
     <Copyright>®2020-2023 Atomatus - All rights reserved</Copyright>
-    <Description>Bootstarter library for noSql CosmoDB repository</Description>
-    <PackageId>Com.Atomatus.BootStarter.Cosmos</PackageId>
-    <PackageTags>ef boot starter cosmos</PackageTags>
-    <PackageVersion>0.0.16</PackageVersion>
+    <Description>Bootstarter library for InMemory database repository</Description>
+    <PackageId>Com.Atomatus.BootStarter.InMemory</PackageId>
+    <PackageTags>ef boot starter inmemory memory</PackageTags>
+    <PackageVersion>0.0.1</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIconUrl>https://raw.githubusercontent.com/atomatus/design-template/master/logos/atomatus/logo512x512.png?token=ACNS4LJJGHPDFLXVQRCXN5TAPW3JK</PackageIconUrl>
@@ -22,8 +22,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>privatekey.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>1.0.0.16</AssemblyVersion>
-    <FileVersion>1.0.0.16</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,21 +38,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="ContextConnectionPostgres.Extensions.cs" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.4" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <None Include="ContextConnectionCosmos.Extensions.cs">
-      <DependentUpon>ContextConnectionCosmos.cs</DependentUpon>
+    <None Include="ContextConnectionInMemory.Extensions.cs">
+      <DependentUpon>ContextConnectionInMemory.cs</DependentUpon>
     </None>
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="7.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Com.Atomatus.Bootstarter\Com.Atomatus.Bootstarter.csproj" />
   </ItemGroup>
-  
+
 </Project>

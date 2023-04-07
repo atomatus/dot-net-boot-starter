@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter", "Com.Atomatus.Bootstarter\Com.Atomatus.Bootstarter.csproj", "{34EBDBB9-37E3-44AC-B2EC-A104D021E404}"
 EndProject
@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Sq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Cosmos", "Com.Atomatus.Bootstarter.Cosmos\Com.Atomatus.Bootstarter.Cosmos.csproj", "{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.InMemory", "Com.Atomatus.Bootstarter.InMemory\Com.Atomatus.Bootstarter.InMemory.csproj", "{219FAE6B-0564-4668-B807-6586120EBD50}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "githubActions", "githubActions", "{737EAF4D-3B95-447C-B46A-EFB6A88E28C6}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\nuget-cicd.yml = ..\.github\workflows\nuget-cicd.yml
@@ -20,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "githubActions", "githubActi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{096D2E48-D1B0-42A8-9C6A-B49F895182BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlite.Test", "Com.Atomatus.Bootstarter.Sqlite.Test\Com.Atomatus.Bootstarter.Sqlite.Test.csproj", "{D7EAA702-5593-4379-95AD-EFAA31760792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Sqlite.Test", "Com.Atomatus.Bootstarter.Sqlite.Test\Com.Atomatus.Bootstarter.Sqlite.Test.csproj", "{D7EAA702-5593-4379-95AD-EFAA31760792}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{D7EAA702-5593-4379-95AD-EFAA31760792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7EAA702-5593-4379-95AD-EFAA31760792}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7EAA702-5593-4379-95AD-EFAA31760792}.Release|Any CPU.Build.0 = Release|Any CPU
+		{219FAE6B-0564-4668-B807-6586120EBD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{219FAE6B-0564-4668-B807-6586120EBD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{219FAE6B-0564-4668-B807-6586120EBD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{219FAE6B-0564-4668-B807-6586120EBD50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
