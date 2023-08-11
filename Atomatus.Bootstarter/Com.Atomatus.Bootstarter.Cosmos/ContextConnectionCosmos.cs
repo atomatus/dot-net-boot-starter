@@ -18,7 +18,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
         public ContextConnectionCosmos(Builder builder) : base(builder) { }
 
-        private void CheckMatchGroup(Match match, string group, ref string value)
+        private static void CheckMatchGroup(Match match, string group, ref string value)
         {
             var g = match.Groups[group];
             value = (g?.Success ?? false) ? g.Value : value;
