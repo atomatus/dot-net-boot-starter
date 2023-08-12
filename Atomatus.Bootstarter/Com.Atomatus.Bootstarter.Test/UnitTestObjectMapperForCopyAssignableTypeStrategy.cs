@@ -2,7 +2,7 @@
 
 namespace Com.Atomatus.Bootstarter.Test
 {
-    public class UnitTestObjectMapperForCopyAssinableTypeStrategy
+    public class UnitTestObjectMapperForCopyAssignableTypeStrategy
     {
         [Fact]
         public void Utils_ObjectMapper_Copy_Assinable_Type_Strategy_Successfully()

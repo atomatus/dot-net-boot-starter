@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Atomatus.Bootstarter.Util
 {
-    internal sealed class AssinableTypeCopyStrategy : ICopyStrategy
+    internal sealed class AssignableTypeCopyStrategy : ICopyStrategy
     {
         private static bool TryFindCommonType(Type type1, Type type2, out Type commonType)
         {
@@ -33,7 +33,7 @@ namespace Com.Atomatus.Bootstarter.Util
         public bool TryHandle([NotNull] object source, [NotNull] object target)
         {
             return TryFindCommonType(source.GetType(), target.GetType(), out Type commonType) &&
-                EqualTypeCopyStrategy.TryHandleSameType(this, source, target, commonType);
+                EqualTypeCopyStrategy.TryHandleSameType(source, target, commonType);
         }
     }
 }

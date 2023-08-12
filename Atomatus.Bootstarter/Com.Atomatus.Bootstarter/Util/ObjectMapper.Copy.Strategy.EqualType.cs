@@ -6,7 +6,7 @@ namespace Com.Atomatus.Bootstarter.Util
 {
     internal sealed class EqualTypeCopyStrategy : ICopyStrategy
     {
-        internal static bool TryHandleSameType([NotNull] ICopyStrategy strategy,[NotNull] object source, [NotNull] object target, Type sourceType)
+        internal static bool TryHandleSameType([NotNull] object source, [NotNull] object target, Type sourceType)
         {
             #region Collection
             CollectionCopyStrategy collectionCopy = new CollectionCopyStrategy();
@@ -19,7 +19,7 @@ namespace Com.Atomatus.Bootstarter.Util
             #region Properties
             PropertyInfo[] sourceProperties = sourceType.GetProperties();
 
-            if(sourceProperties.Length == 0)
+            if (sourceProperties.Length == 0)
             {
                 throw new InvalidOperationException($"Source type {sourceType.FullName} does not contains no one public property!");
             }
@@ -41,7 +41,8 @@ namespace Com.Atomatus.Bootstarter.Util
                         else
                         {
                             object valueCopy = Activator.CreateInstance(property.PropertyType);
-                            if (strategy.TryHandle(value, valueCopy))
+
+                            if (TryHandleSameType(value, valueCopy, property.PropertyType))
                             {
                                 property.SetValue(target, valueCopy);
                             }
@@ -64,7 +65,7 @@ namespace Com.Atomatus.Bootstarter.Util
         {
             Type sourceType = source.GetType();
             Type targetType = target.GetType();
-            return sourceType == targetType && TryHandleSameType(this, source, target, sourceType);
+            return sourceType == targetType && TryHandleSameType(source, target, sourceType);
         }
     }
 }

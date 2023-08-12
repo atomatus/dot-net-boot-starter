@@ -24,7 +24,7 @@ namespace Com.Atomatus.Bootstarter.Util
             using var handler = new CopyHandler(() => new EqualTypeCopyStrategy());
             handler
                 .Next(() => new CollectionCopyStrategy())
-                .Next(() => new AssinableTypeCopyStrategy())
+                .Next(() => new AssignableTypeCopyStrategy())
                 .Next(() => new CommonInterfaceCopyStrategy())
                 .Next(() => new CommonPropertyCopyStrategy());
             return handler.Handle(source, target);
