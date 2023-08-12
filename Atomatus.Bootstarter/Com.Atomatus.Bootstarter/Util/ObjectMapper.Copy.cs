@@ -46,7 +46,9 @@ namespace Com.Atomatus.Bootstarter.Util
             else
             {
                 Type sType = source.GetType();
-                if(sType.IsClass && sType != typeof(string))
+                SolveNullableType(ref sType);
+
+                if (sType.IsClass && sType != typeof(string))
                 {
                     T target = (T) Activator.CreateInstance(sType);
                     if(Copy(source, target))

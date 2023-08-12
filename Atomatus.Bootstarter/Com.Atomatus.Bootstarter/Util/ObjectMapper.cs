@@ -75,6 +75,8 @@ namespace Com.Atomatus.Bootstarter.Util
             }
 
             Type sourceType = source.GetType();
+            SolveNullableType(ref sourceType);
+            SolveNullableType(ref targetType);
 
             if (sourceType == targetType || ((targetType.IsInterface || targetType.IsAbstract) && targetType.IsAssignableFrom(sourceType)))
             {
@@ -163,6 +165,13 @@ namespace Com.Atomatus.Bootstarter.Util
         /// </exception>
         public static object GetDefaultValue([NotNull] Type type)
         {
+            if (type is null)
+            {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            SolveNullableType(ref type);
+
             if (type.IsClass)
             {
                 return null; // Return null for reference types (classes).
@@ -175,6 +184,17 @@ namespace Com.Atomatus.Bootstarter.Util
             {
                 throw new ArgumentException("Unsupported type: " + type);
             }
+        }
+
+        /// <summary>
+        /// Use this method to change current type for his 
+        /// underlying type when it is a nullable type, 
+        /// otherwise keep same type.
+        /// </summary>
+        /// <param name="type">target type reference</param>
+        internal static void SolveNullableType(ref Type type)
+        {
+            type = Nullable.GetUnderlyingType(type) ?? type;
         }
     }
 }

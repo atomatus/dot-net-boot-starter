@@ -39,14 +39,11 @@ namespace Com.Atomatus.Bootstarter.Util
                 {
                     if (TryGetTargetProperty(sourceProperties, targetProperties, sourceProp, out PropertyInfo targetProp))
                     {
-                        handled = true;
-                        object sourceValue = sourceProp.GetValue(source);
-
-                        Type sType = sourceProp.PropertyType;
-                        Type tType = targetProp.PropertyType;
-
                         try
                         {
+                            handled = true;
+                            object sourceValue = sourceProp.GetValue(source);
+                            Type tType = targetProp.PropertyType;
                             object targetValue = ObjectMapper.Parse(sourceValue, tType);
                             targetProp.SetValue(target, targetValue, null);
                         }
@@ -76,6 +73,8 @@ namespace Com.Atomatus.Bootstarter.Util
         {
             Type sType = source.GetType();
             Type tType = target.GetType();
+            ObjectMapper.SolveNullableType(ref sType);
+            ObjectMapper.SolveNullableType(ref tType);
 
             if (sType == tType)
             {

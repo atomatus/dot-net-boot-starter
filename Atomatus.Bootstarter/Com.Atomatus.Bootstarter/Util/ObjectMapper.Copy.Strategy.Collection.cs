@@ -32,6 +32,7 @@ namespace Com.Atomatus.Bootstarter.Util
                 try
                 {
                     Type sItemType = sItem.GetType();
+                    ObjectMapper.SolveNullableType(ref sItemType);
 
                     if (sItemType.IsPrimitive || sItemType == typeof(string) || !sItemType.IsClass)
                     {
@@ -101,6 +102,7 @@ namespace Com.Atomatus.Bootstarter.Util
                 if (target is Array array)
                 {
                     Type tItemType = array.GetType().GetElementType();
+                    ObjectMapper.SolveNullableType(ref tItemType);
 
                     int i = 0;
                     int l = array.Length;
@@ -129,9 +131,10 @@ namespace Com.Atomatus.Bootstarter.Util
             public override bool TryHandle([NotNull] IEnumerable source, [NotNull] object target)
             {
                 bool handled = false;
-                if (IsGenericTypeAndImplementingInterface(target.GetType(), typeof(ICollection<>)))
+                Type tType = target.GetType();
+                ObjectMapper.SolveNullableType(ref tType);
+                if (IsGenericTypeAndImplementingInterface(tType, typeof(ICollection<>)))
                 {
-                    Type tType = target.GetType();
                     Type tItemType = tType.GetGenericArguments()[0];
                     MethodInfo addMethod = tType.GetMethod("Add");
 
@@ -149,11 +152,9 @@ namespace Com.Atomatus.Bootstarter.Util
         {
             private static bool IsKeyValuePair(object obj)
             {
-                Type keyValuePairType = typeof(KeyValuePair<,>);
                 Type objectType = obj.GetType();
-
                 return objectType.IsGenericType &&
-                       objectType.GetGenericTypeDefinition() == keyValuePairType;
+                       objectType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>);
             }
 
             private static object GetKeyValue(object keyValuePair, string propertyName)
@@ -214,6 +215,8 @@ namespace Com.Atomatus.Bootstarter.Util
                 if(target is IDictionary dictionary)
                 {
                     Type dictionaryType = dictionary.GetType();
+                    ObjectMapper.SolveNullableType(ref dictionaryType);
+
                     Type[] targetDictKeyValueType = IsGenericTypeAndImplementingInterface(dictionaryType, typeof(IDictionary<,>)) ?
                         dictionaryType.GetGenericArguments() : Array.Empty<Type>();
 
@@ -271,7 +274,9 @@ namespace Com.Atomatus.Bootstarter.Util
                 {
                     foreach (var e in source)
                     {
-                        handled |= TryAddToTargetCollection(source, tCollection, e, e.GetType(),
+                        Type eType = e.GetType();
+                        ObjectMapper.SolveNullableType(ref eType);
+                        handled |= TryAddToTargetCollection(source, tCollection, e, eType,
                             (t, e) => t.Add(e));
                     }
                 }

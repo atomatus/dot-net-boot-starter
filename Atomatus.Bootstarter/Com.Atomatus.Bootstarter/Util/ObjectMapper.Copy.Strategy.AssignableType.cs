@@ -7,6 +7,9 @@ namespace Com.Atomatus.Bootstarter.Util
     {
         private static bool TryFindCommonType(Type type1, Type type2, out Type commonType)
         {
+            ObjectMapper.SolveNullableType(ref type1);
+            ObjectMapper.SolveNullableType(ref type2);
+
             Type originalType2 = type2;
 
             while (type1 != null)
