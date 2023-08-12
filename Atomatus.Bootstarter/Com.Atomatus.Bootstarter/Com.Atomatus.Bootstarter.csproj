@@ -39,87 +39,90 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="Context/ContextBase.Configuration.cs">
+    <Compile Update="Context/ContextBase.Configuration.cs">
       <DependentUpon>Context/ContextBase.cs</DependentUpon>
-    </None>
-    <None Include="Context/ContextBase.DbSet.cs">
+    </Compile>
+    <Compile Update="Context/ContextBase.DbSet.cs">
       <DependentUpon>Context/ContextBase.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Context/Configuration/Connection/ContextConnection.Builder.cs">
+    <Compile Update="Context/Configuration/Connection/ContextConnection.Builder.cs">
       <DependentUpon>Context/Configuration/Connection/ContextConnection.cs</DependentUpon>
-    </None>
-    <None Include="Context/Configuration/Connection/ContextConnection.Parameters.cs">
+    </Compile>
+    <Compile Update="Context/Configuration/Connection/ContextConnection.Parameters.cs">
       <DependentUpon>Context/Configuration/Connection/ContextConnection.cs</DependentUpon>
-    </None>
-    <None Include="Context/Configuration/Connection/ContextConnectionString.Extensions.cs">
+    </Compile>
+    <Compile Update="Context/Configuration/Connection/ContextConnectionString.Extensions.cs">
       <DependentUpon>Context/Configuration/Connection/ContextConnectionString.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Context/Ensures/ContextBaseForEnsure.Creation.cs">
+    <Compile Update="Context/Ensures/ContextBaseForEnsure.Creation.cs">
       <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
-    </None>
-    <None Include="Context/Ensures/ContextBaseForEnsure.Creation.DeletedOnDispose.cs">
+    </Compile>
+    <Compile Update="Context/Ensures/ContextBaseForEnsure.Creation.DeletedOnDispose.cs">
       <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
-    </None>
-    <None Include="Context/Ensures/ContextBaseForEnsure.DeletedOnDispose.cs">
+    </Compile>
+    <Compile Update="Context/Ensures/ContextBaseForEnsure.DeletedOnDispose.cs">
       <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
-    </None>
-    <None Include="Context/Ensures/ContextBaseForEnsure.Migration.cs">
+    </Compile>
+    <Compile Update="Context/Ensures/ContextBaseForEnsure.Migration.cs">
       <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Util/DynamicType.Factory.cs">
+    <Compile Update="Util/DynamicType.Factory.cs">
       <DependentUpon>Util/DynamicType.cs</DependentUpon>
-    </None>
-    <None Include="Util/DynamicType.Context.cs">
+    </Compile>
+    <Compile Update="Util/DynamicType.Context.cs">
       <DependentUpon>Util/DynamicType.cs</DependentUpon>
-    </None>
-    <None Include="Util/DynamicType.Service.cs">
+    </Compile>
+    <Compile Update="Util/DynamicType.Service.cs">
       <DependentUpon>Util/DynamicType.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="Util/ObjectMapper.Copy.cs">
+    <Compile Update="Util/ObjectMapper.Copy.cs">
       <DependentUpon>Util/ObjectMapper.cs</DependentUpon>
-    </None>
-    <None Include="Util/ObjectMapper.Copy.Handler.cs">
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Handler.cs">
       <DependentUpon>Util/ObjectMapper.Copy.cs</DependentUpon>
-    </None>
-    <None Include="Util/ObjectMapper.Copy.Strategy.cs">
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Strategy.cs">
       <DependentUpon>Util/ObjectMapper.Copy.cs</DependentUpon>
-    </None>
-    <None Include="Util/ObjectMapper.Copy.Strategy.AssignableType.cs">
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Strategy.AssignableType.cs">
       <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
-    </None>
-    <None Include="Util/ObjectMapper.Copy.Strategy.CommonInterface.cs">
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Strategy.Collection.cs">
       <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
-    </None>
-    <None Include="Util/ObjectMapper.Copy.Strategy.CommonProperty.cs">
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Strategy.CommonInterface.cs">
       <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
-    </None>
-    <None Include="Util/ObjectMapper.Copy.Strategy.EqualType.cs">
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Strategy.CommonProperty.cs">
       <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
-    </None>
+    </Compile>
+    <Compile Update="Util/ObjectMapper.Copy.Strategy.EqualType.cs">
+      <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="Services/IService.Crud.cs">
+    <Compile Update="Services/IService.Crud.cs">
       <DependentUpon>Services/IService.cs</DependentUpon>
-    </None>
-    <None Include="Services/IService.Crud.Async.cs">
+    </Compile>
+    <Compile Update="Services/IService.Crud.Async.cs">
       <DependentUpon>Services/IService.cs</DependentUpon>
-    </None>
-    <None Include="Services/ServiceCrud.Async.cs">
+    </Compile>
+    <Compile Update="Services/ServiceCrud.Async.cs">
       <DependentUpon>Services/ServiceCrud.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
