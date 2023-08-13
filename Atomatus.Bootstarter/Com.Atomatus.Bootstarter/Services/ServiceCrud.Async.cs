@@ -20,6 +20,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
         public async Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken)
         {
+            RequireValidate(entity);
             await dbSet.AddAsync(entity ?? throw new ArgumentNullException(nameof(entity)), cancellationToken);
             
             try
@@ -504,7 +505,7 @@ namespace Com.Atomatus.Bootstarter.Services
                       "thus can not be updated! Because it does not contains an Id.");
                 }
             }
-
+            RequireValidate(entity);
             //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local
                 .AsParallel()

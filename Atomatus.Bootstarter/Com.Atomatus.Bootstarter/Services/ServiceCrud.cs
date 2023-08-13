@@ -55,6 +55,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
         public TEntity Save(TEntity entity)
         {
+            RequireValidate(entity);
             dbSet.Add(entity ?? throw new ArgumentNullException(nameof(entity)));
 
             try
@@ -549,6 +550,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 }
             }
 
+            RequireValidate(entity);
             //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local.FirstOrDefault(entity.EqualsAnyId);
 

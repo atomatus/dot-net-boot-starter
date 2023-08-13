@@ -9,6 +9,27 @@ namespace Com.Atomatus.Bootstarter.Services
     public partial class ServiceCrud<TContext, TEntity, ID> : IServiceValidation<TEntity>
     {
         #region Validation
+        private static void ValidateLocal([NotNull] TEntity entity, 
+            [NotNull] out IEnumerable<ValidationResult> validationResults,
+            out bool isValidatableObject,
+            out bool isValid)
+        {
+            validationResults = (isValidatableObject = entity is IValidatableObject) ?
+                    (entity as IValidatableObject).Validate(new ValidationContext(entity)) :
+                    Enumerable.Empty<ValidationResult>();
+            isValid = !validationResults.Any();
+        }
+
+        private static void RequireValidate([NotNull] TEntity entity)
+        {
+            ValidateLocal(entity, out var validationResults, out bool _, out bool isValid);
+            if (!isValid)
+            {
+                throw new AggregateException("One or more validation error was found!",
+                    validationResults.Select(r => new ValidationException(r.ErrorMessage)));
+            }
+        }
+
         /// <summary>
         /// Use this methoid when <typeparamref name="TEntity"/> implements <see cref="IValidatableObject"/>
         /// to validate it and recover validation result when is not valid (return false).
@@ -18,17 +39,13 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>true, entity is valid, otherwise false and contains validation results.</returns>
         public bool Validate([NotNull] TEntity entity, [NotNull] out IEnumerable<ValidationResult> validationResults)
         {
-            if (entity is IValidatableObject validatable)
+            ValidateLocal(entity, out validationResults, out bool isValidatableObject, out bool isValid);
+            if(!isValidatableObject)
             {
-                validationResults = validatable.Validate(new ValidationContext(entity));
-            }
-            else
-            {
-                validationResults = Enumerable.Empty<ValidationResult>();
                 ConsoleColored.WriteLine($"[ServiceCrud#Validate] Entity \"{typeof(TEntity).FullName}\" does not implements IValidatableObject interface, " +
                     $"therefore Validate will always return true.", ConsoleColor.Red);
             }
-            return !validationResults.Any();
+            return isValid;
         }
 
         /// <summary>
@@ -49,8 +66,8 @@ namespace Com.Atomatus.Bootstarter.Services
         /// contains validation result and callback will be fired for it one.</returns>
         public bool ValidateModelState([NotNull] TEntity entity, Action<string, string> addModelStateErrorAction)
         {
-            bool validate = this.Validate(entity, out var validationResults);
-            if (!validate)
+            bool isValid = this.Validate(entity, out var validationResults);
+            if (!isValid)
             {
                 foreach (var result in validationResults)
                 {
@@ -60,7 +77,7 @@ namespace Com.Atomatus.Bootstarter.Services
                     }
                 }
             }
-            return validate;
+            return isValid;
         }
 
         /// <summary>
