@@ -138,6 +138,37 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// Get entity by alternate key.
+        /// <para>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="uuid">alternate key uuid</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
+        public Task<TEntity> GetByUuidTrackingAsync(Guid uuid, CancellationToken cancellationToken = default)
+        {
+            return dbSet
+                .OfType<IModelAltenateKey>()
+                .Where(t => t.Uuid == uuid)
+                .OfType<TEntity>()
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        /// <summary>
         /// Get the first entity in collection.
         /// </summary>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
@@ -151,6 +182,23 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
+        /// Get the first entity in collection.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        public Task<TEntity> FirstTrackingAsync()
+        {
+            return dbSet
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
         /// Get the last entity in collection.
         /// </summary>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
@@ -158,6 +206,23 @@ namespace Com.Atomatus.Bootstarter.Services
         {
             return dbSet
                 .AsNoTracking()
+                .OrderByDescending(t => t.Id)
+                .Take(1)
+                .FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// <para>
+        /// Get the last entity in collection.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <returns>task representation with result, found entity, otherwise null value</returns>
+        public Task<TEntity> LastTrackingAsync()
+        {
+            return dbSet
                 .OrderByDescending(t => t.Id)
                 .Take(1)
                 .FirstOrDefaultAsync();
@@ -196,6 +261,36 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
+        /// List entities by paging.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="index">item index on persistence base, from 0</param>
+        /// <param name="count">entity count by page list</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>task representation with result, found value, otherwhise empty list.</returns>
+        public Task<List<TEntity>> PagingIndexTrackingAsync(int index, int count, CancellationToken cancellationToken = default)
+        {
+            if (index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            return this.dbSet
+                .OrderBy(e => e.Id)
+                .Skip(index)
+                .Take(count)
+                .ToListAsync(cancellationToken);
+        }
+
+        /// <summary>
         /// List entities by paging.
         /// </summary>
         /// <param name="page">page index, from 0</param>
@@ -204,10 +299,28 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>task representation with result, found value, otherwhise empty list.</returns>
         public Task<List<TEntity>> PagingAsync(int page, int limit, CancellationToken cancellationToken)
         {
-            page = page < 0 ? 0 : page;
             limit = limit <= 0 ? IService<TEntity, ID>.REQUEST_LIST_LIMIT: limit;
-            int index = page * limit;//to skip.
+            int index = Math.Max(page, 0) * limit;//to skip.
             return PagingIndexAsync(index, limit, cancellationToken);
+        }
+
+        /// <summary>
+        /// <para>
+        /// List entities by paging.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="page">page index, from 0</param>
+        /// <param name="limit">entity limit by page list, when -1 will use the max request limit default (<see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>).</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>task representation with result, found value, otherwhise empty list.</returns>
+        public Task<List<TEntity>> PagingTrackingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default)
+        {
+            limit = limit <= 0 ? IService<TEntity, ID>.REQUEST_LIST_LIMIT : limit;
+            int index = Math.Max(page, 0) * limit;//to skip.
+            return PagingIndexTrackingAsync(index, limit, cancellationToken);
         }
 
         /// <summary>
@@ -229,6 +342,26 @@ namespace Com.Atomatus.Bootstarter.Services
 
         /// <summary>
         /// <para>
+        /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>task representation with result, list all values possible</returns>
+        public Task<List<TEntity>> ListTrackingAsync(CancellationToken cancellationToken = default)
+        {
+            return PagingIndexTrackingAsync(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT, cancellationToken);
+        }
+
+        /// <summary>
+        /// <para>
         /// Recovery an amount of values sorted by id.
         /// </para>
         /// <para>
@@ -246,6 +379,30 @@ namespace Com.Atomatus.Bootstarter.Services
         public Task<List<TEntity>> TakeAsync(int count, CancellationToken cancellationToken)
         {
             return PagingIndexAsync(0, count, cancellationToken);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery an amount of values sorted by id.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="count"> amount of data</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>list values requested sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/>task representation with result, value is less or equals zero.
+        /// </exception>
+        public Task<List<TEntity>> TakeTrackingAsync(int count, CancellationToken cancellationToken = default)
+        {
+            return PagingIndexTrackingAsync(0, count, cancellationToken);
         }
 
         /// <summary>
@@ -275,6 +432,39 @@ namespace Com.Atomatus.Bootstarter.Services
             //check de method message it is the purpose.
             return this.dbSet
                 .AsNoTracking()
+                .Take(count)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery an sample of values non sorted.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="PagingAsync(int, int, CancellationToken)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="count">amount of data</param>
+        /// <param name="cancellationToken">cancellation token</param>
+        /// <returns>list values requested non sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/>task representation with result, value is less or equals zero.
+        /// </exception>
+        public Task<List<TEntity>> SampleTrackingAsync(int count, CancellationToken cancellationToken = default)
+        {
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            //oh! a "Take" request without "OrderBy", it's ok!
+            //check de method message it is the purpose.
+            return this.dbSet
                 .Take(count)
                 .ToListAsync();
         }

@@ -153,6 +153,21 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
+        /// Get entity by primary key.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="id">target id</param>
+        /// <returns>found entity, otherwise null value</returns>
+        public TEntity GetTracking(ID id)
+        {
+            return dbSet.Find(id);
+        }
+
+        /// <summary>
         /// Get entity by alternate key.<br/>
         /// <i>
         /// Obs.: <typeparamref name="TEntity"/> must contains 
@@ -179,6 +194,36 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// Get entity by alternate key.
+        /// <para>
+        /// <i>
+        /// Obs.: <typeparamref name="TEntity"/> must contains 
+        /// <see cref="IModelAltenateKey"/> implementation.
+        /// Otherwise, will throw exception.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="uuid">alternate key uuid</param>
+        /// <returns>found entity, otherwise null value</returns>
+        /// <exception cref="InvalidCastException">
+        /// Throws exception when <typeparamref name="TEntity"/>
+        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
+        /// </exception>
+        public TEntity GetByUuidTracking(Guid uuid)
+        {
+            return dbSet
+                .OfType<IModelAltenateKey>()
+                .Where(t => t.Uuid == uuid)
+                .OfType<TEntity>()
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// Get the first entity in collection.
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
@@ -192,6 +237,23 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
+        /// Get the first entity in collection.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <returns>found entity, otherwise null value</returns>
+        public TEntity FirstTracking()
+        {
+            return dbSet
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// Get the last entity in collection.
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
@@ -199,6 +261,23 @@ namespace Com.Atomatus.Bootstarter.Services
         {
             return dbSet
                 .AsNoTracking()
+                .OrderByDescending(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// <para>
+        /// Get the last entity in collection.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <returns>found entity, otherwise null value</returns>
+        public TEntity LastTracking()
+        {
+            return dbSet
                 .OrderByDescending(t => t.Id)
                 .Take(1)
                 .FirstOrDefault();
@@ -236,6 +315,35 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// <para>
+        /// List entities by paging.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="index">item index on persistence base, from 0</param>
+        /// <param name="count">entity count by page list</param>
+        /// <returns>found value, otherwhise empty list.</returns>
+        public List<TEntity> PagingIndexTracking(int index, int count)
+        {
+            if (index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            return this.dbSet
+                .OrderBy(e => e.Id)
+                .Skip(index)
+                .Take(count)
+                .ToList();
+        }
+
+        /// <summary>
         /// List entities by paging.
         /// </summary>
         /// <param name="page">page index, from 0</param>
@@ -243,10 +351,27 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>found value, otherwhise empty list.</returns>
         public List<TEntity> Paging(int page, int limit)
         {
-            page = page < 0 ? 0 : page;
             limit = limit <= 0 ? IService<TEntity,ID>.REQUEST_LIST_LIMIT : limit;
-            int index = page * limit;//to skip.
+            int index = Math.Max(page, 0) * limit;//to skip.
             return PagingIndex(index, limit);
+        }
+        
+        /// <summary>
+        /// <para>
+        /// List entities by paging.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="page">page index, from 0</param>
+        /// <param name="limit">entity limit by page list, when -1 will use the max request limit default (<see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>).</param>
+        /// <returns>found value, otherwhise empty list.</returns>
+        public List<TEntity> PagingTracking(int page = 0, int limit = -1)
+        {
+            limit = limit <= 0 ? IService<TEntity, ID>.REQUEST_LIST_LIMIT : limit;
+            int index = Math.Max(page, 0) * limit;//to skip.
+            return PagingIndexTracking(index, limit);
         }
 
         /// <summary>
@@ -263,6 +388,25 @@ namespace Com.Atomatus.Bootstarter.Services
         public List<TEntity> List()
         {
             return PagingIndex(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT);
+        }
+
+        /// <summary>
+        /// <para>
+        /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <returns>list all values possible</returns>
+        public List<TEntity> ListTracking()
+        {
+            return PagingIndexTracking(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT);
         }
 
         /// <summary>
@@ -287,7 +431,30 @@ namespace Com.Atomatus.Bootstarter.Services
 
         /// <summary>
         /// <para>
-        /// Recovery an sample of values non sorted.
+        /// Recovery an amount of values sorted by id.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="count"> amount of data</param>
+        /// <returns>list values requested sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        public List<TEntity> TakeTracking(int count)
+        {
+            return PagingIndexTracking(0, count);
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery a sample of values non sorted.
         /// </para>
         /// <para>
         /// <i>
@@ -311,6 +478,38 @@ namespace Com.Atomatus.Bootstarter.Services
             //check de method message it is the purpose.
             return this.dbSet
                 .AsNoTracking()                
+                .Take(count)
+                .ToList();
+        }
+
+        /// <summary>
+        /// <para>
+        /// Recovery a sample of values non sorted.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="count">amount of data</param>
+        /// <returns>list values requested non sorted and limited to count</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        public List<TEntity> SampleTracking(int count)
+        {
+            if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            //oh! a "Take" request without "OrderBy", it's ok!
+            //check de method message it is the purpose.
+            return this.dbSet
                 .Take(count)
                 .ToList();
         }
