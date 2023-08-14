@@ -48,13 +48,14 @@ namespace Com.Atomatus.Bootstarter.Services
 
         #region [C]reate
         /// <summary>
-        /// Insert a new valeu to persistence base.
+        /// Insert a new value to persistence base.
         /// </summary>
         /// <param name="entity">target entity</param>
         /// <returns>entity within ids</returns>
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
         public TEntity Save(TEntity entity)
         {
+            OnBeforeInsertCallback(entity);
             RequireValidate(entity);
             dbSet.Add(entity ?? throw new ArgumentNullException(nameof(entity)));
 
@@ -550,6 +551,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 }
             }
 
+            OnBeforeUpdateCallback(entity);
             RequireValidate(entity);
             //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local.FirstOrDefault(entity.EqualsAnyId);
@@ -660,6 +662,7 @@ namespace Com.Atomatus.Bootstarter.Services
         private int DeleteLocal(IEnumerable<Guid> uuids)
         {
             var entity  = AttachRangeNonExists(uuids).ToList();
+            OnBeforeDeleteCallback(entity);
             dbSet.RemoveRange(entity);
             int count   = dbContext.SaveChanges();
             if(count > 0) OnDeletedCallback(entity);
@@ -745,6 +748,7 @@ namespace Com.Atomatus.Bootstarter.Services
         public bool Delete(IEnumerable<TEntity> entity)
         {
             var att = AttachRangeNonExists(entity);
+            OnBeforeDeleteCallback(att);
             dbSet.RemoveRange(att);
             var res = dbContext.SaveChanges() >= entity.Count();
             if (res) OnDeletedCallback(att);
@@ -760,6 +764,7 @@ namespace Com.Atomatus.Bootstarter.Services
         public bool Delete(params TEntity[] entity)
         {
             var att = AttachRangeNonExists(entity);
+            OnBeforeDeleteCallback(att);
             dbSet.RemoveRange(att);
             var res = dbContext.SaveChanges() >= entity.Length;
             if (res) OnDeletedCallback(att);
@@ -768,6 +773,24 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region Callbacks
+        /// <summary>
+        /// Callback firing before insert entity.
+        /// </summary>
+        /// <param name="entity">new entity</param>
+        protected virtual void OnBeforeInsertCallback(TEntity entity) { }
+
+        /// <summary>
+        /// Callback firing before update entity.
+        /// </summary>
+        /// <param name="entity">entity updated</param>
+        protected virtual void OnBeforeUpdateCallback(TEntity entity) { }
+
+        /// <summary>
+        /// Callback firing before delete entities.
+        /// </summary>
+        /// <param name="entities">entities deleted</param>
+        protected virtual void OnBeforeDeleteCallback(IEnumerable<TEntity> entities) { }
+
         /// <summary>
         /// Callback firing after insert entity.
         /// </summary>
