@@ -101,7 +101,7 @@ namespace Com.Atomatus.Bootstarter
             BindingFlags flags = BindingFlags.Instance | BindingFlags.Public;
             return target is null ? 0 : GetHashCode(
                    target.GetType().GetFields(flags).Select(f => f.GetValue(target)).Union(
-                   target.GetType().GetProperties(flags).Select(f => f.GetValue(target))));
+                   target.GetType().GetProperties(flags).Where(p => !p.GetGetMethod()?.IsVirtual ?? false).Select(f => f.GetValue(target))));
         }
 
         /// <summary>
