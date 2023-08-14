@@ -12,7 +12,7 @@
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.25</PackageVersion>
+    <PackageVersion>0.0.26</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
@@ -23,8 +23,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>privatekey.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>1.0.0.25</AssemblyVersion>
-    <FileVersion>1.0.0.25</FileVersion>
+    <AssemblyVersion>1.0.0.26</AssemblyVersion>
+    <FileVersion>1.0.0.26</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,105 +39,108 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Update="Context/ContextBase.Configuration.cs">
-      <DependentUpon>Context/ContextBase.cs</DependentUpon>
+    <Compile Update="Context\ContextBase.Configuration.cs">
+      <DependentUpon>Context\ContextBase.cs</DependentUpon>
     </Compile>
-    <Compile Update="Context/ContextBase.DbSet.cs">
-      <DependentUpon>Context/ContextBase.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Context/Configuration/Connection/ContextConnection.Builder.cs">
-      <DependentUpon>Context/Configuration/Connection/ContextConnection.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Context/Configuration/Connection/ContextConnection.Parameters.cs">
-      <DependentUpon>Context/Configuration/Connection/ContextConnection.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Context/Configuration/Connection/ContextConnectionString.Extensions.cs">
-      <DependentUpon>Context/Configuration/Connection/ContextConnectionString.cs</DependentUpon>
+    <Compile Update="Context\ContextBase.DbSet.cs">
+      <DependentUpon>Context\ContextBase.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Context/Ensures/ContextBaseForEnsure.Creation.cs">
-      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    <Compile Update="Context\Configuration\Connection\ContextConnection.Builder.cs">
+      <DependentUpon>Context\Configuration\Connection\ContextConnection.cs</DependentUpon>
     </Compile>
-    <Compile Update="Context/Ensures/ContextBaseForEnsure.Creation.DeletedOnDispose.cs">
-      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    <Compile Update="Context\Configuration\Connection\ContextConnection.Parameters.cs">
+      <DependentUpon>Context\Configuration\Connection\ContextConnection.cs</DependentUpon>
     </Compile>
-    <Compile Update="Context/Ensures/ContextBaseForEnsure.DeletedOnDispose.cs">
-      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Context/Ensures/ContextBaseForEnsure.Migration.cs">
-      <DependentUpon>Context/Ensures/ContextBaseForEnsure.cs</DependentUpon>
+    <Compile Update="Context\Configuration\Connection\ContextConnectionString.Extensions.cs">
+      <DependentUpon>Context\Configuration\Connection\ContextConnectionString.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Util/DynamicType.Factory.cs">
-      <DependentUpon>Util/DynamicType.cs</DependentUpon>
+    <Compile Update="Context\Ensures\ContextBaseForEnsure.Creation.cs">
+      <DependentUpon>Context\Ensures\ContextBaseForEnsure.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/DynamicType.Context.cs">
-      <DependentUpon>Util/DynamicType.cs</DependentUpon>
+    <Compile Update="Context\Ensures\ContextBaseForEnsure.Creation.DeletedOnDispose.cs">
+      <DependentUpon>Context\Ensures\ContextBaseForEnsure.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/DynamicType.Service.cs">
-      <DependentUpon>Util/DynamicType.cs</DependentUpon>
+    <Compile Update="Context\Ensures\ContextBaseForEnsure.DeletedOnDispose.cs">
+      <DependentUpon>Context\Ensures\ContextBaseForEnsure.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Context\Ensures\ContextBaseForEnsure.Migration.cs">
+      <DependentUpon>Context\Ensures\ContextBaseForEnsure.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Util\DynamicType.Factory.cs">
+      <DependentUpon>Util\DynamicType.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Util\DynamicType.Context.cs">
+      <DependentUpon>Util\DynamicType.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Util\DynamicType.Service.cs">
+      <DependentUpon>Util\DynamicType.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Update="Util/ObjectMapper.Copy.cs">
-      <DependentUpon>Util/ObjectMapper.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.cs">
+      <DependentUpon>Util\ObjectMapper.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Handler.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Handler.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Strategy.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Strategy.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Strategy.AssignableType.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Strategy.AssignableType.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.Strategy.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Strategy.Collection.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Strategy.Collection.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.Strategy.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Strategy.CommonInterface.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Strategy.CommonInterface.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.Strategy.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Strategy.CommonProperty.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Strategy.CommonProperty.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.Strategy.cs</DependentUpon>
     </Compile>
-    <Compile Update="Util/ObjectMapper.Copy.Strategy.EqualType.cs">
-      <DependentUpon>Util/ObjectMapper.Copy.Strategy.cs</DependentUpon>
+    <Compile Update="Util\ObjectMapper.Copy.Strategy.EqualType.cs">
+      <DependentUpon>Util\ObjectMapper.Copy.Strategy.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Update="Services/IService.Crud.cs">
-      <DependentUpon>Services/IService.cs</DependentUpon>
+    <Compile Update="Services\IService.Crud.cs">
+      <DependentUpon>Services\IService.cs</DependentUpon>
     </Compile>
-    <Compile Update="Services/IService.Crud.Async.cs">
-      <DependentUpon>Services/IService.cs</DependentUpon>
+    <Compile Update="Services\IService.Crud.Async.cs">
+      <DependentUpon>Services\IService.cs</DependentUpon>
     </Compile>
-    <Compile Update="Services/IService.Validation.cs">
-      <DependentUpon>Services/IService.cs</DependentUpon>
+    <Compile Update="Services\IService.Validation.cs">
+      <DependentUpon>Services\IService.cs</DependentUpon>
     </Compile>
-    <Compile Update="Services/ServiceCrud.Async.cs">
-      <DependentUpon>Services/ServiceCrud.cs</DependentUpon>
+    <Compile Update="Services\ServiceCrud.Async.cs">
+      <DependentUpon>Services\ServiceCrud.cs</DependentUpon>
     </Compile>
-    <Compile Update="Services/ServiceCrud.Validation.cs">
-      <DependentUpon>Services/ServiceCrud.cs</DependentUpon>
+    <Compile Update="Services\ServiceCrud.Validation.cs">
+      <DependentUpon>Services\ServiceCrud.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Services\ServiceCrud.Validation.Exception.cs">
+      <DependentUpon>Services\ServiceCrud.Validation.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />

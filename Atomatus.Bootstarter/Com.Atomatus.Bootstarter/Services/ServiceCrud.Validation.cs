@@ -25,8 +25,7 @@ namespace Com.Atomatus.Bootstarter.Services
             ValidateLocal(entity, out var validationResults, out bool _, out bool isValid);
             if (!isValid)
             {
-                throw new AggregateException("One or more validation error was found!",
-                    validationResults.Select(r => new ValidationException(r.ErrorMessage)));
+                throw new AggregateValidationException(validationResults);
             }
         }
 
@@ -91,8 +90,7 @@ namespace Com.Atomatus.Bootstarter.Services
         {
             if (!this.Validate(entity, out var validationResults))
             {
-                throw new AggregateException("One or more validation error was found!", 
-                    validationResults.Select(r => new ValidationException(r.ErrorMessage)));
+                throw new AggregateValidationException(validationResults);
             }
         }
         #endregion
