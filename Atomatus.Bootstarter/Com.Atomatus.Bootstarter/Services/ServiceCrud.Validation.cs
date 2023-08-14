@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 
 namespace Com.Atomatus.Bootstarter.Services
 {
     public partial class ServiceCrud<TContext, TEntity, ID> : IServiceValidation<TEntity>
     {
         #region Validation
-        private static void ValidateLocal([NotNull] TEntity entity, 
+        private static void ValidateLocal([NotNull] object entity, 
             [NotNull] out IEnumerable<ValidationResult> validationResults,
             out bool isValidatableObject,
             out bool isValid)
@@ -20,12 +22,27 @@ namespace Com.Atomatus.Bootstarter.Services
             isValid = !validationResults.Any();
         }
 
-        private static void RequireValidate([NotNull] TEntity entity)
+        private static void RequireValidate([NotNull] object entity)
         {
             ValidateLocal(entity, out var validationResults, out bool _, out bool isValid);
             if (!isValid)
             {
-                throw new AggregateValidationException(validationResults);
+                throw new AggregateValidationException(entity, validationResults);
+            }
+            else
+            {
+                entity.GetType()
+                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(p => !p.GetGetMethod()?.IsVirtual ?? false)//ignore virtual props. To avoid circular reference.
+                    .SelectMany(p =>
+                    {
+                        var value = p.GetValue(entity);
+                        return
+                            value is IEnumerable e ? e.OfType<IValidatableObject>() :
+                            value is IValidatableObject vo ? new[] { vo } : Enumerable.Empty<object>();
+                    })
+                    .ToList()
+                    .ForEach(p => RequireValidate(p));
             }
         }
 
@@ -90,7 +107,7 @@ namespace Com.Atomatus.Bootstarter.Services
         {
             if (!this.Validate(entity, out var validationResults))
             {
-                throw new AggregateValidationException(validationResults);
+                throw new AggregateValidationException(entity, validationResults);
             }
         }
         #endregion

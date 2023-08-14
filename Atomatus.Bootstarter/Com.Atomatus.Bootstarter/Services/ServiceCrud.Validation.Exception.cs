@@ -20,8 +20,13 @@ namespace Com.Atomatus.Bootstarter.Services
         new public ReadOnlyCollection<ValidationException> InnerExceptions =>
             _rocView ??= new ReadOnlyCollection<ValidationException>(base.InnerExceptions.OfType<ValidationException>().ToList());
 
-        public AggregateValidationException([NotNull] IEnumerable<ValidationResult> validationResults)
+        /// <summary>
+        /// Construct an AggregateValidation exception by target entity and his ValidationResults.
+        /// </summary>
+        /// <param name="entity">target entity</param>
+        /// <param name="validationResults">entity validation results</param>
+        public AggregateValidationException([NotNull] object entity, [NotNull] IEnumerable<ValidationResult> validationResults)
             : base("One or more validation error was found!",
-                  validationResults.Select(r => new ValidationException(r, null, null))) { }
+                  validationResults.Select(r => new ValidationException(r, null, entity))) { }
     }
 }
