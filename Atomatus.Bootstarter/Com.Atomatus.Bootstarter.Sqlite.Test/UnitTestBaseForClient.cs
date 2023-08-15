@@ -1,3 +1,4 @@
+using Com.Atomatus.Bootstarter.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -97,7 +98,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             };
 
             //[A]ct
-            var ex = Assert.ThrowsAny<DbUpdateException>(() => provider.Service.Save(client));
+            var ex = Assert.ThrowsAny<AggregateValidationException>(() => provider.Service.Save(client));
 
             //[A]ssert
             Assert.NotNull(ex);
@@ -227,7 +228,7 @@ namespace Com.Atomatus.Bootstarter.Sqlite.Test
             client.Name = null;//required it.
 
             //[A]ct
-            var ex = Assert.ThrowsAny<DbUpdateException>(() => provider.Service.Update(client));
+            var ex = Assert.ThrowsAny<AggregateValidationException>(() => provider.Service.Update(client));
 
             //[A]ssert
             Assert.NotNull(ex);

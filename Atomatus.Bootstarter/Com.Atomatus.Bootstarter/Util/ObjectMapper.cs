@@ -84,6 +84,18 @@ namespace Com.Atomatus.Bootstarter.Util
             }
             else if (targetType.IsPrimitive || targetType == typeof(string) || targetType.IsEnum || !targetType.IsClass)
             {
+                if(targetType.IsInterface)
+                {
+                    var collectionsGenericType = new [] { typeof(IList<>), typeof(ICollection<>), typeof(IEnumerable<>) };
+                    if(targetType.IsGenericType &&
+                        targetType.GetInterfaces().FirstOrDefault(d => d.IsGenericType &&
+                            collectionsGenericType.Contains(d.GetGenericTypeDefinition())) is Type listType)
+                    {
+                        Type listItemType = listType.GetGenericArguments()[0];
+                        return Parse(source, typeof(List<>).MakeGenericType(listItemType));
+                    }
+                }
+
                 return Convert.ChangeType(source, targetType);
             }
             else
@@ -172,7 +184,7 @@ namespace Com.Atomatus.Bootstarter.Util
 
             SolveNullableType(ref type);
 
-            if (type.IsClass)
+            if (type.IsClass || type.IsInterface)
             {
                 return null; // Return null for reference types (classes).
             }

@@ -123,9 +123,11 @@ namespace Com.Atomatus.Bootstarter.Util
 
         private class GenericCollectionStrategy : LocalCollectionStrategy
         {
-            protected static bool IsGenericTypeAndImplementingInterface(Type type, Type interfaceType)
+            protected static bool IsGenericTypeAndImplementingInterface(Type type, Type interfaceType, out Type[] genericArguments)
             {
-                return type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType);
+                return (genericArguments = type.GetInterfaces()
+                    .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType)?
+                    .GetGenericArguments()) != default;
             }
 
             public override bool TryHandle([NotNull] IEnumerable source, [NotNull] object target)
@@ -133,9 +135,8 @@ namespace Com.Atomatus.Bootstarter.Util
                 bool handled = false;
                 Type tType = target.GetType();
                 ObjectMapper.SolveNullableType(ref tType);
-                if (IsGenericTypeAndImplementingInterface(tType, typeof(ICollection<>)))
+                if (IsGenericTypeAndImplementingInterface(tType, typeof(ICollection<>), out Type[] args) && args.FirstOrDefault() is Type tItemType)
                 {
-                    Type tItemType = tType.GetGenericArguments()[0];
                     MethodInfo addMethod = tType.GetMethod("Add");
 
                     foreach (var sItem in source)
@@ -217,8 +218,8 @@ namespace Com.Atomatus.Bootstarter.Util
                     Type dictionaryType = dictionary.GetType();
                     ObjectMapper.SolveNullableType(ref dictionaryType);
 
-                    Type[] targetDictKeyValueType = IsGenericTypeAndImplementingInterface(dictionaryType, typeof(IDictionary<,>)) ?
-                        dictionaryType.GetGenericArguments() : Array.Empty<Type>();
+                    Type[] targetDictKeyValueType = IsGenericTypeAndImplementingInterface(dictionaryType, typeof(IDictionary<,>), out Type[] genericArgs) ?
+                        genericArgs : Array.Empty<Type>();
 
                     foreach (var s in source)
                     {
