@@ -197,10 +197,10 @@ namespace Com.Atomatus.Bootstarter.Util
                         } 
                         catch (Exception ex)
                         {
+                            Debug.WriteLine(ex);
 #if DEBUG
                             throw;
 #else
-                            Debug.WriteLine(ex);
                             keyValue = null;
                             return false;//ignore this pair.
 #endif
@@ -246,10 +246,10 @@ namespace Com.Atomatus.Bootstarter.Util
                                 } 
                                 catch (Exception ex)
                                 {
+                                    Debug.WriteLine(ex);
 #if DEBUG
                                     throw;
 #else
-                                    Debug.WriteLine(ex);
                                     continue;
 #endif
                                 }

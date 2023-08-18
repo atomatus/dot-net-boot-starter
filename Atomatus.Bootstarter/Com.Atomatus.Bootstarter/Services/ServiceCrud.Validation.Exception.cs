@@ -17,6 +17,7 @@ namespace Com.Atomatus.Bootstarter.Services
     {
         private ReadOnlyCollection<ValidationException> _rocView;
 
+        /// <inheritdoc/>
         new public ReadOnlyCollection<ValidationException> InnerExceptions =>
             _rocView ??= new ReadOnlyCollection<ValidationException>(base.InnerExceptions.OfType<ValidationException>().ToList());
 

@@ -49,11 +49,10 @@ namespace Com.Atomatus.Bootstarter.Util
                         }
                         catch (Exception ex)
                         {
+                            Debug.WriteLine(ex);
 #if DEBUG
                             throw;
 #else
-
-                            Debug.WriteLine(ex);
                             handled = false;
                             break;
 #endif
