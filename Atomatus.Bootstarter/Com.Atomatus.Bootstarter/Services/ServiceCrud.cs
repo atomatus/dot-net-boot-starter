@@ -98,6 +98,18 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
+        /// Check if where condition makes matches with some data.
+        /// </summary>
+        /// <param name="whereCondition">where condition</param>
+        /// <returns>true if any elements in the source sequence pass the test in the specified predicate; otherwise, false.</returns>
+        public bool Exists(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return dbSet
+                .AsNoTracking()
+                .Any(whereCondition);
+        }
+
+        /// <summary>
         /// Check whether current uuid exists on persistence base.<br/>
         /// <i>
         /// Obs.: <typeparamref name="TEntity"/> must contains 

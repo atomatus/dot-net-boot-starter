@@ -465,7 +465,14 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="id">primary key</param>
         /// <returns>true, value exists, otherwhise false</returns>
         bool Exists(ID id);
-        
+
+        /// <summary>
+        /// Check if where condition makes matches with some data.
+        /// </summary>
+        /// <param name="whereCondition">where condition</param>
+        /// <returns>true if any elements in the source sequence pass the test in the specified predicate; otherwise, false.</returns>
+        bool Exists(Expression<Func<TEntity, bool>> whereCondition);
+
         /// <summary>
         /// Get entity by primary key.
         /// </summary>
