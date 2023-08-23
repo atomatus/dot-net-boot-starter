@@ -8,7 +8,7 @@ namespace Com.Atomatus.Bootstarter.Model
     /// <summary>
     /// Model base within generic id and object validator.
     /// </summary>
-    /// <typeparam name="ID"></typeparam>
+    /// <typeparam name="ID">id type</typeparam>
     public abstract class ModelBase<ID> :
         IModel<ID>,
         IModelAltenateKey,

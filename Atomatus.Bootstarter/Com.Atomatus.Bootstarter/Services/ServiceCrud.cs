@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Com.Atomatus.Bootstarter.Services
 {
@@ -74,7 +75,7 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region [R]ead        
-        private void RequireEntityImplementIModelAlternateKey()
+        private static void RequireEntityImplementIModelAlternateKey()
         {
             if (!typeof(IModelAltenateKey).IsAssignableFrom(typeof(TEntity)))
             {
@@ -91,7 +92,6 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <returns>true, value exists, otherwhise false</returns>
         public bool Exists(ID id)
         {
-            this.RequireEntityImplementIModelAlternateKey();
             return dbSet
                 .AsNoTracking()
                 .Any(e => e.Id.Equals(id));
@@ -113,7 +113,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </exception>
         public bool ExistsByUuid(Guid uuid)
         {
-            this.RequireEntityImplementIModelAlternateKey();
+            RequireEntityImplementIModelAlternateKey();
             return dbSet
                 .AsNoTracking()
                 .OfType<IModelAltenateKey>()
@@ -147,7 +147,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="id">target id</param>
         /// <returns>found entity, otherwise null value</returns>
-        public TEntity Get(ID id)
+        public virtual TEntity Get(ID id)
         {
             TEntity found = dbSet.Find(id);
             if (found != null) dbContext.Entry(found).State = EntityState.Detached;
@@ -164,7 +164,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="id">target id</param>
         /// <returns>found entity, otherwise null value</returns>
-        public TEntity GetTracking(ID id)
+        public virtual TEntity GetTracking(ID id)
         {
             return dbSet.Find(id);
         }
@@ -183,7 +183,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public TEntity GetByUuid(Guid uuid)
+        public virtual TEntity GetByUuid(Guid uuid)
         {
             return dbSet
                 .AsNoTracking()
@@ -214,7 +214,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public TEntity GetByUuidTracking(Guid uuid)
+        public virtual TEntity GetByUuidTracking(Guid uuid)
         {
             return dbSet
                 .OfType<IModelAltenateKey>()
@@ -229,10 +229,25 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Get the first entity in collection.
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
-        public TEntity First()
+        public virtual TEntity First()
         {
             return dbSet
                 .AsNoTracking()
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Attempt to find the first entity in where condition.
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <returns>first element in condition, otherwise null</returns>
+        public virtual TEntity First(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return this.dbSet
+                .AsNoTracking()
+                .Where(whereCondition)
                 .OrderBy(t => t.Id)
                 .Take(1)
                 .FirstOrDefault();
@@ -247,9 +262,28 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </para>
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
-        public TEntity FirstTracking()
+        public virtual TEntity FirstTracking()
         {
             return dbSet
+                .OrderBy(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// <para>
+        /// Get the first entity in where condition.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <returns>found entity, otherwise null value</returns>
+        public virtual TEntity FirstTracking(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return dbSet
+                .Where(whereCondition)
                 .OrderBy(t => t.Id)
                 .Take(1)
                 .FirstOrDefault();
@@ -259,10 +293,25 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Get the last entity in collection.
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
-        public TEntity Last()
+        public virtual TEntity Last()
         {
             return dbSet
                 .AsNoTracking()
+                .OrderByDescending(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get the last entity in where condition.
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <returns>found entity, otherwise null value</returns>
+        public virtual TEntity Last(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return dbSet
+                .AsNoTracking()
+                .Where(whereCondition)
                 .OrderByDescending(t => t.Id)
                 .Take(1)
                 .FirstOrDefault();
@@ -277,9 +326,28 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </para>
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
-        public TEntity LastTracking()
+        public virtual TEntity LastTracking()
         {
             return dbSet
+                .OrderByDescending(t => t.Id)
+                .Take(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// <para>
+        /// Get the last entity in where condition.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <returns>found entity, otherwise null value</returns>
+        public virtual TEntity LastTracking(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return dbSet
+                .Where(whereCondition)
                 .OrderByDescending(t => t.Id)
                 .Take(1)
                 .FirstOrDefault();
@@ -297,7 +365,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/> value is less or equals zero.
         /// </exception>
-        public List<TEntity> PagingIndex(int index, int count)
+        public virtual List<TEntity> PagingIndex(int index, int count)
         {
             if (index < 0)
             {
@@ -317,17 +385,19 @@ namespace Com.Atomatus.Bootstarter.Services
         }
 
         /// <summary>
-        /// <para>
-        /// List entities by paging.
-        /// </para>
-        /// <para>
-        /// Obs.: This request is Tracking enabled.
-        /// </para>
+        /// List entities by paging in where condition.
         /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
         /// <param name="index">item index on persistence base, from 0</param>
         /// <param name="count">entity count by page list</param>
         /// <returns>found value, otherwhise empty list.</returns>
-        public List<TEntity> PagingIndexTracking(int index, int count)
+        /// <exception cref="IndexOutOfRangeException">
+        /// <paramref name="index"/> value is less then zero.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="count"/> value is less or equals zero.
+        /// </exception>
+        public virtual List<TEntity> PagingIndex(Expression<Func<TEntity, bool>> whereCondition, int index, int count)
         {
             if (index < 0)
             {
@@ -339,6 +409,68 @@ namespace Com.Atomatus.Bootstarter.Services
             }
 
             return this.dbSet
+                .AsNoTracking()
+                .Where(whereCondition)
+                .OrderBy(e => e.Id)
+                .Skip(index)
+                .Take(count)
+                .ToList();
+        }
+
+        /// <summary>
+        /// <para>
+        /// List entities by paging.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="index">item index on persistence base, from 0</param>
+        /// <param name="count">entity count by page list</param>
+        /// <returns>found value, otherwhise empty list.</returns>
+        public virtual List<TEntity> PagingIndexTracking(int index, int count)
+        {
+            if (index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            return this.dbSet
+                .OrderBy(e => e.Id)
+                .Skip(index)
+                .Take(count)
+                .ToList();
+        }
+
+        /// <summary>
+        /// <para>
+        /// List entities by paging in where condition.
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <param name="index">item index on persistence base, from 0</param>
+        /// <param name="count">entity count by page list</param>
+        /// <returns>found value, otherwhise empty list.</returns>
+        public virtual List<TEntity> PagingIndexTracking(Expression<Func<TEntity, bool>> whereCondition, int index, int count)
+        {
+            if (index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if (count <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count));
+            }
+
+            return this.dbSet
+                .Where(whereCondition)
                 .OrderBy(e => e.Id)
                 .Skip(index)
                 .Take(count)
@@ -394,6 +526,25 @@ namespace Com.Atomatus.Bootstarter.Services
 
         /// <summary>
         /// <para>
+        /// List all values in database
+        /// (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging)
+        /// in where condition.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <returns>list all values possible</returns>
+        public List<TEntity> List(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return PagingIndex(whereCondition, 0, IService<TEntity, ID>.REQUEST_LIST_LIMIT);
+        }
+
+        /// <summary>
+        /// <para>
         /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
         /// </para>
         /// <para>
@@ -409,6 +560,27 @@ namespace Com.Atomatus.Bootstarter.Services
         public List<TEntity> ListTracking()
         {
             return PagingIndexTracking(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT);
+        }
+
+        /// <summary>
+        /// <para>
+        /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging)
+        /// in where condition.
+        /// </para>
+        /// <para>
+        /// <i>
+        /// Warning: For a better performing in amount of data large use <see cref="Paging(int, int)"/>.
+        /// </i>
+        /// </para>
+        /// <para>
+        /// Obs.: This request is Tracking enabled.
+        /// </para>
+        /// </summary>
+        /// <param name="whereCondition">where filter condition</param>
+        /// <returns>list all values possible</returns>
+        public List<TEntity> ListTracking(Expression<Func<TEntity, bool>> whereCondition)
+        {
+            return PagingIndexTracking(whereCondition, 0, IService<TEntity, ID>.REQUEST_LIST_LIMIT);
         }
 
         /// <summary>
@@ -469,7 +641,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/> value is less or equals zero.
         /// </exception>
-        public List<TEntity> Sample(int count)
+        public virtual List<TEntity> Sample(int count)
         {
             if (count <= 0)
             {
@@ -502,7 +674,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/> value is less or equals zero.
         /// </exception>
-        public List<TEntity> SampleTracking(int count)
+        public virtual List<TEntity> SampleTracking(int count)
         {
             if (count <= 0)
             {
@@ -558,7 +730,7 @@ namespace Com.Atomatus.Bootstarter.Services
 
             if (curr != null)
             {
-                dbContext.Entry(curr)
+                dbContext.Entry(OnValidateEntryBeforeUpdateCallback(curr, entity))
                     .CurrentValues
                     .SetValues(entity);
             }
@@ -582,10 +754,18 @@ namespace Com.Atomatus.Bootstarter.Services
                         $"with Uuid \"{altKey.Uuid}\" does not exists on database!");
                 }
 
-                entity.Id = curr.Id;
-                dbContext.Entry(curr)
-                    .CurrentValues
-                    .SetValues(entity);
+                try
+                {
+                    entity.Id = curr.Id;
+                    dbContext.Entry(OnValidateEntryBeforeUpdateCallback(curr, entity))
+                        .CurrentValues
+                        .SetValues(entity);
+                }
+                catch
+                {
+                    dbContext.Entry(curr).State = EntityState.Detached;
+                    throw;
+                }
             }
             else
             {
@@ -614,7 +794,7 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region [D]elete
-        private IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<TEntity> entities)
+        internal IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<TEntity> entities)
         {
             foreach(TEntity e in entities)
             {
@@ -647,9 +827,9 @@ namespace Com.Atomatus.Bootstarter.Services
             }
         }
 
-        private IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<Guid> uuids)
+        internal IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<Guid> uuids)
         {
-            this.RequireEntityImplementIModelAlternateKey();
+            RequireEntityImplementIModelAlternateKey();
             return AttachRangeNonExists(uuids.Select(uuid => 
             {
                 TEntity t = new TEntity { };
@@ -659,7 +839,7 @@ namespace Com.Atomatus.Bootstarter.Services
             }));
         }
 
-        private int DeleteLocal(IEnumerable<Guid> uuids)
+        internal virtual int DeleteLocal(IEnumerable<Guid> uuids)
         {
             var entity  = AttachRangeNonExists(uuids).ToList();
             OnBeforeDeleteCallback(entity);
@@ -745,7 +925,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">entities target</param>
         /// <returns>true, removed value, otherwhise false.</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        public bool Delete(IEnumerable<TEntity> entity)
+        public virtual bool Delete(IEnumerable<TEntity> entity)
         {
             var att = AttachRangeNonExists(entity);
             OnBeforeDeleteCallback(att);
@@ -761,7 +941,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">entities target</param>
         /// <returns>true, removed value, otherwhise false.</returns>
         /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        public bool Delete(params TEntity[] entity)
+        public virtual bool Delete(params TEntity[] entity)
         {
             var att = AttachRangeNonExists(entity);
             OnBeforeDeleteCallback(att);
@@ -808,6 +988,19 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="entities">entities deleted</param>
         protected virtual void OnDeletedCallback(IEnumerable<TEntity> entities) { }
+
+        /// <summary>
+        /// Callback firing before update to validate current entity and candidate update entity.
+        /// </summary>
+        /// <param name="currentEntityInDatabase">current entity values in database</param>
+        /// <param name="candidateEntityToUpdate">candidate value to update entity</param>
+        /// <returns></returns>
+        protected virtual TEntity OnValidateEntryBeforeUpdateCallback(
+            TEntity currentEntityInDatabase,
+            TEntity candidateEntityToUpdate)
+        {
+            return currentEntityInDatabase;
+        }
         #endregion
 
     }

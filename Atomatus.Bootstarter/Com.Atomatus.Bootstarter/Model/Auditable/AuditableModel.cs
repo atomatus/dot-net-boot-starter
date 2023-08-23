@@ -6,7 +6,7 @@ namespace Com.Atomatus.Bootstarter.Model
     /// Model base auditable.
     /// Contains Create and update date properties.
     /// </summary>
-    /// <typeparam name="ID"></typeparam>
+    /// <typeparam name="ID">id type</typeparam>
     public abstract class AuditableModel<ID> : ModelBase<ID>, IAudit
     {
         /// <summary>
