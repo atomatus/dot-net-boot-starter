@@ -11,7 +11,7 @@ namespace Com.Atomatus.Bootstarter.Model
         /// <summary>
         /// Deleted at date.
         /// </summary>
-        public DateTime Deleted { get; set; }
+        public DateTime? Deleted { get; set; }
     }
 }
 

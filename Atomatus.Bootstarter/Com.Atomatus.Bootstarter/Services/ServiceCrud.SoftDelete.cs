@@ -41,6 +41,7 @@ namespace Com.Atomatus.Bootstarter.Services
             : this(context, context?.GetOrSet<TEntity>()) { }
 
         #region [R]ead
+        /// <inheritdoc/>
         public override TEntity Get(ID id)
         {
             return dbSet
@@ -48,12 +49,14 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault(e => e.Deleted == null && e.Id.Equals(id));
         }
 
+        /// <inheritdoc/>
         public override TEntity GetTracking(ID id)
         {
             return dbSet
                 .FirstOrDefault(e => e.Deleted == null && e.Id.Equals(id));
         }
 
+        /// <inheritdoc/>
         public override TEntity GetByUuid(Guid uuid)
         {
             return dbSet
@@ -65,6 +68,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity GetByUuidTracking(Guid uuid)
         {
             return dbSet
@@ -75,6 +79,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity First()
         {
             return dbSet
@@ -85,6 +90,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity First(Expression<Func<TEntity, bool>> whereCondition)
         {
             return dbSet
@@ -96,6 +102,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity FirstTracking()
         {
             return dbSet
@@ -105,6 +112,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity FirstTracking(Expression<Func<TEntity, bool>> whereCondition)
         {
             return dbSet
@@ -115,6 +123,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity Last()
         {
             return dbSet
@@ -125,6 +134,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity Last(Expression<Func<TEntity, bool>> whereCondition)
         {
             return dbSet
@@ -136,6 +146,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity LastTracking()
         {
             return dbSet
@@ -145,6 +156,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override TEntity LastTracking(Expression<Func<TEntity, bool>> whereCondition)
         {
             return dbSet
@@ -155,6 +167,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .FirstOrDefault();
         }
 
+        /// <inheritdoc/>
         public override List<TEntity> PagingIndex(int index, int count)
         {
             if (index < 0)
@@ -175,6 +188,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public override List<TEntity> PagingIndex(Expression<Func<TEntity, bool>> whereCondition, int index, int count)
         {
             if (index < 0)
@@ -196,6 +210,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public override List<TEntity> PagingIndexTracking(int index, int count)
         {
             if (index < 0)
@@ -215,6 +230,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public override List<TEntity> PagingIndexTracking(Expression<Func<TEntity, bool>> whereCondition, int index, int count)
         {
             if (index < 0)
@@ -235,6 +251,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public override List<TEntity> Sample(int count)
         {
             if (count <= 0)
@@ -251,6 +268,7 @@ namespace Com.Atomatus.Bootstarter.Services
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public override List<TEntity> SampleTracking(int count)
         {
             if (count <= 0)
@@ -268,6 +286,7 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region [D]elete
+        /// <inheritdoc/>
         internal override int DeleteLocal(IEnumerable<Guid> uuids)
         {
             var entity = AttachRangeNonExists(uuids).ToList();
@@ -279,6 +298,7 @@ namespace Com.Atomatus.Bootstarter.Services
             return Math.Min(count, entity.Count);
         }
 
+        /// <inheritdoc/>
         public override bool Delete(IEnumerable<TEntity> entities)
         {
             var att = AttachRangeNonExists(entities);
@@ -291,6 +311,7 @@ namespace Com.Atomatus.Bootstarter.Services
             return res;
         }
 
+        /// <inheritdoc/>
         public override bool Delete(params TEntity[] entities)
         {
             var att = AttachRangeNonExists(entities);
@@ -305,12 +326,14 @@ namespace Com.Atomatus.Bootstarter.Services
         #endregion
 
         #region Callbacks
+        /// <inheritdoc/>
         protected override void OnBeforeInsertCallback(TEntity entity)
         {
             entity.Deleted = null;
             base.OnBeforeInsertCallback(entity);
         }
 
+        /// <inheritdoc/>
         protected override TEntity OnValidateEntryBeforeUpdateCallback(TEntity currentEntityInDatabase, TEntity candidateEntityToUpdate)
         {
             if(currentEntityInDatabase.Deleted != null)
@@ -325,4 +348,3 @@ namespace Com.Atomatus.Bootstarter.Services
 
     }
 }
-
