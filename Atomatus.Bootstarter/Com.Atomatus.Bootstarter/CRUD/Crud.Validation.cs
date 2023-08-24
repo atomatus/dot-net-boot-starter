@@ -6,12 +6,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
-namespace Com.Atomatus.Bootstarter.Services
+namespace Com.Atomatus.Bootstarter
 {
-    public partial class ServiceCrud<TContext, TEntity, ID> : IServiceValidation<TEntity>
+    public abstract partial class Crud<TContext, TEntity> : IValidation<TEntity>
     {
         #region Validation
-        private static void ValidateLocal([NotNull] object entity, 
+        private static void ValidateLocal([NotNull] object entity,
             [NotNull] out IEnumerable<ValidationResult> validationResults,
             out bool isValidatableObject,
             out bool isValid)
@@ -22,7 +22,7 @@ namespace Com.Atomatus.Bootstarter.Services
             isValid = !validationResults.Any();
         }
 
-        private static void RequireValidate([NotNull] object entity)
+        internal static void RequireValidate([NotNull] object entity)
         {
             ValidateLocal(entity, out var validationResults, out bool _, out bool isValid);
             if (!isValid)
@@ -56,7 +56,7 @@ namespace Com.Atomatus.Bootstarter.Services
         public bool Validate([NotNull] TEntity entity, [NotNull] out IEnumerable<ValidationResult> validationResults)
         {
             ValidateLocal(entity, out validationResults, out bool isValidatableObject, out bool isValid);
-            if(!isValidatableObject)
+            if (!isValidatableObject)
             {
                 ConsoleColored.WriteLine($"[ServiceCrud#Validate] Entity \"{typeof(TEntity).FullName}\" does not implements IValidatableObject interface, " +
                     $"therefore Validate will always return true.", ConsoleColor.Red);

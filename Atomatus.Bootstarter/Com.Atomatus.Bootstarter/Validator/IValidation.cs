@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Com.Atomatus.Bootstarter.Services
+namespace Com.Atomatus.Bootstarter
 {
     /// <summary>
     /// Entity validation service interface.
     /// </summary>
     /// <typeparam name="TEntity">entity type</typeparam>
-    public interface IServiceValidation<TEntity>
+    public interface IValidation<TEntity>
     {
         /// <summary>
         /// Use this methoid when <typeparamref name="TEntity"/> implements <see cref="IValidatableObject"/>

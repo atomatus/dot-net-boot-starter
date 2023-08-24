@@ -28,6 +28,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Validator\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -38,6 +41,48 @@
     </None>
   </ItemGroup>
   
+  <ItemGroup>
+    <Compile Update="CRUD\ICrud.Id.cs">
+      <DependentUpon>CRUD\ICrud.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\ICrud.Expression.cs">
+      <DependentUpon>CRUD\ICrud.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\ICrud.Expression.Id.cs">
+      <DependentUpon>CRUD\ICrud.Expression.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\ICrud.Id.Async.cs">
+      <DependentUpon>CRUD\ICrud.Async.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\ICrud.Async.cs">
+      <DependentUpon>CRUD\ICrud.cs</DependentUpon>
+    </Compile>
+
+    
+    <Compile Update="CRUD\Crud.Async.cs">
+      <DependentUpon>CRUD\Crud.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\Crud.Expression.cs">
+      <DependentUpon>CRUD\Crud.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\Crud.SoftDelete.cs">
+      <DependentUpon>CRUD\Crud.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\Crud.Validation.cs">
+      <DependentUpon>CRUD\Crud.cs</DependentUpon>
+    </Compile>
+    
+    <Compile Update="CRUD\Crud.Id.Async.cs">
+      <DependentUpon>CRUD\Crud.Id.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\Crud.Id.Expression.cs">
+      <DependentUpon>CRUD\Crud.Id.cs</DependentUpon>
+    </Compile>
+    <Compile Update="CRUD\Crud.Id.SoftDelete.cs">
+      <DependentUpon>CRUD\Crud.Id.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Context\ContextBase.Configuration.cs">
       <DependentUpon>Context\ContextBase.cs</DependentUpon>
@@ -120,17 +165,11 @@
     <Compile Update="Services\IService.Crud.Async.cs">
       <DependentUpon>Services\IService.cs</DependentUpon>
     </Compile>
-    <Compile Update="Services\IService.Validation.cs">
-      <DependentUpon>Services\IService.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Services\ServiceCrud.Async.cs">
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Services\ServiceCrud.SoftDelete.cs">
       <DependentUpon>Services\ServiceCrud.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Services\ServiceCrud.Validation.cs">
-      <DependentUpon>Services\ServiceCrud.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Services\ServiceCrud.Validation.Exception.cs">
-      <DependentUpon>Services\ServiceCrud.Validation.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

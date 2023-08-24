@@ -1,13 +1,16 @@
-﻿using Com.Atomatus.Bootstarter.Model;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Com.Atomatus.Bootstarter.Model;
 
-namespace Com.Atomatus.Bootstarter.Services
+namespace Com.Atomatus.Bootstarter
 {
-    public abstract partial class ServiceCrud<TContext, TEntity, ID> : IServiceCrudAsync<TEntity, ID>
+    /// <summary>
+    /// CRUD Operations Async for target Entity.
+    /// </summary>
+    /// <typeparam name="TEntity">target Entity</typeparam>
+	public interface ICrudAsync<TEntity> where TEntity : IModel
     {
         #region [C]reate
         /// <summary>
@@ -16,11 +19,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">target entity</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with entity</returns>
-        /// <exception cref="ArgumentNullException">throws when entity is null</exception>
-        public Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Save(entity), cancellationToken);
-        }
+        Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default);
         #endregion
 
         #region [R]ead
@@ -39,10 +38,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<bool> ExistsByUuidAsync(Guid uuid, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => ExistsByUuid(uuid), cancellationToken);
-        }
+        Task<bool> ExistsByUuidAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Check whether current entity exists on persistence base.
@@ -50,32 +46,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="e">target entity</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true value exists, otherwhise false</returns>
-        public Task<bool> ExistsAsync(TEntity e, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Exists(e), cancellationToken);
-        }
-
-        /// <summary>
-        /// Check whether current ID exists on persistence base.<br/>
-        /// </summary>
-        /// <param name="id">primary key</param>
-        /// <param name="cancellationToken">cancellation token</param>
-        /// <returns>task representation with result, true value exists, otherwhise false</returns>
-        public Task<bool> ExistsAsync(ID id, CancellationToken cancellationToken = default)
-        {
-            return Task.Factory.StartNew(() => Exists(id), cancellationToken);
-        }
-
-        /// <summary>
-        /// Get entity by primary key.
-        /// </summary>
-        /// <param name="id">target id</param>
-        /// <param name="cancellationToken">cancellation token</param>
-        /// <returns>task representation with result, found entity, otherwise null value</returns>
-        public Task<TEntity> GetAsync(ID id, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Get(id), cancellationToken);
-        }
+        Task<bool> ExistsAsync(TEntity e, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get entity by alternate key.<br/>
@@ -92,10 +63,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<TEntity> GetByUuidAsync(Guid uuid, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => GetByUuid(uuid), cancellationToken);
-        }
+        Task<TEntity> GetByUuidAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get entity by alternate key.
@@ -117,19 +85,13 @@ namespace Com.Atomatus.Bootstarter.Services
         /// Throws exception when <typeparamref name="TEntity"/>
         /// does not contains <see cref="IModelAltenateKey"/> implementated it.
         /// </exception>
-        public Task<TEntity> GetByUuidTrackingAsync(Guid uuid, CancellationToken cancellationToken = default)
-        {
-            return Task.Factory.StartNew(() => GetByUuidTracking(uuid), cancellationToken);
-        }
+        Task<TEntity> GetByUuidTrackingAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get the first entity in collection.
         /// </summary>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
-        public Task<TEntity> FirstAsync()
-        {
-            return Task.Factory.StartNew(First);
-        }
+        Task<TEntity> FirstAsync();
 
         /// <summary>
         /// <para>
@@ -140,19 +102,13 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </para>
         /// </summary>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
-        public Task<TEntity> FirstTrackingAsync()
-        {
-            return Task.Factory.StartNew(FirstTracking);
-        }
+        Task<TEntity> FirstTrackingAsync();
 
         /// <summary>
         /// Get the last entity in collection.
         /// </summary>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
-        public Task<TEntity> LastAsync()
-        {
-            return Task.Factory.StartNew(Last);
-        }
+        Task<TEntity> LastAsync();
 
         /// <summary>
         /// <para>
@@ -163,10 +119,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </para>
         /// </summary>
         /// <returns>task representation with result, found entity, otherwise null value</returns>
-        public Task<TEntity> LastTrackingAsync()
-        {
-            return Task.Factory.StartNew(LastTracking);
-        }
+        Task<TEntity> LastTrackingAsync();
 
         /// <summary>
         /// List entities by paging.
@@ -175,16 +128,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="count">entity count by page list</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, found value, otherwhise empty list.</returns>
-        /// <exception cref="IndexOutOfRangeException">
-        /// <paramref name="index"/> value is less then zero.
-        /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <paramref name="count"/> value is less or equals zero.
-        /// </exception>
-        public Task<List<TEntity>> PagingIndexAsync(int index, int count, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => PagingIndex(index, count), cancellationToken);
-        }
+        Task<List<TEntity>> PagingIndexAsync(int index, int count, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
@@ -198,22 +142,16 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="count">entity count by page list</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, found value, otherwhise empty list.</returns>
-        public Task<List<TEntity>> PagingIndexTrackingAsync(int index, int count, CancellationToken cancellationToken = default)
-        {
-            return Task.Factory.StartNew(() => PagingIndexTracking(index, count), cancellationToken);
-        }
+        Task<List<TEntity>> PagingIndexTrackingAsync(int index, int count, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// List entities by paging.
         /// </summary>
         /// <param name="page">page index, from 0</param>
-        /// <param name="limit">entity limit by page list, when -1 will use the max request limit default (<see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>).</param>
+        /// <param name="limit">entity limit by page list, when -1 will use the max request limit default (<see cref="ICrud{TEntity}.REQUEST_LIST_LIMIT"/>).</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, found value, otherwhise empty list.</returns>
-        public Task<List<TEntity>> PagingAsync(int page, int limit, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Paging(page, limit), cancellationToken);
-        }
+        Task<List<TEntity>> PagingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
@@ -224,17 +162,14 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </para>
         /// </summary>
         /// <param name="page">page index, from 0</param>
-        /// <param name="limit">entity limit by page list, when -1 will use the max request limit default (<see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>).</param>
+        /// <param name="limit">entity limit by page list, when -1 will use the max request limit default (<see cref="ICrud{TEntity}.REQUEST_LIST_LIMIT"/>).</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, found value, otherwhise empty list.</returns>
-        public Task<List<TEntity>> PagingTrackingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default)
-        {
-            return Task.Factory.StartNew(() => PagingTracking(page, limit), cancellationToken);
-        }
+        Task<List<TEntity>> PagingTrackingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
-        /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// List all values in database (limited to max request <see cref="ICrud{TEntity}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
         /// </para>
         /// <para>
         /// <i>
@@ -244,14 +179,11 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, list all values possible</returns>
-        public Task<List<TEntity>> ListAsync(CancellationToken cancellationToken)
-        {
-            return PagingIndexAsync(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT, cancellationToken);
-        }
+        Task<List<TEntity>> ListAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
-        /// List all values in database (limited to max request <see cref="IService{TEntity, ID}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
+        /// List all values in database (limited to max request <see cref="ICrud{TEntity}.REQUEST_LIST_LIMIT"/>, when more that it, use paging).
         /// </para>
         /// <para>
         /// <i>
@@ -264,10 +196,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// </summary>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, list all values possible</returns>
-        public Task<List<TEntity>> ListTrackingAsync(CancellationToken cancellationToken = default)
-        {
-            return PagingIndexTrackingAsync(0, IService<TEntity, ID>.REQUEST_LIST_LIMIT, cancellationToken);
-        }
+        Task<List<TEntity>> ListTrackingAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
@@ -285,10 +214,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/>task representation with result, value is less or equals zero.
         /// </exception>
-        public Task<List<TEntity>> TakeAsync(int count, CancellationToken cancellationToken)
-        {
-            return PagingIndexAsync(0, count, cancellationToken);
-        }
+        Task<List<TEntity>> TakeAsync(int count, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
@@ -309,10 +235,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/>task representation with result, value is less or equals zero.
         /// </exception>
-        public Task<List<TEntity>> TakeTrackingAsync(int count, CancellationToken cancellationToken = default)
-        {
-            return PagingIndexTrackingAsync(0, count, cancellationToken);
-        }
+        Task<List<TEntity>> TakeTrackingAsync(int count, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
@@ -330,10 +253,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/>task representation with result, value is less or equals zero.
         /// </exception>
-        public Task<List<TEntity>> SampleAsync(int count, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Sample(count), cancellationToken);
-        }
+        Task<List<TEntity>> SampleAsync(int count, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// <para>
@@ -354,10 +274,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/>task representation with result, value is less or equals zero.
         /// </exception>
-        public Task<List<TEntity>> SampleTrackingAsync(int count, CancellationToken cancellationToken = default)
-        {
-            return Task.Factory.StartNew(() => SampleTracking(count), cancellationToken);
-        }
+        Task<List<TEntity>> SampleTrackingAsync(int count, CancellationToken cancellationToken = default);
         #endregion
 
         #region [U]pdate
@@ -367,109 +284,40 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">target entity</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, updated target entity</returns>
-        /// <exception cref="ArgumentNullException">throws when entity is null</exception>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        /// <exception cref="DbUpdateException">throws when is not possible update value, value does not exists, for example.</exception>
-        public Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Update(entity), cancellationToken);
-        }
+        Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
         #endregion
 
         #region [D]elete
-        private Task<int> DeleteLocalAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => DeleteLocal(uuids), cancellationToken);
-        }
-
         /// <summary>
-        /// Attempt to delete values by id.
+        /// Attempt to delete values by uuid.
         /// </summary>
-        /// <param name="id">target id</param>
+        /// <param name="uuid">uuids target</param>
         /// <param name="cancellationToken">cancellation token</param>
-        /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
-        public Task<bool> DeleteAsync(ID id, CancellationToken cancellationToken = default)
-        {
-            return Task.Factory.StartNew(() => Delete(id), cancellationToken);
-        }
+        /// <returns>task representation with result, amount of values removed</returns>
+        Task<int> DeleteByUuidAsync(IEnumerable<Guid> uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Attempt to delete values by uuid.
         /// </summary>
-        /// <param name="uuids">uuids target</param>
+        /// <param name="uuid">uuids target</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, amount of values removed</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        /// <exception cref="InvalidCastException">
-        /// Throws exception when <typeparamref name="TEntity"/>
-        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
-        /// </exception>
-        public Task<int> DeleteByUuidAsync(IEnumerable<Guid> uuids, CancellationToken cancellationToken)
-        {
-            return DeleteLocalAsync(uuids, cancellationToken);
-        }
+        Task<int> DeleteByUuidAsync(Guid[] uuid, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Attempt to delete values by uuid.<br/>
-        /// <i>
-        /// Obs.: <typeparamref name="TEntity"/> must contains 
-        /// <see cref="IModelAltenateKey"/> implementation.
-        /// Otherwise, will throw exception.
-        /// </i>
+        /// Attempt to delete values by uuid.
         /// </summary>
-        /// <param name="args">uuids target</param>
-        /// <param name="cancellationToken">cancellation token</param>
+        /// <param name="uuid">uuids target</param>
         /// <returns>task representation with result, amount of values removed</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        /// <exception cref="InvalidCastException">
-        /// Throws exception when <typeparamref name="TEntity"/>
-        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
-        /// </exception>
-        public Task<int> DeleteByUuidAsync(Guid[] args, CancellationToken cancellationToken)
-        {
-            return DeleteLocalAsync(args, cancellationToken);
-        }
+        Task<int> DeleteByUuidAsync(params Guid[] uuid);
 
         /// <summary>
-        /// Attempt to delete values by uuid.<br/>
-        /// <i>
-        /// Obs.: <typeparamref name="TEntity"/> must contains 
-        /// <see cref="IModelAltenateKey"/> implementation.
-        /// Otherwise, will throw exception.
-        /// </i>
-        /// </summary>
-        /// <param name="args">uuids target</param>
-        /// <returns>task representation with result, amount of values removed</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        /// <exception cref="InvalidCastException">
-        /// Throws exception when <typeparamref name="TEntity"/>
-        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
-        /// </exception>
-        public Task<int> DeleteByUuidAsync(params Guid[] args)
-        {
-            return DeleteLocalAsync(args, default);
-        }
-
-        /// <summary>
-        /// Attempt to delete values by uuid.<br/>
-        /// <i>
-        /// Obs.: <typeparamref name="TEntity"/> must contains 
-        /// <see cref="IModelAltenateKey"/> implementation.
-        /// Otherwise, will throw exception.
-        /// </i>
+        /// Attempt to delete values by uuid.
         /// </summary>
         /// <param name="uuid">uuids target</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        /// <exception cref="InvalidCastException">
-        /// Throws exception when <typeparamref name="TEntity"/>
-        /// does not contains <see cref="IModelAltenateKey"/> implementated it.
-        /// </exception>
-        public Task<bool> DeleteByUuidAsync(Guid uuid, CancellationToken cancellationToken)
-        {
-            return DeleteLocalAsync(new Guid[] { uuid }, cancellationToken).ContinueWith(t => t.Result == 1);
-        }
+        Task<bool> DeleteByUuidAsync(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Attempt to delete entities.
@@ -477,11 +325,7 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">entities target</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        public Task<bool> DeleteAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Delete(entity), cancellationToken);
-        }
+        Task<bool> DeleteAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Attempt to delete entities.
@@ -489,22 +333,14 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <param name="entity">entities target</param>
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        public Task<bool> DeleteAsync(TEntity[] entity, CancellationToken cancellationToken)
-        {
-            return Task.Factory.StartNew(() => Delete(entity), cancellationToken);
-        }
+        Task<bool> DeleteAsync(TEntity[] entity, CancellationToken cancellationToken);
 
         /// <summary>
         /// Attempt to delete entities.
         /// </summary>
         /// <param name="entity">entities target</param>
         /// <returns>task representation with result, true, removed value, otherwhise false.</returns>
-        /// <exception cref="InvalidOperationException">throws when entity is untrackable, does not contains valid id and Uuid.</exception>
-        public Task<bool> DeleteAsync(params TEntity[] entity)
-        {
-            return DeleteAsync(entity, default);
-        }
+        Task<bool> DeleteAsync(params TEntity[] entity);
         #endregion
     }
 }

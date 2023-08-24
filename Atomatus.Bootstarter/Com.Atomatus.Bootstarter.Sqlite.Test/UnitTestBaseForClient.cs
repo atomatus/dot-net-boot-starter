@@ -1,7 +1,6 @@
-using Com.Atomatus.Bootstarter.Services;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Com.Atomatus.Bootstarter.Sqlite.Test
