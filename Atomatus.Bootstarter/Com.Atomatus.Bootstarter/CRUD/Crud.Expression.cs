@@ -159,6 +159,17 @@ namespace Com.Atomatus.Bootstarter
                 .Take(count)
                 .ToList();
         }
+
+        /// <summary>
+        /// Filters a sequence of values based on a predicate.
+        /// </summary>
+        /// <param name="predicate">filter predicate callback</param>
+        /// <returns>An <see cref="IQueryable{TEntity}"/> that contains elements from the input sequence that satisfy the condition specified by predicate.</returns>
+        /// <exception cref="ArgumentNullException">Throws when predicate is null</exception>
+        public virtual IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+        {
+            return this.dbSet.Where(predicate);
+        }
         #endregion
     }
 }

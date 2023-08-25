@@ -260,6 +260,12 @@ namespace Com.Atomatus.Bootstarter
                 .Take(count)
                 .ToList();
         }
+
+        /// <inheritdoc/>
+        public override IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+        {
+            return base.Where(predicate).Where(t => t.Deleted == null);
+        }
         #endregion
 
         #region [D]elete

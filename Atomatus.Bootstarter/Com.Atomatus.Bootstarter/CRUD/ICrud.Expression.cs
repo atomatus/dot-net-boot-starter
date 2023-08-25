@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Com.Atomatus.Bootstarter.Model;
 
@@ -17,6 +18,7 @@ namespace Com.Atomatus.Bootstarter
         /// </summary>
         /// <param name="whereCondition">where filter condition</param>
         /// <returns>first element in condition, otherwise null</returns>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         TEntity First(Expression<Func<TEntity, bool>> whereCondition);
 
         /// <summary>
@@ -29,12 +31,14 @@ namespace Com.Atomatus.Bootstarter
         /// </summary>
         /// <param name="whereCondition">where filter condition</param>
         /// <returns>found entity, otherwise null value</returns>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         TEntity FirstTracking(Expression<Func<TEntity, bool>> whereCondition);
 
         /// <summary>
         /// Get the last entity in where condition.
         /// </summary>
         /// <returns>found entity, otherwise null value</returns>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         TEntity Last(Expression<Func<TEntity, bool>> whereCondition);
 
         /// <summary>
@@ -47,6 +51,7 @@ namespace Com.Atomatus.Bootstarter
         /// </summary>
         /// <param name="whereCondition">where filter condition</param>
         /// <returns>found entity, otherwise null value</returns>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         TEntity LastTracking(Expression<Func<TEntity, bool>> whereCondition);
 
         /// <summary>
@@ -62,6 +67,7 @@ namespace Com.Atomatus.Bootstarter
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="count"/> value is less or equals zero.
         /// </exception>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         List<TEntity> PagingIndex(Expression<Func<TEntity, bool>> whereCondition, int index, int count);
 
         /// <summary>
@@ -76,6 +82,7 @@ namespace Com.Atomatus.Bootstarter
         /// <param name="index">item index on persistence base, from 0</param>
         /// <param name="count">entity count by page list</param>
         /// <returns>found value, otherwhise empty list.</returns>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         List<TEntity> PagingIndexTracking(Expression<Func<TEntity, bool>> whereCondition, int index, int count);
 
         /// <summary>
@@ -92,6 +99,7 @@ namespace Com.Atomatus.Bootstarter
         /// </summary>
         /// <param name="whereCondition">where filter condition</param>
         /// <returns>list all values possible</returns>
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
         List<TEntity> List(Expression<Func<TEntity, bool>> whereCondition);
 
         /// <summary>
@@ -110,7 +118,16 @@ namespace Com.Atomatus.Bootstarter
         /// </summary>
         /// <param name="whereCondition">where filter condition</param>
         /// <returns>list all values possible</returns>
-        public List<TEntity> ListTracking(Expression<Func<TEntity, bool>> whereCondition);
+        /// <exception cref="ArgumentNullException">Throws when whereCondition is null</exception>
+        List<TEntity> ListTracking(Expression<Func<TEntity, bool>> whereCondition);
+
+        /// <summary>
+        /// Filters a sequence of values based on a predicate.
+        /// </summary>
+        /// <param name="predicate">filter predicate callback</param>
+        /// <returns>An <see cref="IQueryable{TEntity}"/> that contains elements from the input sequence that satisfy the condition specified by predicate.</returns>
+        /// <exception cref="ArgumentNullException">Throws when predicate is null</exception>
+        IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
         #endregion
     }
 }
