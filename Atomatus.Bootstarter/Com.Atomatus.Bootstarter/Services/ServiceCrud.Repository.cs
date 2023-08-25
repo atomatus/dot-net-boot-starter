@@ -16,10 +16,18 @@ namespace Com.Atomatus.Bootstarter.Services
     /// <typeparam name="ID">entity id type</typeparam>
     public abstract class ServiceCrudForRepository<TRepository, TEntity, ID> :
         IServiceCrud<TEntity, ID>, IServiceCrudAsync<TEntity, ID>
-        where TRepository : IRepositoryCrud<TEntity, ID>, IRepositoryCrudAsync<TEntity, ID>
+        where TRepository : IRepositoryCrud<TEntity, ID>
         where TEntity : class, IModel<ID>, new()
     {
         private readonly TRepository repository;
+
+        /// <summary>
+        /// Current <typeparamref name="TRepository"/> reference.
+        /// </summary>
+        protected TRepository Repository
+        {
+            get => repository;
+        }
 
         /// <summary>
         /// Construct a Service CRUD using repository.
@@ -211,181 +219,331 @@ namespace Com.Atomatus.Bootstarter.Services
         /// <inheritdoc/>
         public Task<bool> DeleteAsync(ID id, CancellationToken cancellationToken = default)
         {
-            return repository.DeleteAsync(id, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity,ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteAsync(id, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Delete(id));
         }
 
         /// <inheritdoc/>
         public Task<bool> DeleteAsync(IEnumerable<TEntity> entity, CancellationToken cancellationToken = default)
         {
-            return repository.DeleteAsync(entity, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteAsync(entity, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Delete(entity));
         }
 
         /// <inheritdoc/>
         public Task<bool> DeleteAsync(TEntity[] entity, CancellationToken cancellationToken)
         {
-            return repository.DeleteAsync(entity, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteAsync(entity, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Delete(entity));
         }
 
         /// <inheritdoc/>
         public Task<bool> DeleteAsync(params TEntity[] entity)
         {
-            return repository.DeleteAsync(entity);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteAsync(entity);
+            }
+
+            return Task.Factory.StartNew(() => Delete(entity));
         }
 
         /// <inheritdoc/>
         public Task<int> DeleteByUuidAsync(IEnumerable<Guid> uuid, CancellationToken cancellationToken = default)
         {
-            return repository.DeleteByUuidAsync(uuid, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteByUuidAsync(uuid, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => DeleteByUuid(uuid));
         }
 
         /// <inheritdoc/>
         public Task<int> DeleteByUuidAsync(Guid[] uuid, CancellationToken cancellationToken)
         {
-            return repository.DeleteByUuidAsync(uuid, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteByUuidAsync(uuid, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => DeleteByUuid(uuid));
         }
 
         /// <inheritdoc/>
         public Task<int> DeleteByUuidAsync(params Guid[] uuid)
         {
-            return repository.DeleteByUuidAsync(uuid);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteByUuidAsync(uuid);
+            }
+
+            return Task.Factory.StartNew(() => DeleteByUuid(uuid));
         }
 
         /// <inheritdoc/>
         public Task<bool> DeleteByUuidAsync(Guid uuid, CancellationToken cancellationToken = default)
         {
-            return repository.DeleteByUuidAsync(uuid, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.DeleteByUuidAsync(uuid, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => DeleteByUuid(uuid));
         }
 
         /// <inheritdoc/>
         public Task<bool> ExistsAsync(ID id, CancellationToken cancellationToken = default)
         {
-            return repository.ExistsAsync(id, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.ExistsAsync(id, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Exists(id));
         }
 
         /// <inheritdoc/>
         public Task<bool> ExistsAsync(TEntity e, CancellationToken cancellationToken = default)
         {
-            return repository.ExistsAsync(e, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.ExistsAsync(e, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Exists(e));
         }
 
         /// <inheritdoc/>
         public Task<bool> ExistsByUuidAsync(Guid uuid, CancellationToken cancellationToken = default)
         {
-            return repository.ExistsByUuidAsync(uuid, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.ExistsByUuidAsync(uuid, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => ExistsByUuid(uuid));
         }
 
         /// <inheritdoc/>
         public Task<TEntity> FirstAsync()
         {
-            return repository.FirstAsync();
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.FirstAsync();
+            }
+
+            return Task.Factory.StartNew(First);
         }
 
         /// <inheritdoc/>
         public Task<TEntity> FirstTrackingAsync()
         {
-            return repository.FirstTrackingAsync();
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.FirstTrackingAsync();
+            }
+
+            return Task.Factory.StartNew(FirstTracking);
         }
 
         /// <inheritdoc/>
         public Task<TEntity> GetAsync(ID id, CancellationToken cancellationToken = default)
         {
-            return repository.GetAsync(id, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.GetAsync(id, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Get(id));
         }
 
         /// <inheritdoc/>
         public Task<TEntity> GetByUuidAsync(Guid uuid, CancellationToken cancellationToken = default)
         {
-            return repository.GetByUuidAsync(uuid, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.GetByUuidAsync(uuid, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => GetByUuid(uuid));
         }
 
         /// <inheritdoc/>
         public Task<TEntity> GetByUuidTrackingAsync(Guid uuid, CancellationToken cancellationToken = default)
         {
-            return repository.GetByUuidTrackingAsync(uuid, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.GetByUuidTrackingAsync(uuid, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => GetByUuidTracking(uuid));
         }
 
         /// <inheritdoc/>
         public Task<TEntity> LastAsync()
         {
-            return repository.LastAsync();
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.LastAsync();
+            }
+
+            return Task.Factory.StartNew(Last);
         }
 
         /// <inheritdoc/>
         public Task<TEntity> LastTrackingAsync()
         {
-            return repository.LastTrackingAsync();
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.LastTrackingAsync();
+            }
+
+            return Task.Factory.StartNew(LastTracking);
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> ListAsync(CancellationToken cancellationToken = default)
         {
-            return repository.ListAsync(cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.ListAsync(cancellationToken);
+            }
+
+            return Task.Factory.StartNew(List);
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> ListTrackingAsync(CancellationToken cancellationToken = default)
         {
-            return repository.ListTrackingAsync(cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.ListTrackingAsync(cancellationToken);
+            }
+
+            return Task.Factory.StartNew(ListTracking);
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> PagingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default)
         {
-            return repository.PagingAsync(page, limit, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.PagingAsync(page, limit, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Paging(page, limit));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> PagingIndexAsync(int index, int count, CancellationToken cancellationToken = default)
         {
-            return repository.PagingIndexAsync(index, count, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.PagingIndexAsync(index, count, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => PagingIndex(index, count));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> PagingIndexTrackingAsync(int index, int count, CancellationToken cancellationToken = default)
         {
-            return repository.PagingIndexTrackingAsync(index, count, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.PagingIndexTrackingAsync(index, count, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => PagingIndexTracking(index, count));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> PagingTrackingAsync(int page = 0, int limit = -1, CancellationToken cancellationToken = default)
         {
-            return repository.PagingTrackingAsync(page, limit, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.PagingTrackingAsync(page, limit, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => PagingTracking(page, limit));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> SampleAsync(int count, CancellationToken cancellationToken = default)
         {
-            return repository.SampleAsync(count, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.SampleAsync(count, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Sample(count));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> SampleTrackingAsync(int count, CancellationToken cancellationToken = default)
         {
-            return repository.SampleTrackingAsync(count, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.SampleTrackingAsync(count, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => SampleTracking(count));
         }
 
         /// <inheritdoc/>
         public Task<TEntity> SaveAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            return repository.SaveAsync(entity, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.SaveAsync(entity, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Save(entity));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> TakeAsync(int count, CancellationToken cancellationToken = default)
         {
-            return repository.TakeAsync(count, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.TakeAsync(count, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Take(count));
         }
 
         /// <inheritdoc/>
         public Task<List<TEntity>> TakeTrackingAsync(int count, CancellationToken cancellationToken = default)
         {
-            return repository.TakeTrackingAsync(count, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.TakeTrackingAsync(count, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => TakeTracking(count));
         }
 
         /// <inheritdoc/>
         public Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            return repository.UpdateAsync(entity, cancellationToken);
+            if (repository is IRepositoryCrudAsync<TEntity, ID> repositoryAsync)
+            {
+                return repositoryAsync.UpdateAsync(entity, cancellationToken);
+            }
+
+            return Task.Factory.StartNew(() => Update(entity));
         }
         #endregion
     }
