@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Com.Atomatus.Bootstarter
 {
     /// <summary>
-    /// CRUD for DBContext/DBSet using ID.
+    /// CRUD Operations for DBContext/DBSet using ID.
     /// </summary>
     /// <typeparam name="TContext">context type</typeparam>
     /// <typeparam name="TEntity">entity type</typeparam>

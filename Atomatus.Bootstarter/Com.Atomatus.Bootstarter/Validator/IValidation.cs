@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Com.Atomatus.Bootstarter
 {
     /// <summary>
-    /// Entity validation service interface.
+    /// Entity validation interface.
     /// </summary>
     /// <typeparam name="TEntity">entity type</typeparam>
     public interface IValidation<TEntity>

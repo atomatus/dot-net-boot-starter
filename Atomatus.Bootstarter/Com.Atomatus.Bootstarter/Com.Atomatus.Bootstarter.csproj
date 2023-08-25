@@ -171,11 +171,20 @@
     <Compile Update="Services\ServiceCrud.SoftDelete.cs">
       <DependentUpon>Services\ServiceCrud.cs</DependentUpon>
     </Compile>
+    <Compile Update="Services\ServiceCrud.Repository.cs">
+      <DependentUpon>Services\ServiceCrud.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>
     <Compile Update="Repositories\IRepository.Crud.cs">
       <DependentUpon>Repositories\IRepository.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Repositories\IRepository.Crud.Async.cs">
+      <DependentUpon>Repositories\IRepository.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Repositories\RepositoryCrud.SoftDelete.cs">
+      <DependentUpon>Repositories\RepositoryCrud.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

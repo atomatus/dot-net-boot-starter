@@ -7,11 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Com.Atomatus.Bootstarter
 {
-    /// <summary>
-    /// CRUD for DBContext/DBSet.
-    /// </summary>
-    /// <typeparam name="TContext">context type</typeparam>
-    /// <typeparam name="TEntity">entity type</typeparam>
     public abstract partial class Crud<TContext, TEntity> : ICrudAsync<TEntity>
     {
         #region [C]reate
