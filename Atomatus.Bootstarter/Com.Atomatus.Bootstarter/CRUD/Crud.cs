@@ -53,7 +53,7 @@ namespace Com.Atomatus.Bootstarter
         /// <param name="entity">target entity</param>
         /// <returns>entity within ids</returns>
         /// <exception cref="ArgumentNullException">throws when entity is null</exception>
-        public TEntity Save(TEntity entity)
+        public virtual TEntity Save(TEntity entity)
         {
             OnBeforeInsertCallback(entity);
             RequireValidate(entity);
