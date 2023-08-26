@@ -74,6 +74,24 @@ namespace Com.Atomatus.Bootstarter.Context
             public Builder Database(string database)
             {
                 this.database = database;
+                this.allowNoDatabase = false;
+                return this;
+            }
+
+            /// <summary>
+            /// Set up no one database target.
+            /// <para>
+            /// <i>
+            /// Use this configuration when connection is restricted by
+            /// procedures and you don't know dartabase name or details for example.
+            /// </i>
+            /// </para>
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder NoDatabase()
+            {
+                this.allowNoDatabase = true;
+                this.database = null;
                 return this;
             }
 

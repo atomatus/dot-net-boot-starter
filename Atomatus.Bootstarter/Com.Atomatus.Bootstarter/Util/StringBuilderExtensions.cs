@@ -22,6 +22,11 @@ namespace Com.Atomatus.Bootstarter
             return condition ? value.Aggregate(sb, (acc, curr) => acc.Append(curr)) : sb;
         }
 
+        public static StringBuilder AppendIf([NotNull] this StringBuilder sb, bool condition, Func<StringBuilder, StringBuilder> callback)
+        {
+            return condition ? callback(sb): sb;
+        }
+
         public static StringBuilder AppendOrElse([NotNull] this StringBuilder sb, [AllowNull] string target, [NotNull] string elseOption)
         {
             return !string.IsNullOrEmpty(target) ?

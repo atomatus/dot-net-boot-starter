@@ -125,6 +125,11 @@ namespace Com.Atomatus.Bootstarter.Context
         protected bool grantDynamicContext;
 
         /// <summary>
+        /// Allow no one database setup in connection rules.
+        /// </summary>
+        protected bool allowNoDatabase;
+
+        /// <summary>
         /// Explicit context name.
         /// </summary>
         protected string contextName;
@@ -188,6 +193,7 @@ namespace Com.Atomatus.Bootstarter.Context
             this.ensureDeletedOnDispose     = other.ensureDeletedOnDispose;
             this.ensureMigrate              = other.ensureMigrate;
             this.grantDynamicContext        = other.grantDynamicContext;
+            this.allowNoDatabase            = other.allowNoDatabase;
             this.contextName                = other.contextName;
         }
 
@@ -217,6 +223,10 @@ namespace Com.Atomatus.Bootstarter.Context
             this.ensureCreated              = null;
             this.ensureDeletedOnDispose     = null;
             this.ensureMigrate              = null;
+            this.encrypt                    = null;
+            this.integratedSecurity         = null;
+            this.trustServerCertificate     = null;
+            this.multipleActiveResultSets   = null;
         }
 
         void IDisposable.Dispose()

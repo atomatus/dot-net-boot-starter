@@ -142,6 +142,18 @@ namespace Com.Atomatus.Bootstarter.Context
         protected bool HasTrustServerCertificate() => trustServerCertificate != null;
 
         /// <summary>
+        /// Allow setup connection without database.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsAllowNoDatabase() => allowNoDatabase;
+
+        /// <summary>
+        /// Require to setup connection with database.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsRequireDatabase() => !allowNoDatabase;
+
+        /// <summary>
         /// Get explicit defined or generate connection string.
         /// </summary>
         /// <returns></returns>

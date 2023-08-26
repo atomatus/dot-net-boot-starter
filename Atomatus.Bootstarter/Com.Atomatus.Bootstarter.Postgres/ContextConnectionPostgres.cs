@@ -19,7 +19,7 @@ namespace Com.Atomatus.Bootstarter.Context
             return new StringBuilder()
                 .Append("Server=").AppendOrElse(host, "localhost").Append(';')
                 .Append("Port=").AppendOrElse(port, DEFAULT_PORT).Append(';')
-                .Append("Database=").AppendOrThrow(database, "database name not set!").Append(';')
+                .AppendIf(IsRequireDatabase(), s0 => s0.Append("Database=").AppendOrThrow(database, "database name not set!").Append(';'))
                 .AppendIf(HasUsername(), "User Id=", user, ';')
                 .AppendIf(HasPassword(), "Password=", password, ';')
                 .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer || IsIntegratedSecurity(), "Integrated Security=", !HasIntegratedSecurity() || IsIntegratedSecurity(), ';')
