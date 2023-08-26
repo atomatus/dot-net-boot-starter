@@ -234,10 +234,11 @@ namespace Com.Atomatus.Bootstarter.Context
             /// This options is setup by default true when does not set <see cref="User(string)"/> and <see cref="Password(string)"/>.
             /// </para>
             /// </summary>
+            /// <param name="integratedSecurity">true, enable integrated security, otherwise false</param>
             /// <returns>current builder</returns>
-            public Builder IntegratedSecurity()
+            public Builder IntegratedSecurity(bool integratedSecurity = true)
             {
-                this.integratedSecurity = true;
+                this.integratedSecurity = integratedSecurity;
                 return this;
             }
 
@@ -251,10 +252,11 @@ namespace Com.Atomatus.Bootstarter.Context
             /// This means that if one query is in progress, other queries must wait until the first one completes before they can be executed.
             /// </para>
             /// </summary>
+            /// <param name="integratedSecurity">true, enable MARS, otherwise false</param>
             /// <returns>current builder</returns>
-            public Builder MultipleActiveResultSets()
+            public Builder MultipleActiveResultSets(bool multipleActiveResultSets = true)
             {
-                this.multipleActiveResultSets = true;
+                this.multipleActiveResultSets = multipleActiveResultSets;
                 return this;
             }
 
@@ -264,20 +266,22 @@ namespace Com.Atomatus.Bootstarter.Context
             /// <i>Warn: You must to check server Trust Certification when using it.</i>
             /// </para>
             /// </summary>
+            /// <param name="encrypt">true, enabled, otherwise false.</param>
             /// <returns>current builder</returns>
-            public Builder Encrypt()
+            public Builder Encrypt(bool encrypt = true)
             {
-                this.encrypt = true;
+                this.encrypt = encrypt;
                 return this;
             }
 
             /// <summary>
             /// Set up current server encrypted connection to accept server certified as reliabled (trusted).
             /// </summary>
+            /// <param name="trustServerCertificate">true, enabled, otherwise false.</param>
             /// <returns>current builder</returns>
-            public Builder TrustServerCertificate()
+            public Builder TrustServerCertificate(bool trustServerCertificate = true)
             {
-                this.trustServerCertificate = true;
+                this.trustServerCertificate = trustServerCertificate;
                 return this;
             }
             #endregion

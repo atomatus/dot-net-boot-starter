@@ -97,25 +97,49 @@ namespace Com.Atomatus.Bootstarter.Context
         /// Check whether connection is integrated security (authentication by SO).
         /// </summary>
         /// <returns></returns>
-        protected bool IsIntegratedSecurity() => integratedSecurity;
+        protected bool IsIntegratedSecurity() => integratedSecurity != null && integratedSecurity.Value;
+
+        /// <summary>
+        /// Check where integrated security is configured.
+        /// </summary>
+        /// <returns></returns>
+        protected bool HasIntegratedSecurity() => integratedSecurity != null;
 
         /// <summary>
         /// Check whether enable multiple active result sets (MARS), allowing multiple queries on the same connection.
         /// </summary>
         /// <returns></returns>
-        protected bool IsMultipleActiveResultSets() => multipleActiveResultSets;
+        protected bool IsMultipleActiveResultSets() => multipleActiveResultSets != null && multipleActiveResultSets.Value;
+
+        /// <summary>
+        /// Check whether enable multiple active result sets (MARS) is configured.
+        /// </summary>
+        /// <returns></returns>
+        protected bool HasMultipleActiveResultSets() => multipleActiveResultSets != null;
 
         /// <summary>
         /// Check whether enable server encrypted connection.
         /// </summary>
         /// <returns></returns>
-        protected bool IsEncrypt() => encrypt;
+        protected bool IsEncrypt() => encrypt != null && encrypt.Value;
+
+        /// <summary>
+        /// Check whether server encrypted connection is configured.
+        /// </summary>
+        /// <returns></returns>
+        protected bool HasEncrypt() => encrypt != null;
 
         /// <summary>
         /// Check whether enable server encrypted connection (<see cref="IsEncrypt"/> = true) certified as trusted.
         /// </summary>
         /// <returns></returns>
-        protected bool IsTrustServerCertificate() => trustServerCertificate;
+        protected bool IsTrustServerCertificate() => trustServerCertificate != null && trustServerCertificate.Value;
+
+        /// <summary>
+        /// Check whether trust server encrypted connection certificate is configured.
+        /// </summary>
+        /// <returns></returns>
+        protected bool HasTrustServerCertificate() => trustServerCertificate != null;
 
         /// <summary>
         /// Get explicit defined or generate connection string.

@@ -81,22 +81,22 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <summary>
         /// Database make usage of OS (Windows) authentication (when user and password is not setup explicitly).
         /// </summary>
-        protected bool integratedSecurity;
+        protected bool? integratedSecurity;
 
         /// <summary>
         /// Enable multiple active result sets (MARS), allow multiple queries on the same connection.
         /// </summary>
-        protected bool multipleActiveResultSets;
+        protected bool? multipleActiveResultSets;
 
         /// <summary>
         /// Database connetion must be encrypted.
         /// </summary>
-        protected bool encrypt;
+        protected bool? encrypt;
 
         /// <summary>
         /// Server certified must be reliable in encrypted connection (<see cref="encrypt"/> = true).
         /// </summary>
-        protected bool trustServerCertificate;
+        protected bool? trustServerCertificate;
 
         /// <summary>
         /// Application name.
