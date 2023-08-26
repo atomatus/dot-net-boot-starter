@@ -32,7 +32,7 @@ namespace Com.Atomatus.Bootstarter.Context
                 .AppendIf(HasIdleLifetime(), "Connection Lifetime=", idleLifetime, ';')                
                 .AppendIf(MinPoolSize(), "Min Pool Size=", minPoolSize, ';')
                 .AppendIf(MaxPoolSize(), "Max Pool Size=", maxPoolSize, ";Pooling=true;")
-                .Append("ApplicationName=").AppendOrElse(applicationName, Assembly.GetEntryAssembly().GetName().Name).Append(';')
+                .Append("Application Name=").AppendOrElse(applicationName, Assembly.GetEntryAssembly().GetName().Name).Append(';')
                 .ToString();
         }
 
