@@ -79,6 +79,26 @@ namespace Com.Atomatus.Bootstarter.Context
         protected bool sharedCache;
 
         /// <summary>
+        /// Database make usage of OS (Windows) authentication (when user and password is not setup explicitly).
+        /// </summary>
+        protected bool integratedSecurity;
+
+        /// <summary>
+        /// Enable multiple active result sets (MARS), allow multiple queries on the same connection.
+        /// </summary>
+        protected bool multipleActiveResultSets;
+
+        /// <summary>
+        /// Database connetion must be encrypted.
+        /// </summary>
+        protected bool encrypt;
+
+        /// <summary>
+        /// Server certified must be reliable in encrypted connection (<see cref="encrypt"/> = true).
+        /// </summary>
+        protected bool trustServerCertificate;
+
+        /// <summary>
         /// Application name.
         /// </summary>
         protected string applicationName;
@@ -157,6 +177,10 @@ namespace Com.Atomatus.Bootstarter.Context
             this.applicationName            = other.applicationName;
             this.readOnly                   = other.readOnly;
             this.sharedCache                = other.sharedCache;
+            this.integratedSecurity         = other.integratedSecurity;
+            this.multipleActiveResultSets   = other.multipleActiveResultSets;
+            this.encrypt                    = other.encrypt;
+            this.trustServerCertificate     = other.trustServerCertificate;
             this.configuration              = other.configuration;
             this.connectionStringKey        = other.connectionStringKey;
             this.connectionStringCallback   = other.connectionStringCallback;

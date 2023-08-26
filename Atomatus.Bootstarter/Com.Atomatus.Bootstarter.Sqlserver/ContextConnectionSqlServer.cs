@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Text;
 
 namespace Com.Atomatus.Bootstarter.Context
@@ -17,18 +18,21 @@ namespace Com.Atomatus.Bootstarter.Context
         {
             return new StringBuilder()
                 .Append("Data Source=").AppendOrElse(host, ".")
-                .Append(",").AppendOrElse(port, DEFAULT_PORT).Append(";")
-                .Append("Initial Catalog=").AppendOrThrow(database, "Database name not set!").Append(";")
+                .Append(',').AppendOrElse(port, DEFAULT_PORT).Append(';')
+                .Append("Initial Catalog=").AppendOrThrow(database, "Database name not set!").Append(';')
                 .AppendIf(HasUsername(), "User Id=", user, ';')
                 .AppendIf(HasPassword(), "Password=", password, ';')
-                .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer, "Integrated Security=True;")
-                .AppendIf(HasNotUsernameAndPassword(), "Trusted_Connection=True;")
+                .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer || IsIntegratedSecurity(), "Integrated Security=True;")
+                .AppendIf(HasNotUsernameAndPassword() || IsIntegratedSecurity(), "Trusted_Connection=True;")
                 .AppendIf(IsReadOnly(), "ApplicationIntent=ReadOnly;")
-                .Append("MultipleActiveResultSets=True;")
-                .Append("Connection Timeout=").AppendOrElse(timeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(";")
+                .AppendIf(IsMultipleActiveResultSets(), "MultipleActiveResultSets=True;")
+                .AppendIf(IsEncrypt(), "Encrypt=True;")
+                .AppendIf(IsTrustServerCertificate(), "TrustServerCertificate=True;")
+                .Append("Connection Timeout=").AppendOrElse(timeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(';')
                 .AppendIf(HasIdleLifetime(), "Connection Lifetime=", idleLifetime, ';')                
                 .AppendIf(MinPoolSize(), "Min Pool Size=", minPoolSize, ';')
                 .AppendIf(MaxPoolSize(), "Max Pool Size=", maxPoolSize, ";Pooling=true;")
+                .Append("ApplicationName=").AppendOrElse(applicationName, Assembly.GetEntryAssembly().GetName().Name).Append(';')
                 .ToString();
         }
 

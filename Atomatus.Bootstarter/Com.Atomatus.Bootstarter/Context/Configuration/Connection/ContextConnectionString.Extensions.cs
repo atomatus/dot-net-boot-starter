@@ -12,7 +12,7 @@ namespace Com.Atomatus.Bootstarter.Context
     /// <summary>
     /// Context Connection extensions for context string
     /// </summary>
-    internal static class ContextConnectionStringExtensions
+    public static class ContextConnectionStringExtensions
     {
         private static bool OnBuildFromConnectionStringCallback(ContextConnection.Builder builder, out ContextConnection conn)
         {
@@ -29,7 +29,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <param name="builder">current builder</param>
         /// <param name="configuration">configuration values</param>
         /// <returns>current buider</returns>
-        public static ContextConnection.Builder Configuration(this ContextConnection.Builder builder, IConfiguration configuration)
+        internal static ContextConnection.Builder Configuration(this ContextConnection.Builder builder, IConfiguration configuration)
         {
             return builder
                 .AddConfiguration(configuration)
@@ -43,7 +43,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// <param name="builder">current builder</param>
         /// <param name="provider">service provider that contains IConfiguration</param>
         /// <returns>current builder</returns>
-        public static ContextConnection.Builder Configuration(this ContextConnection.Builder builder, IServiceProvider provider)
+        internal static ContextConnection.Builder Configuration(this ContextConnection.Builder builder, IServiceProvider provider)
         {
             return builder.Configuration((provider != null ? provider.GetService<IConfiguration>() :
                  throw new ArgumentNullException(nameof(provider), "Service provider can not be null!"))/* ??

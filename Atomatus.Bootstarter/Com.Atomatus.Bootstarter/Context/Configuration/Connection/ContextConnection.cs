@@ -94,6 +94,30 @@ namespace Com.Atomatus.Bootstarter.Context
         protected bool IsSharedCache() => sharedCache;
 
         /// <summary>
+        /// Check whether connection is integrated security (authentication by SO).
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsIntegratedSecurity() => integratedSecurity;
+
+        /// <summary>
+        /// Check whether enable multiple active result sets (MARS), allowing multiple queries on the same connection.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsMultipleActiveResultSets() => multipleActiveResultSets;
+
+        /// <summary>
+        /// Check whether enable server encrypted connection.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsEncrypt() => encrypt;
+
+        /// <summary>
+        /// Check whether enable server encrypted connection (<see cref="IsEncrypt"/> = true) certified as trusted.
+        /// </summary>
+        /// <returns></returns>
+        protected bool IsTrustServerCertificate() => trustServerCertificate;
+
+        /// <summary>
         /// Get explicit defined or generate connection string.
         /// </summary>
         /// <returns></returns>

@@ -22,12 +22,14 @@ namespace Com.Atomatus.Bootstarter.Context
                 .Append("Database=").AppendOrThrow(database, "database name not set!").Append(';')
                 .AppendIf(HasUsername(), "User Id=", user, ';')
                 .AppendIf(HasPassword(), "Password=", password, ';')
-                .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer, "Integrated Security=True;")
-                .Append("Timeout=").AppendOrElse(timeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(";")
-                .Append("Command Timeout=").AppendOrElse(commandTimeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(";")
+                .AppendIf(HasNotUsernameAndPassword() || !DotnetRunningInContainer || IsIntegratedSecurity(), "Integrated Security=True;")
+                .Append("Timeout=").AppendOrElse(timeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(';')
+                .Append("Command Timeout=").AppendOrElse(commandTimeout, DEFAULT_CONNECTION_TIMEOUT_IN_SEC).Append(';')
                 .AppendIf(MinPoolSize(), "Min Pool Size=", minPoolSize, ';')
                 .AppendIf(MaxPoolSize(), "Max Pool Size=", maxPoolSize, ";Pooling=true;")
                 .AppendIf(HasIdleLifetime(), "Connection Idle Lifetime=", idleLifetime, ';')
+                .AppendIf(IsEncrypt(), "SslMode=", IsTrustServerCertificate() ? "TrustCertificate" : "Prefer", ';')
+                .AppendIf(IsTrustServerCertificate(), "Trust Server Certificate=true")
                 .Append("ApplicationName=").AppendOrElse(applicationName, Assembly.GetEntryAssembly().GetName().Name).Append(';')
                 .ToString();
         }

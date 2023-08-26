@@ -227,6 +227,59 @@ namespace Com.Atomatus.Bootstarter.Context
                 this.sharedCache = true;
                 return this;
             }
+
+            /// <summary>
+            /// Connection authentication by SO (Windows).
+            /// <para>
+            /// This options is setup by default true when does not set <see cref="User(string)"/> and <see cref="Password(string)"/>.
+            /// </para>
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder IntegratedSecurity()
+            {
+                this.integratedSecurity = true;
+                return this;
+            }
+
+            /// <summary>
+            /// <para>
+            /// <b>MultipleActiveResultSets (MARS)</b> is a feature in Microsoft SQL Server exclusive, that allows multiple active result sets
+            /// (queries) to be processed concurrently on a single connection.
+            /// Normally, without MARS, a single SQL Server connection can only process one active result set at a time.
+            /// </para>
+            /// <para>
+            /// This means that if one query is in progress, other queries must wait until the first one completes before they can be executed.
+            /// </para>
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder MultipleActiveResultSets()
+            {
+                this.multipleActiveResultSets = true;
+                return this;
+            }
+
+            /// <summary>
+            /// Set up current server connection as encrypted.
+            /// <para>
+            /// <i>Warn: You must to check server Trust Certification when using it.</i>
+            /// </para>
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder Encrypt()
+            {
+                this.encrypt = true;
+                return this;
+            }
+
+            /// <summary>
+            /// Set up current server encrypted connection to accept server certified as reliabled (trusted).
+            /// </summary>
+            /// <returns>current builder</returns>
+            public Builder TrustServerCertificate()
+            {
+                this.trustServerCertificate = true;
+                return this;
+            }
             #endregion
 
             #region Parameters From Environment
