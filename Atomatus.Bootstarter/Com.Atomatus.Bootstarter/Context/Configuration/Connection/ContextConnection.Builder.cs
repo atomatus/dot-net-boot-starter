@@ -252,7 +252,7 @@ namespace Com.Atomatus.Bootstarter.Context
             /// This means that if one query is in progress, other queries must wait until the first one completes before they can be executed.
             /// </para>
             /// </summary>
-            /// <param name="integratedSecurity">true, enable MARS, otherwise false</param>
+            /// <param name="multipleActiveResultSets">true, enable MARS, otherwise false</param>
             /// <returns>current builder</returns>
             public Builder MultipleActiveResultSets(bool multipleActiveResultSets = true)
             {
