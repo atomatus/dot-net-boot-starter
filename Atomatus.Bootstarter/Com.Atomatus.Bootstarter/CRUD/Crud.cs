@@ -56,7 +56,7 @@ namespace Com.Atomatus.Bootstarter
         public virtual TEntity Save(TEntity entity)
         {
             OnBeforeInsertCallback(entity);
-            RequireValidate(entity);
+            RequireValidateModel(entity);
             dbSet.Add(entity ?? throw new ArgumentNullException(nameof(entity)));
 
             try
@@ -563,7 +563,7 @@ namespace Com.Atomatus.Bootstarter
             }
 
             OnBeforeUpdateCallback(entity);
-            RequireValidate(entity);
+            RequireValidateModel(entity);
             //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local.FirstOrDefault(e => e is IModelEquatable em ?
                 em.EqualsAnyId(entity) : e.Equals(entity));

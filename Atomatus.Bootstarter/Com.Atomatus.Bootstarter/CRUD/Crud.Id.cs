@@ -181,7 +181,7 @@ namespace Com.Atomatus.Bootstarter
             }
 
             OnBeforeUpdateCallback(entity);
-            RequireValidate(entity);
+            RequireValidateModel(entity);
             //check contains in tracking local dbSet.
             TEntity curr = dbSet.Local.FirstOrDefault(entity.EqualsAnyId);
 
