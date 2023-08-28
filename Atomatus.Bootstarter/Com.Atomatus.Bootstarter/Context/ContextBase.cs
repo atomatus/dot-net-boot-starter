@@ -113,7 +113,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
         private void OnPrevSaveChanges()
         {
-            this.OnAuditEntity(ChangeTracker
+            OnAuditEntity(ChangeTracker
                .Entries()
                .Where(e =>
                     e.State == EntityState.Added ||
@@ -122,7 +122,7 @@ namespace Com.Atomatus.Bootstarter.Context
             this.OnPrevSaveChanges(ChangeTracker.Entries());
         }
 
-        private void OnAuditEntity(IEnumerable<EntityEntry> entries)
+        private static void OnAuditEntity(IEnumerable<EntityEntry> entries)
         {
             DateTime now = DateTime.Now;
 
@@ -225,7 +225,7 @@ namespace Com.Atomatus.Bootstarter.Context
         /// </exception>
         public sealed override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
-            return Task.Factory.StartNew(this.OnPrevSaveChanges)
+            return Task.Factory.StartNew(this.OnPrevSaveChanges, cancellationToken)
                 .ContinueWith(r => base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken), cancellationToken)
                 .Unwrap();
         }

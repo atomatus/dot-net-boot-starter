@@ -73,6 +73,7 @@ namespace Com.Atomatus.Bootstarter.Context
             this.DisposeDBSetDictionary();
             this.OnDispose();
             base.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -84,6 +85,7 @@ namespace Com.Atomatus.Bootstarter.Context
             this.DetachAllEntities();
             this.DisposeDBSetDictionary();
             this.OnDispose();
+            GC.SuppressFinalize(this);
             return base.DisposeAsync();
         }
     }
