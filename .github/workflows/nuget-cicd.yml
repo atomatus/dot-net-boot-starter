@@ -16,7 +16,8 @@ env:
   PROJ_BS_POSTGRES_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Postgres/Com.Atomatus.Bootstarter.Postgres.csproj'
   PROJ_BS_SQLITE_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlite/Com.Atomatus.Bootstarter.Sqlite.csproj'
   PROJ_BS_SQLSERVER_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlserver/Com.Atomatus.Bootstarter.Sqlserver.csproj'  
-  PROJ_BS_TEST_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlite.Test/Com.Atomatus.Bootstarter.Sqlite.Test.csproj'
+  PROJ_BS_SQLITE_TEST_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlite.Test/Com.Atomatus.Bootstarter.Sqlite.Test.csproj'
+  PROJ_BS_TEST_PATH: 'Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Test/Com.Atomatus.Bootstarter.Test.csproj'
 
 jobs:
   deploy:
@@ -48,6 +49,10 @@ jobs:
         if: ${{ success() }}
         run: dotnet build ${{ env.PROJ_BS_SQLITE_PATH }} --no-restore --configuration Release
        
+      - name: 'Test Bootstarter Sqlite'        
+        if: ${{ success() }}
+        run: dotnet test ${{ env.PROJ_BS_SQLITE_TEST_PATH }} --no-restore --logger "console;verbosity=detailed"
+
       - name: 'Test Bootstarter'        
         if: ${{ success() }}
         run: dotnet test ${{ env.PROJ_BS_TEST_PATH }} --no-restore --logger "console;verbosity=detailed"
