@@ -1,6 +1,4 @@
-﻿using Com.Atomatus.Bootstarter.Util;
-
-namespace Com.Atomatus.Bootstarter.Test
+﻿namespace Com.Atomatus.Bootstarter.Test
 {
     public class UnitTestObjectMapperForDefaultValue
     {

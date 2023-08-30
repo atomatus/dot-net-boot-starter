@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Com.Atomatus.Bootstarter.Util
+namespace Com.Atomatus.Bootstarter
 {
     internal sealed class CommonInterfaceCopyStrategy : ICopyStrategy
     {

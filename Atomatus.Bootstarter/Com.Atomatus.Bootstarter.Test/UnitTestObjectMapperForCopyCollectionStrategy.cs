@@ -1,5 +1,4 @@
-﻿using Com.Atomatus.Bootstarter.Util;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Com.Atomatus.Bootstarter.Test
 {

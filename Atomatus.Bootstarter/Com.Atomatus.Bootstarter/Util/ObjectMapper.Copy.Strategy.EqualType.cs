@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace Com.Atomatus.Bootstarter.Util
+namespace Com.Atomatus.Bootstarter
 {
     internal sealed class EqualTypeCopyStrategy : ICopyStrategy
     {

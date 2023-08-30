@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Com.Atomatus.Bootstarter.Util
+namespace Com.Atomatus.Bootstarter
 {
     /// <summary>
     /// Use this attribute to ignore field for <see cref="ObjectMapper"/>.

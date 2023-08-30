@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
-namespace Com.Atomatus.Bootstarter.Util
+namespace Com.Atomatus.Bootstarter
 {
     internal sealed class CommonPropertyCopyStrategy : ICopyStrategy
     {

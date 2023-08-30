@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Com.Atomatus.Bootstarter.Test, PublicKey=0024000004800000940000000602000000240000525341310004000001000100790ebf3db21fd725034bc88eb382f2bfd3f17fb28e5a3b80c2ec0fce9621b3e94722d7ee3d0f842ef940f82a250495cdaf6867eb82ba987d475b185c5738b49428e9c7e782676fabeb91191678768c211774018e6527dd2a1ccdedeca941408a3a9696d9365326125530cb2b8c557f34b490ae15fd8016edccf33e47f6ea77f3")]
-namespace Com.Atomatus.Bootstarter.Util
+namespace Com.Atomatus.Bootstarter
 {
     /// <summary>
     /// <para>Object Mapper</para>

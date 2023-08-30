@@ -7,6 +7,12 @@ namespace Com.Atomatus.Bootstarter.Test
         [Fact]
         public void Utils_Object_HashCode_Equals_Successfully()
         {
+            EnvironmentVariable env0 = ("");
+            EnvironmentVariable env1 = ("", null);
+            EnvironmentVariable env2 = ("", 0);
+            EnvironmentVariable env3 = ("", 0, 0);
+            EnvironmentVariable env4 = ("", 0, 0, 0);
+
             TestItem testItem0 = new() { Code = "A", Amount = 1.5m, Name = "test" };
             TestItem testItem1 = new() { Code = "A", Amount = 1.5m, Name = "test2" };
 

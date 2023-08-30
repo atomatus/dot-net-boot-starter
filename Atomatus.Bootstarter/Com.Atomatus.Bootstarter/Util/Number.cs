@@ -281,9 +281,7 @@
         /// <inheritdoc/>
         public int CompareTo(Number other)
         {
-            double d0 = this;
-            double d1 = other;
-            return d0 > d1 ? 1 : d0 < d1 ? -1 : 0;
+            return this > other ? 1 : this < other ? -1 : 0;
         }
         #endregion
 
@@ -367,7 +365,7 @@
         /// <inheritdoc/>
         public bool Equals(Number other)
         {
-            return ((double)this) == ((double)other);
+            return this.value == other.value || this == other;
         }
         #endregion
 
@@ -475,6 +473,50 @@
         }
         #endregion
 
+        #region Math
+        /// <summary>
+        /// Returns the larger of the two <see cref="Number"/> values.
+        /// </summary>
+        /// <param name="other">The second <see cref="Number"/> value to compare.</param>
+        /// <returns>The larger of the two <see cref="Number"/> values.</returns>
+        public Number Max(Number other)
+        {
+            return Max(this, other);
+        }
+
+        /// <summary>
+        /// Returns the smaller of the two <see cref="Number"/> values.
+        /// </summary>
+        /// <param name="other">The second <see cref="Number"/> value to compare.</param>
+        /// <returns>The smaller of the two <see cref="Number"/> values.</returns>
+        public Number Min(Number other)
+        {
+            return Min(this, other);
+        }
+
+        /// <summary>
+        /// Returns the larger of two <see cref="Number"/> values.
+        /// </summary>
+        /// <param name="left">The first <see cref="Number"/> value to compare.</param>
+        /// <param name="right">The second <see cref="Number"/> value to compare.</param>
+        /// <returns>The larger of the two <see cref="Number"/> values.</returns>
+        public static Number Max(Number left, Number right)
+        {
+            return left.CompareTo(right) == 1 ? left : right;
+        }
+
+        /// <summary>
+        /// Returns the smaller of two <see cref="Number"/> values.
+        /// </summary>
+        /// <param name="left">The first <see cref="Number"/> value to compare.</param>
+        /// <param name="right">The second <see cref="Number"/> value to compare.</param>
+        /// <returns>The smaller of the two <see cref="Number"/> values.</returns>
+        public static Number Min(Number left, Number right)
+        {
+            return left.CompareTo(right) == -1 ? left : right;
+        }
+        #endregion
+
         /// <inheritdoc/>
         public override string ToString() => value.ToString();
 
@@ -490,4 +532,5 @@
             return this.value.GetHashCode();
         }
     }
+
 }

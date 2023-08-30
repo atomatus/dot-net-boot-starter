@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 
-namespace Com.Atomatus.Bootstarter.Util
+namespace Com.Atomatus.Bootstarter
 {
     /// <summary>
     /// PropertyInfo Extensions.
