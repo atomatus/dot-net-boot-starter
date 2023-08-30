@@ -26,7 +26,7 @@ namespace Com.Atomatus.Bootstarter.Util
 
             foreach (PropertyInfo property in sourceProperties)
             {
-                if (property.CanRead && property.CanWrite)
+                if (property.CanRead && property.CanWrite && property.IsNotIgnored())
                 {
                     object value = property.GetValue(source);
 

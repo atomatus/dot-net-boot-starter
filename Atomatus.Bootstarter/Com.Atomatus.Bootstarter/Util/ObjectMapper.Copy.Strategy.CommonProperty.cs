@@ -77,14 +77,14 @@ namespace Com.Atomatus.Bootstarter.Util
 
             if (sType == tType)
             {
-                var props = source.GetType().GetProperties().Where(e => e.CanRead && e.CanWrite);
+                var props = source.GetType().GetProperties().Where(e => e.CanRead && e.CanWrite && e.IsNotIgnored());
                 return TryHandleProperties(source, target, props, props);
             }
             else
             {
                 return TryHandleProperties(source, target,
-                    source.GetType().GetProperties().Where(e => e.CanRead),
-                    target.GetType().GetProperties().Where(e => e.CanWrite));
+                    source.GetType().GetProperties().Where(e => e.CanRead && e.IsNotIgnored()),
+                    target.GetType().GetProperties().Where(e => e.CanWrite && e.IsNotIgnored()));
             }
         }
     }
