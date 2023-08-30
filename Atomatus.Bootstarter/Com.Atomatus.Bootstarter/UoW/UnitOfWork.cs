@@ -54,6 +54,7 @@ namespace Com.Atomatus.Bootstarter.UoW
             this.repositoryCache = new Dictionary<Type, IRepository>();
         }
 
+        /// <inheritdoc />
         public TRepository GetRepository<TRepository>() where TRepository : IRepository
         {
             Type key = typeof(TRepository);
@@ -65,12 +66,14 @@ namespace Com.Atomatus.Bootstarter.UoW
             return (TRepository)repository;
         }
 
+        /// <inheritdoc />
         public void BeginTransaction()
         {
             this.RequireTransactionNotOpen();
             transaction = dbContext.Database.BeginTransaction();
         }
 
+        /// <inheritdoc />
         public async Task BeginTransactionAsync()
         {
             this.RequireTransactionNotOpen();
@@ -108,6 +111,7 @@ namespace Com.Atomatus.Bootstarter.UoW
             }
         }
 
+        /// <inheritdoc />
         public void Commit()
         {
             var transaction = this.RequireTransactionOpens();
@@ -128,6 +132,7 @@ namespace Com.Atomatus.Bootstarter.UoW
             }
         }
 
+        /// <inheritdoc />
         public async Task CommitAsync()
         {
             var transaction = this.RequireTransactionOpens();
@@ -148,6 +153,7 @@ namespace Com.Atomatus.Bootstarter.UoW
             }
         }
 
+        /// <inheritdoc />
         public void Rollback()
         {
             var transaction = this.RequireTransactionOpens();
@@ -155,6 +161,7 @@ namespace Com.Atomatus.Bootstarter.UoW
             this.DisposeTransaction(transaction);
         }
 
+        /// <inheritdoc />
         public async Task RollbackAsync()
         {
             var transaction = this.RequireTransactionOpens();
@@ -162,16 +169,19 @@ namespace Com.Atomatus.Bootstarter.UoW
             await this.DisposeTransactionAsync(transaction);
         }
 
+        /// <inheritdoc />
         public int SaveChanges()
         {
             return this.dbContext.SaveChanges();
         }
 
+        /// <inheritdoc />
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return this.dbContext.SaveChangesAsync(cancellationToken);
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             if (transaction != null)
