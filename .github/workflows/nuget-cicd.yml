@@ -61,7 +61,7 @@ jobs:
       # region Bootstarter      
       - name: Publish Bootstarter to NuGet
         if: ${{ success() }}
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_PATH }}
           VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'
@@ -73,7 +73,7 @@ jobs:
       # region Bootstarter.Sqlite     
       - name: Publish Bootstarter.Sqlite to NuGet
         if: ${{ success() }}
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_SQLITE_PATH }}
           VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
@@ -93,7 +93,7 @@ jobs:
       
       - name: Publish Bootstarter.Cosmos to NuGet
         if: ${{ success() }}
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_COSMOS_PATH }}
           VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
@@ -113,7 +113,7 @@ jobs:
       
       - name: Publish Bootstarter.InMemory to NuGet
         if: ${{ success() }}
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_MEMORY_PATH }}
           VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
@@ -133,7 +133,7 @@ jobs:
       
       - name: Publish Bootstarter.Postgres to NuGet
         if: ${{ success() }}
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_POSTGRES_PATH }}
           VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
@@ -153,7 +153,7 @@ jobs:
       
       - name: Publish Bootstarter.Sqlserver to NuGet
         if: ${{ success() }}
-        uses: alirezanet/publish-nuget@v3.0.0
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: ${{ env.PROJ_BS_SQLSERVER_PATH }}
           VERSION_REGEX: '^\s*<PackageVersion>(.*)</PackageVersion>\s*$'          
