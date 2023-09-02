@@ -72,6 +72,39 @@
             }
         }
 
+        [Theory]
+        [InlineData(ABC.A)]
+        [InlineData(ABC.B)]
+        [InlineData(ABC.C)]
+        [InlineData(ABC.A | ABC.B)]
+        [InlineData(ABC.A | ABC.C)]
+        [InlineData(ABC.B | ABC.C)]
+        [InlineData(ABC.A | ABC.B | ABC.C)]
+        public void Utils_ObjectMapper_Parse_Item_Enum_Successfully(ABC abc)
+        {
+            AbcDTO dto = new() { Abc = abc };
+            
+            AbcByteDTO byteDTO = ObjectMapper.Parse<AbcByteDTO>(dto);
+            Assert.NotNull(dto);
+            Assert.NotNull(byteDTO);
+            Assert.Equal((byte) dto.Abc, byteDTO.Abc);
+
+            AbcIntDTO intDTO = ObjectMapper.Parse<AbcIntDTO>(dto);
+            Assert.NotNull(dto);
+            Assert.NotNull(intDTO);
+            Assert.Equal((int)dto.Abc, intDTO.Abc);
+
+            AbcDTO fromByteDTO = ObjectMapper.Parse<AbcDTO>(byteDTO);
+            Assert.NotNull(byteDTO);
+            Assert.NotNull(fromByteDTO);
+            Assert.Equal(fromByteDTO.Abc, (ABC) byteDTO.Abc);
+
+            AbcDTO fromIntDTO = ObjectMapper.Parse<AbcDTO>(intDTO);
+            Assert.NotNull(intDTO);
+            Assert.NotNull(fromIntDTO);
+            Assert.Equal(fromIntDTO.Abc, (ABC)intDTO.Abc);
+        }
+
         interface IModel
         {
             Guid Uuid { get; set; }
@@ -168,6 +201,29 @@
                 get => Items?.OfType<IItem>().ToList();
                 set => Items = ObjectMapper.ParseList<ItemDTO>(value);
             }
+        }
+
+        [Flags]
+        public enum ABC
+        {
+            A = 1,
+            B = 2,
+            C = 4
+        }
+
+        class AbcDTO
+        {
+            public ABC Abc { get; set; }
+        }
+
+        class AbcByteDTO
+        {
+            public byte Abc { get; set; }
+        }
+
+        class AbcIntDTO
+        {
+            public int Abc { get; set; }
         }
     }
 }

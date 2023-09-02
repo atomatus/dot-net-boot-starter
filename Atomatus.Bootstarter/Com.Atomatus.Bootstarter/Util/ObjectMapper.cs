@@ -95,6 +95,15 @@ namespace Com.Atomatus.Bootstarter
                         return Parse(source, typeof(List<>).MakeGenericType(listItemType));
                     }
                 }
+                else if (targetType.IsEnum)
+                {
+                    return Enum.Parse(targetType, source.ToString());
+                }
+                else if (sourceType.IsEnum)
+                {
+                    source = Convert.ChangeType(source,
+                        Enum.GetUnderlyingType(sourceType));
+                }
 
                 return Convert.ChangeType(source, targetType);
             }
