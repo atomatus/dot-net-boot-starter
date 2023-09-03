@@ -37,7 +37,7 @@ namespace Com.Atomatus.Bootstarter
         /// <param name="source">source object to be copied</param>
         /// <returns>copy of source object, otherwise null</returns>
         /// <exception cref="InvalidOperationException">Throws when is not possible copy value from source to target</exception>
-        public static T Copy<T>([MaybeNull] T source)
+        public static T Copy<T>([AllowNull] T source)
         {
             if (source is null || object.ReferenceEquals(source, default(T)))
             {

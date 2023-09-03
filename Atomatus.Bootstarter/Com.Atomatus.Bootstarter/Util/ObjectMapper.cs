@@ -38,7 +38,7 @@ namespace Com.Atomatus.Bootstarter
         /// Otherwise, if type conversion is possible using <see cref="Convert.ChangeType(object, Type)"/>,
         /// it is performed and the converted value is returned.
         /// </remarks>
-        public static T Parse<T>([MaybeNull] object source)
+        public static T Parse<T>([AllowNull] object source)
         {
             return (T) Parse(source, typeof(T));
         }
@@ -63,7 +63,7 @@ namespace Com.Atomatus.Bootstarter
         /// Otherwise, if type conversion is possible using <see cref="Convert.ChangeType(object, Type)"/>,
         /// it is performed and the converted value is returned.
         /// </remarks>
-        public static object Parse([MaybeNull] object source, [NotNull] Type targetType)
+        public static object Parse([AllowNull] object source, [NotNull] Type targetType)
         {
             if (targetType is null)
             {
@@ -140,7 +140,7 @@ namespace Com.Atomatus.Bootstarter
         /// Otherwise, if type conversion is possible using <see cref="Convert.ChangeType(object, Type)"/>,
         /// it is performed and the converted value is returned.
         /// </remarks>
-        public static List<T> ParseList<T>([MaybeNull] object source)
+        public static List<T> ParseList<T>([AllowNull] object source)
         {
             return Parse<List<T>>(source);
         }
@@ -164,7 +164,7 @@ namespace Com.Atomatus.Bootstarter
         /// Otherwise, if type conversion is possible using <see cref="Convert.ChangeType(object, Type)"/>,
         /// it is performed and the converted value is returned.
         /// </remarks>
-        public static List<TTarget> ParseList<TSource, TTarget>([MaybeNull] IList<TSource> source)
+        public static List<TTarget> ParseList<TSource, TTarget>([AllowNull] IList<TSource> source)
         {
             return source?.Select(s => Parse<TTarget>(s)).ToList() ?? new List<TTarget>();
         }
