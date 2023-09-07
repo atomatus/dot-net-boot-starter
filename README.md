@@ -82,9 +82,9 @@ Here are the steps to install the _`Com.Atomatus.BootStarter`_ package:
     - How To Install: [![NuGet version (Com.Atomatus.BootStarter.Postgres)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.Postgres.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.Postgres/)
 
   - SQLite 
-    - How To Use:  [README.md](/Atomatus.Bootstarter/Com.Atomatus.Bootstarter.SQlite/README.md)
+    - How To Use:  [README.md](/Atomatus.Bootstarter/Com.Atomatus.Bootstarter.Sqlite/README.md)
 
-    - How To Install: [![NuGet version (Com.Atomatus.BootStarter.SqlServer)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.SQLite.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.SQLite/)
+    - How To Install: [![NuGet version (Com.Atomatus.BootStarter.SqlServer)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.Sqlite.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter.Sqlite/)
 
 - **NoSQL**
   - Cosmos 
