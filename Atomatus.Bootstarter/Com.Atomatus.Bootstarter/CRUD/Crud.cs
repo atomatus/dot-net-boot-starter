@@ -603,10 +603,13 @@ namespace Com.Atomatus.Bootstarter
         #region [D]elete
         internal virtual IEnumerable<TEntity> AttachRangeNonExists(IEnumerable<TEntity> entities)
         {
+            var values = dbSet.Local.AsEnumerable();
+
             foreach (TEntity e in entities)
             {
-                TEntity curr = dbSet.Local.FirstOrDefault(c => c is IModelEquatable me ?
-                    me.EqualsAnyId(e) : c.Equals(e));
+                TEntity curr = values
+                    .FirstOrDefault(c => c is IModelEquatable me ?
+                        me.EqualsAnyId(e) : c.Equals(e));
 
                 if (curr != null)
                 {
@@ -633,7 +636,7 @@ namespace Com.Atomatus.Bootstarter
             RequireEntityImplementIModelAlternateKey();
             return AttachRangeNonExists(uuids.Select(uuid =>
             {
-                TEntity t = new TEntity { };
+                TEntity t = new TEntity();
                 IModelAltenateKey altKey = (IModelAltenateKey)t;
                 altKey.Uuid = uuid;
                 return t;
@@ -642,12 +645,10 @@ namespace Com.Atomatus.Bootstarter
 
         internal virtual int DeleteLocal(IEnumerable<Guid> uuids)
         {
-            var entity = AttachRangeNonExists(uuids).ToList();
-            OnBeforeDeleteCallback(entity);
-            dbSet.RemoveRange(entity);
-            int count = dbContext.SaveChanges();
-            if (count > 0) OnDeletedCallback(entity);
-            return Math.Min(count, entity.Count);
+            int count = dbSet.OfType<IModelAltenateKey>()
+                .Where(e => uuids.Any(uuid => uuid == e.Uuid))
+                .ExecuteDelete();
+            return Math.Min(count, uuids.Count());
         }
 
         /// <summary>
