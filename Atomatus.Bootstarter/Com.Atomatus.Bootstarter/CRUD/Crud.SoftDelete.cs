@@ -277,7 +277,7 @@ namespace Com.Atomatus.Bootstarter
         {
             var entity = AttachRangeNonExists(uuids).ToList();
             OnBeforeDeleteCallback(entity);
-            int count = dbSet.Where(e => uuids.Any(uuid => uuid.Equals(e)))
+            int count = dbSet.Where(e => uuids.Any(uuid => uuid == e.Uuid))
                 .ExecuteUpdate(setter =>
                     setter.SetProperty(e => e.Deleted, DateTime.Now));
             if (count > 0) OnDeletedCallback(entity);
