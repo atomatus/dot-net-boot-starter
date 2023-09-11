@@ -30,6 +30,15 @@ namespace Com.Atomatus.Bootstarter
             : base("One or more validation error was found!",
                   validationResults.Select(r => new ValidationException(r, null, entity)))
         { }
+
+        /// <summary>
+        /// Construct an AggregateValudation exception by other one changing main message.
+        /// </summary>
+        /// <param name="message">exception message</param>
+        /// <param name="validationException">validation exceptions</param>
+        public AggregateValidationException([NotNull] string message, [NotNull] AggregateValidationException validationException)
+            : base(message, validationException.InnerExceptions)
+        { } 
     }
 }
 
