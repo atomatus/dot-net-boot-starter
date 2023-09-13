@@ -12,7 +12,7 @@
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.47</PackageVersion>
+    <PackageVersion>0.0.48</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
@@ -23,8 +23,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>privatekey.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>1.0.0.47</AssemblyVersion>
-    <FileVersion>1.0.0.47</FileVersion>
+    <AssemblyVersion>1.0.0.48</AssemblyVersion>
+    <FileVersion>1.0.0.48</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -189,12 +189,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.11" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
