@@ -42,9 +42,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Include="ContextConnectionInMemory.Extensions.cs">
+    <Compile Update="ContextConnectionInMemory.Extensions.cs">
       <DependentUpon>ContextConnectionInMemory.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>

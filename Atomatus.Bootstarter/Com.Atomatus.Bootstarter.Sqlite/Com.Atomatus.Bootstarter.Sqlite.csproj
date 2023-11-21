@@ -42,9 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ContextConnectionSqlite.Extensions.cs">
+    <Compile Update="ContextConnectionSqlite.Extensions.cs">
       <DependentUpon>ContextConnectionSqlite.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

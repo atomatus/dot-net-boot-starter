@@ -42,9 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ContextConnectionCosmos.Extensions.cs">
+    <Compile Update="ContextConnectionCosmos.Extensions.cs">
       <DependentUpon>ContextConnectionCosmos.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>

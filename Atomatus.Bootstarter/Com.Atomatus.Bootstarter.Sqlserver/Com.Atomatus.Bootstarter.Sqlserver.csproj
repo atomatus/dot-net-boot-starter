@@ -47,9 +47,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ContextConnectionSqlServer.Extensions.cs">
+    <Compile Update="ContextConnectionSqlServer.Extensions.cs">
       <DependentUpon>ContextConnectionSqlServer.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -47,9 +47,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="ContextConnectionPostgres.Extensions.cs">
+    <Compile Update="ContextConnectionPostgres.Extensions.cs">
       <DependentUpon>ContextConnectionPostgres.cs</DependentUpon>
-    </None>
+    </Compile>
   </ItemGroup>
   
 </Project>
