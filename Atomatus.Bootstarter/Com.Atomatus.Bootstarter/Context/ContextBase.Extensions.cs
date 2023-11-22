@@ -4,6 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Com.Atomatus.Bootstarter.Context
 {
+    /// <summary>
+    /// ContextBase Extensions.
+    /// </summary>
 	public static class ContextBaseExtensions
 	{
         /// <summary>

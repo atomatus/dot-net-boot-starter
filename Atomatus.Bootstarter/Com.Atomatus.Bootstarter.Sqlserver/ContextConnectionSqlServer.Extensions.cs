@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -28,8 +29,25 @@ namespace Com.Atomatus.Bootstarter.Context
         public static ContextConnection.Builder AsSqlServer([NotNull] this ContextConnection.Builder builder)
         {
             return builder
-                .AddDefaultConnectionStringOperation((b, c) => b.UseSqlServer(c))
+                .AddDefaultConnectionStringOperation((b, c) => b.UseSqlServer(c, opt => builder.InvokeOptions(opt)))
                 .AddBuildCallback(OnBuildAsSqlServerCallback);
+        }
+
+        /// <summary>
+        /// Configure optional action to allow additional SQL Server configuration.
+        /// </summary>
+        /// <param name="builder">The builder being used to configure the context</param>
+        /// <param name="optionAction">An optional action to allow additional and specific configuration.</param>
+        /// <returns>The options builder so that further configuration can be chained.</returns>
+        public static ContextConnection.Builder Options([NotNull] this ContextConnection.Builder builder, [NotNull] Action<SqlServerDbContextOptionsBuilder> optionAction)
+        {
+            return builder.AddOptionsCallback(opt =>
+            {
+                if (opt is SqlServerDbContextOptionsBuilder sqliteOpt)
+                {
+                    optionAction.Invoke(sqliteOpt);
+                }
+            });
         }
 
         /// <summary>

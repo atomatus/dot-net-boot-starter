@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -13,6 +13,9 @@ namespace Com.Atomatus.Bootstarter.Context
 {
     public abstract partial class ContextConnection : ContextConnectionParameters
     {
+        internal delegate bool TryBuildContextConnectionCallback(Builder builder, out ContextConnection conn);
+        internal delegate void OptionsBuilderCallback(object optionsBuilder);
+           
         /// <summary>
         /// Context connection builder.
         /// </summary>
@@ -25,15 +28,13 @@ namespace Com.Atomatus.Bootstarter.Context
             #endregion
 
             #region Local Parameters
-            internal delegate bool TryBuildContextConnectionCallback(Builder builder, out ContextConnection conn);
+            private event TryBuildContextConnectionCallback Callbacks;
+            private event OptionsBuilderCallback OptionsBuilderCallbacks;
 
-            private List<TryBuildContextConnectionCallback> callbacks;
-            
             internal Builder AddBuildCallback(TryBuildContextConnectionCallback callback)
             {
-                this.callbacks ??= new List<TryBuildContextConnectionCallback>();                
-                this.callbacks.Remove(callback);
-                this.callbacks.Add(callback);
+                this.Callbacks -= callback;
+                this.Callbacks += callback;
                 return this;
             }
 
@@ -54,12 +55,24 @@ namespace Com.Atomatus.Bootstarter.Context
                 this.connectionStringCallback = defaultConnectionStringCallback;
                 return this;
             }
+
+            internal Builder AddOptionsCallback(OptionsBuilderCallback optionAction)
+            {
+                this.OptionsBuilderCallbacks -= optionAction;
+                this.OptionsBuilderCallbacks += optionAction;
+                return this;
+            }
+
+            internal void InvokeOptions(object options)
+            {
+                this.OptionsBuilderCallbacks?.Invoke(options);
+            }
             #endregion
 
             #region Parameters
             internal Builder Database<TContext>() where TContext : ContextBase
             {
-                string Replace(string target, string value) =>
+                static string Replace(string target, string value) =>
                     target.Replace(value, string.Empty,
                     StringComparison.CurrentCultureIgnoreCase);                
                 string name = Replace(Replace(typeof(TContext).Name, "Context"), "db").ToLower() + "db";
@@ -620,8 +633,8 @@ namespace Com.Atomatus.Bootstarter.Context
             /// </summary>
             protected override void OnDispose()
             {
-                this.callbacks?.Clear();
-                this.callbacks = null;
+                this.Callbacks = null;
+                this.OptionsBuilderCallbacks = null;
             }
             #endregion
 
@@ -634,13 +647,12 @@ namespace Com.Atomatus.Bootstarter.Context
             {
                 using (this)
                 {
-                    if(this.callbacks != null)
+                    if(this.Callbacks != null)
                     {
-                        var aux = this.callbacks.AsReadOnly();
-
-                        foreach (var callback in aux)
+                        foreach (var d in this.Callbacks.GetInvocationList())
                         {
-                            if (callback.Invoke(this, out ContextConnection conn))
+                            if (d is TryBuildContextConnectionCallback callback &&
+                                callback.Invoke(this, out ContextConnection conn))
                             {
                                 return conn;
                             }

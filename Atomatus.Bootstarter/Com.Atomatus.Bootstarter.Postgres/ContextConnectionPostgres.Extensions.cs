@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -29,8 +30,25 @@ namespace Com.Atomatus.Bootstarter.Context
         public static ContextConnection.Builder AsPostgres([NotNull] this ContextConnection.Builder builder)
         {
             return builder
-                .AddDefaultConnectionStringOperation((b, c) => b.UseNpgsql(o => o.SetPostgresVersion(9, 6)).UseNpgsql(c))
+                .AddDefaultConnectionStringOperation((b, c) => b.UseNpgsql(c, o => builder.InvokeOptions(o.SetPostgresVersion(9, 6))))
                 .AddBuildCallback(OnBuildAsPostgresCallback);
+        }
+
+        /// <summary>
+        /// Configure optional action to allow additional PostgreSQL configuration.
+        /// </summary>
+        /// <param name="builder">The builder being used to configure the context</param>
+        /// <param name="optionAction">An optional action to allow additional and specific configuration.</param>
+        /// <returns>The options builder so that further configuration can be chained.</returns>
+        public static ContextConnection.Builder Options([NotNull] this ContextConnection.Builder builder, [NotNull] Action<NpgsqlDbContextOptionsBuilder> optionAction)
+        {
+            return builder.AddOptionsCallback(opt =>
+            {
+                if (opt is NpgsqlDbContextOptionsBuilder sqliteOpt)
+                {
+                    optionAction.Invoke(sqliteOpt);
+                }
+            });
         }
 
         /// <summary>
