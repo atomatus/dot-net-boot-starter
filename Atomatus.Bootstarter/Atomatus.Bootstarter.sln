@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter", "Com.Atomatus.Bootstarter\Com.Atomatus.Bootstarter.csproj", "{34EBDBB9-37E3-44AC-B2EC-A104D021E404}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter", "Com.Atomatus.Bootstarter\Com.Atomatus.Bootstarter.csproj", "{34EBDBB9-37E3-44AC-B2EC-A104D021E404}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Sqlserver", "Com.Atomatus.Bootstarter.Sqlserver\Com.Atomatus.Bootstarter.Sqlserver.csproj", "{A5800BCA-19D2-467C-8118-598FB8E1895A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlserver", "Com.Atomatus.Bootstarter.Sqlserver\Com.Atomatus.Bootstarter.Sqlserver.csproj", "{A5800BCA-19D2-467C-8118-598FB8E1895A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Postgres", "Com.Atomatus.Bootstarter.Postgres\Com.Atomatus.Bootstarter.Postgres.csproj", "{B09F2C2A-E20A-4588-B35B-08401778E48C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Postgres", "Com.Atomatus.Bootstarter.Postgres\Com.Atomatus.Bootstarter.Postgres.csproj", "{B09F2C2A-E20A-4588-B35B-08401778E48C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Sqlite", "Com.Atomatus.Bootstarter.Sqlite\Com.Atomatus.Bootstarter.Sqlite.csproj", "{31C522BA-7755-4ED8-8492-B1815A0715C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Sqlite", "Com.Atomatus.Bootstarter.Sqlite\Com.Atomatus.Bootstarter.Sqlite.csproj", "{31C522BA-7755-4ED8-8492-B1815A0715C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.Cosmos", "Com.Atomatus.Bootstarter.Cosmos\Com.Atomatus.Bootstarter.Cosmos.csproj", "{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.Cosmos", "Com.Atomatus.Bootstarter.Cosmos\Com.Atomatus.Bootstarter.Cosmos.csproj", "{E89B5B0E-F720-4E4B-9FFD-FCCD092515B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Com.Atomatus.Bootstarter.InMemory", "Com.Atomatus.Bootstarter.InMemory\Com.Atomatus.Bootstarter.InMemory.csproj", "{219FAE6B-0564-4668-B807-6586120EBD50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Com.Atomatus.Bootstarter.InMemory", "Com.Atomatus.Bootstarter.InMemory\Com.Atomatus.Bootstarter.InMemory.csproj", "{219FAE6B-0564-4668-B807-6586120EBD50}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "githubActions", "githubActions", "{737EAF4D-3B95-447C-B46A-EFB6A88E28C6}"
 	ProjectSection(SolutionItems) = preProject
@@ -74,5 +74,20 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8CD3D6D7-46CD-4C49-89CA-359C1C85D8A8}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.TextStylePolicy = $2
+		$2.inheritsSet = null
+		$2.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $3
+		$3.scope = text/x-csharp
+		$0.TextStylePolicy = $4
+		$4.FileWidth = 80
+		$4.TabsToSpaces = True
+		$4.scope = text/plain
+		$0.StandardHeader = $5
 	EndGlobalSection
 EndGlobal
