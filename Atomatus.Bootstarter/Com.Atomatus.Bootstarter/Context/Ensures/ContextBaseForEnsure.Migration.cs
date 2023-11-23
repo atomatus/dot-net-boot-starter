@@ -17,10 +17,7 @@ namespace Com.Atomatus.Bootstarter.Context.Ensures
         /// </param>
         protected ContextBaseForEnsureMigration(DbContextOptions options) : base(options) 
         {
-            if (this.CanEnsure())
-            {
-                this.Database.Migrate();
-            }
+            this.CanEnsureSync(this.Database.Migrate);
         }
     }
 }

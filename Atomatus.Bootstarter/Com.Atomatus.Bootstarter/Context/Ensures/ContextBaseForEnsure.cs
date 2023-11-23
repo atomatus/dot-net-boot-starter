@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
@@ -9,6 +10,8 @@ namespace Com.Atomatus.Bootstarter.Context.Ensures
     /// </summary>
     public abstract class ContextBaseForEnsure : ContextBase
     {
+        private const long ENSURE_COUNT_LIMIT = 1L;
+
         private class AtomicCounter 
         {
             private long value;
@@ -42,20 +45,36 @@ namespace Com.Atomatus.Bootstarter.Context.Ensures
             this.key = options.ContextType.AssemblyQualifiedName;
         }
 
+        private AtomicCounter GetAtomicCounter()
+        {
+            return counters.GetOrAdd(key, k => new AtomicCounter());
+        }
+
+        protected bool CanEnsureSync(Action action)
+        {
+            var counter = GetAtomicCounter();
+            lock(counter)
+            {
+                bool canEnsure = counter.Increment() == ENSURE_COUNT_LIMIT;
+                if (canEnsure) action.Invoke();
+                return canEnsure;
+            }
+        }
+
         /// <summary>
         /// Check if current context can request any ensure creation,
         /// otherwise indicates that already did it before.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>can ensure, indicates that is enabled to apply changes, otherwise false</returns>
         protected bool CanEnsure()
         {
-            return counters.GetOrAdd(key, k => new AtomicCounter()).Increment() == 1L;
+            return GetAtomicCounter().Increment() == ENSURE_COUNT_LIMIT;
         }
 
         /// <summary>
         /// Check if current context can remove ensure creations.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>true, can undo changes applyied, otherwise false.</returns>
         protected bool IsEnsured()
         {
             return !counters.TryGetValue(key, out AtomicCounter counter) ||
