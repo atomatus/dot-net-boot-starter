@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -14,7 +13,6 @@ namespace Com.Atomatus.Bootstarter.Context
     public abstract partial class ContextConnection : ContextConnectionParameters
     {
         internal delegate bool TryBuildContextConnectionCallback(Builder builder, out ContextConnection conn);
-        internal delegate void OptionsBuilderCallback(object optionsBuilder);
            
         /// <summary>
         /// Context connection builder.
@@ -29,8 +27,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
             #region Local Parameters
             private event TryBuildContextConnectionCallback Callbacks;
-            private event OptionsBuilderCallback OptionsBuilderCallbacks;
-
+            
             internal Builder AddBuildCallback(TryBuildContextConnectionCallback callback)
             {
                 this.Callbacks -= callback;
@@ -61,11 +58,6 @@ namespace Com.Atomatus.Bootstarter.Context
                 this.OptionsBuilderCallbacks -= optionAction;
                 this.OptionsBuilderCallbacks += optionAction;
                 return this;
-            }
-
-            internal void InvokeOptions(object options)
-            {
-                this.OptionsBuilderCallbacks?.Invoke(options);
             }
             #endregion
 
@@ -634,7 +626,6 @@ namespace Com.Atomatus.Bootstarter.Context
             protected override void OnDispose()
             {
                 this.Callbacks = null;
-                this.OptionsBuilderCallbacks = null;
             }
             #endregion
 

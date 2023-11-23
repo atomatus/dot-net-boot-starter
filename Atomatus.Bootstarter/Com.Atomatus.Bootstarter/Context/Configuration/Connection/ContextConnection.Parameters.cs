@@ -19,6 +19,12 @@ namespace Com.Atomatus.Bootstarter.Context
         protected internal delegate DbContextOptionsBuilder ConnectionStringFunction(DbContextOptionsBuilder builder, string connectionString);
 
         /// <summary>
+        /// Database context builder options event.
+        /// </summary>
+        /// <param name="optionsBuilder">option builder</param>
+        internal delegate void OptionsBuilderCallback(object optionsBuilder);
+
+        /// <summary>
         /// Database name.
         /// </summary>
         protected string database;
@@ -135,6 +141,13 @@ namespace Com.Atomatus.Bootstarter.Context
         protected string contextName;
         #endregion
 
+        #region Events
+        /// <summary>
+        /// Database context builder options event.
+        /// </summary>
+        internal event OptionsBuilderCallback OptionsBuilderCallbacks;
+        #endregion
+
         #region Creation Ensures fields
         /// <summary>
         /// Ensures that the database for the target context exists,
@@ -195,12 +208,20 @@ namespace Com.Atomatus.Bootstarter.Context
             this.grantDynamicContext        = other.grantDynamicContext;
             this.allowNoDatabase            = other.allowNoDatabase;
             this.contextName                = other.contextName;
+            this.OptionsBuilderCallbacks    = other.OptionsBuilderCallbacks;
         }
 
         /// <summary>
         /// Default Constructor.
         /// </summary>
         protected ContextConnectionParameters() { }
+        #endregion
+
+        #region Invoke Events
+        internal void InvokeOptions(object options)
+        {
+            this.OptionsBuilderCallbacks?.Invoke(options);
+        }
         #endregion
 
         #region IDisposable
@@ -227,6 +248,7 @@ namespace Com.Atomatus.Bootstarter.Context
             this.integratedSecurity         = null;
             this.trustServerCertificate     = null;
             this.multipleActiveResultSets   = null;
+            this.OptionsBuilderCallbacks    = null;
         }
 
         void IDisposable.Dispose()

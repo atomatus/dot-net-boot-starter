@@ -30,7 +30,8 @@ namespace Com.Atomatus.Bootstarter.Context
         public static ContextConnection.Builder AsPostgres([NotNull] this ContextConnection.Builder builder)
         {
             return builder
-                .AddDefaultConnectionStringOperation((b, c) => b.UseNpgsql(c, o => builder.InvokeOptions(o.SetPostgresVersion(9, 6))))
+                .AddDefaultConnectionStringOperation((b, c) => b.UseNpgsql(c, o => builder.InvokeOptions(
+                    o.SetPostgresVersion(ContextConnectionPostgres.VERSION_MAJOR, ContextConnectionPostgres.VERSION_MINOR))))
                 .AddBuildCallback(OnBuildAsPostgresCallback);
         }
 
@@ -49,6 +50,18 @@ namespace Com.Atomatus.Bootstarter.Context
                     optionAction.Invoke(sqliteOpt);
                 }
             });
+        }
+
+        /// <summary>
+        /// Configure optional action to allow additional PostgreSQL configuration.
+        /// <para><i>Use explicitly database type options when importing more then one Bootstater database context type</i></para>
+        /// </summary>
+        /// <param name="builder">The builder being used to configure the context</param>
+        /// <param name="optionAction">An optional action to allow additional and specific configuration.</param>
+        /// <returns>The options builder so that further configuration can be chained.</returns>
+        public static ContextConnection.Builder PostgresOptions([NotNull] this ContextConnection.Builder builder, [NotNull] Action<NpgsqlDbContextOptionsBuilder> optionAction)
+        {
+            return builder.Options(optionAction);
         }
 
         /// <summary>

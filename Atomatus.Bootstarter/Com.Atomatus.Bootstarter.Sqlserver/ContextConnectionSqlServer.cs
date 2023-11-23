@@ -38,7 +38,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
         protected internal override DbContextOptionsBuilder Attach(DbContextOptionsBuilder options)
         {
-            return options.UseSqlServer(this);
+            return options.UseSqlServer(this, InvokeOptions);
         }
     }
 }

@@ -51,6 +51,18 @@ namespace Com.Atomatus.Bootstarter.Context
         }
 
         /// <summary>
+        /// Configure optional action to allow additional SQL Server configuration.
+        /// <para><i>Use explicitly database type options when importing more then one Bootstater database context type</i></para>
+        /// </summary>
+        /// <param name="builder">The builder being used to configure the context</param>
+        /// <param name="optionAction">An optional action to allow additional and specific configuration.</param>
+        /// <returns>The options builder so that further configuration can be chained.</returns>
+        public static ContextConnection.Builder SqlServerOptions([NotNull] this ContextConnection.Builder builder, [NotNull] Action<SqlServerDbContextOptionsBuilder> optionAction)
+        {
+            return builder.Options(optionAction);
+        }
+
+        /// <summary>
         /// Mark to build context connection as a SqlServer.
         /// <para>
         /// To load by ConnectionString in appsettings.json use the default sqlserver format connection

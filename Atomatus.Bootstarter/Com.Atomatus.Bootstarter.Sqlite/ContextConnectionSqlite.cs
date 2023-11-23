@@ -22,7 +22,7 @@ namespace Com.Atomatus.Bootstarter.Context
 
         protected internal override DbContextOptionsBuilder Attach(DbContextOptionsBuilder options)
         {
-            return options.UseSqlite(this);
+            return options.UseSqlite(this, InvokeOptions);
         }
     }
 }

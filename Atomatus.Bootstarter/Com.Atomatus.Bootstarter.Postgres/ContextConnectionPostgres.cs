@@ -9,6 +9,9 @@ namespace Com.Atomatus.Bootstarter.Context
     /// </summary>
     internal sealed class ContextConnectionPostgres : ContextConnection
     {
+        internal const int VERSION_MAJOR = 9;
+        internal const int VERSION_MINOR = 6;
+
         private const int DEFAULT_PORT = 5432;
         private const int DEFAULT_CONNECTION_TIMEOUT_IN_SEC = 120;
 
@@ -37,7 +40,7 @@ namespace Com.Atomatus.Bootstarter.Context
         protected internal override DbContextOptionsBuilder Attach(DbContextOptionsBuilder options)
         {
             return options
-                .UseNpgsql(o => o.SetPostgresVersion(9, 6))
+                .UseNpgsql(o => InvokeOptions(o.SetPostgresVersion(VERSION_MAJOR, VERSION_MINOR)))
                 .UseNpgsql(this);
         }
     }

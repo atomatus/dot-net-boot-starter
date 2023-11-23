@@ -30,7 +30,10 @@ namespace Com.Atomatus.Bootstarter.Context
         public static ContextConnection.Builder AsSqlite([NotNull] this ContextConnection.Builder builder)
         {
             return builder
-                .AddDefaultConnectionStringOperation((b, c) => b.UseSqlite(c, o => builder.InvokeOptions(o)))
+                .AddDefaultConnectionStringOperation((b, c) =>
+                
+                    b.UseSqlite(c, o => builder.InvokeOptions(o))
+                )
                 .AddBuildCallback(OnBuildAsSqliteCallback);
         }
 
@@ -49,6 +52,18 @@ namespace Com.Atomatus.Bootstarter.Context
                     optionAction.Invoke(sqliteOpt);
                 }
             });
+        }
+
+        /// <summary>
+        /// Configure optional action to allow additional SQLite configuration.
+        /// <para><i>Use explicitly database type options when importing more then one Bootstater database context type</i></para>
+        /// </summary>
+        /// <param name="builder">The builder being used to configure the context</param>
+        /// <param name="optionAction">An optional action to allow additional and specific configuration.</param>
+        /// <returns>The options builder so that further configuration can be chained.</returns>
+        public static ContextConnection.Builder SqliteOptions([NotNull] this ContextConnection.Builder builder, [NotNull] Action<SqliteDbContextOptionsBuilder> optionAction)
+        {
+            return builder.Options(optionAction);
         }
 
         /// <summary>
