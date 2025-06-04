@@ -5,26 +5,25 @@
 [![NuGet version (Com.Atomatus.BootStarter)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter/)
 
 ## What is BootStarter?
-<p>
-  A multiplatform library to simple fast starter 
-  <a href="https://docs.microsoft.com/pt-br/ef/core/get-started/overview/install" target="_blank">Entity Framework Core</a> projects by domain aplication 
-  using <a href="https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/middleware/?view=aspnetcore-5.0" target="_blank">Middlewares pipelines</a> strategy by 
-  <a href="https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0" target="_blank">dependency-injection</a>.
-</p>
 
-<p>
-  Boot Starter project contains abstract and contract classes (
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs">IModel</a>, 
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/IAudit.cs">IAudit</a>, 
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs">ModelBase</a>, 
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/SoftDelete/SoftDeleteModel.cs">SoftDeleteModel</a>, 
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/AuditableModel.cs">AuditableModel</a>, <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/SoftDelete/SoftDeleteAuditableModel.cs">SoftDeleteAuditableModel</a>) 
-  to modularize domain entities, services (
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Services/IService.cs">IService</a>) 
-  pipelines as Repositories mode to persist data using 
-  Entity Framework and DbContext (
-  <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Context/ContextBase.cs">ContextBase</a>) as UnityOfWork.
-</p>
+BootStarter is a cross-platform library designed to simplify and accelerate the startup of [Entity Framework Core](https://docs.microsoft.com/pt-br/ef/core/get-started/overview/install) projects. It follows a domain-driven design approach and leverages [middleware pipelines](https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/middleware/?view=aspnetcore-5.0) and [dependency injection](https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-5.0) strategies.
+
+The BootStarter project provides a set of abstract and contract classes to help modularize domain entities and services, including:
+
+- [IModel](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs)  
+- [IAudit](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/IAudit.cs)  
+- [ModelBase](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs)  
+- [SoftDeleteModel](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/SoftDelete/SoftDeleteModel.cs)  
+- [AuditableModel](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/AuditableModel.cs)  
+- [SoftDeleteAuditableModel](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/SoftDelete/SoftDeleteAuditableModel.cs)
+
+It also includes service contracts like:
+
+- [IService](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Services/IService.cs)
+
+BootStarter implements a repository pipeline pattern to persist data using Entity Framework and DbContext, with support for Unit of Work through:
+
+- [ContextBase](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Context/ContextBase.cs)
 
 ### How to Install?
 [![NuGet version (Com.Atomatus.BootStarter)](https://img.shields.io/nuget/v/Com.Atomatus.BootStarter.svg?style=flat-square)](https://www.nuget.org/packages/Com.Atomatus.BootStarter/)
@@ -166,7 +165,7 @@ Remember that any domain concepts that depends on external resouces, are defined
 
 Now, following up the above concept were created the entity example class Client.
 
-  - **Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L25">IModel<ID></a> (and optionally of <a href="https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L13">IModelAltenateKey</a>) Full Implementatin.**
+  - **Domain class from [IModel<ID>](https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L25") (and optionally of [IModelAltenateKey](https://github.com/atomatus/dot-net-boot-starter/blob/0487b192aa193c1d4f411396c4865520b5db250b/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/IModel.cs#L13)) Full Implementatin.**
 
     ```csharp
     public partial class Client : IModel<long>, IModelAlternateKey 
@@ -181,7 +180,7 @@ Now, following up the above concept were created the entity example class Client
     }
     ```
 
-- **Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs">ModelBase</a>**
+- **Domain class from [ModelBase](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/ModelBase.cs)**
 
   *This class contains the properties Id and Uuid defined it.*
 
@@ -194,7 +193,7 @@ Now, following up the above concept were created the entity example class Client
   }
   ```
 
-- **Domain class from <a href="https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/AuditableModel.cs">AuditableModel</a>**
+- **Domain class from [AuditableModel](https://github.com/atomatus/dot-net-boot-starter/blob/main/Atomatus.Bootstarter/Com.Atomatus.Bootstarter/Model/Auditable/AuditableModel.cs)**
 
   *This class contains the properties Id and Uuid defined it, and when created or updated register the date time for it in entity.*
 
