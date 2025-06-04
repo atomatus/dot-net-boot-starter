@@ -16,10 +16,22 @@ namespace Com.Atomatus.Bootstarter
     public sealed class AggregateValidationException : AggregateException
     {
         private ReadOnlyCollection<ValidationException> _rocView;
+        private readonly string _originalMessage;
 
         /// <inheritdoc/>
         new public ReadOnlyCollection<ValidationException> InnerExceptions =>
             _rocView ??= new ReadOnlyCollection<ValidationException>(base.InnerExceptions.OfType<ValidationException>().ToList());
+
+        /// <summary>
+        /// Original input message.
+        /// </summary>
+        public string OriginalMessage
+        {
+            get
+            {
+                return _originalMessage;
+            }
+        }
 
         /// <summary>
         /// Construct an AggregateValidation exception by target entity and his ValidationResults.
@@ -29,7 +41,9 @@ namespace Com.Atomatus.Bootstarter
         public AggregateValidationException([NotNull] object entity, [NotNull] IEnumerable<ValidationResult> validationResults)
             : base("One or more validation error was found!",
                   validationResults.Select(r => new ValidationException(r, null, entity)))
-        { }
+        {
+            this._originalMessage = "One or more validation error was found!";
+        }
 
         /// <summary>
         /// Construct an AggregateValudation exception by other one changing main message.
@@ -38,7 +52,9 @@ namespace Com.Atomatus.Bootstarter
         /// <param name="validationException">validation exceptions</param>
         public AggregateValidationException([NotNull] string message, [NotNull] AggregateValidationException validationException)
             : base(message, validationException.InnerExceptions)
-        { } 
+        {
+            this._originalMessage = message;
+        }
     }
 }
 
