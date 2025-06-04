@@ -12,9 +12,10 @@
     <Description>Sytem library for multiplatforms to boot starter entity framework projects by domain aplication and hexagonal architecture usage.</Description>
     <PackageId>Com.Atomatus.BootStarter</PackageId>
     <PackageTags>ef boot starter</PackageTags>
-    <PackageVersion>0.0.54</PackageVersion>
+    <PackageVersion>0.0.55</PackageVersion>
     <PackageIcon>logo.png</PackageIcon>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/atomatus/dot-net-boot-starter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/atomatus/dot-net-boot-starter</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -23,8 +24,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>privatekey.snk</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>1.0.0.54</AssemblyVersion>
-    <FileVersion>1.0.0.54</FileVersion>
+    <AssemblyVersion>1.0.0.55</AssemblyVersion>
+    <FileVersion>1.0.0.55</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +40,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+     <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   
   <ItemGroup>
